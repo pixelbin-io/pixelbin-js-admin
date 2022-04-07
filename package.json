@@ -1,0 +1,39 @@
+{
+    "name": "@pixelbin/admin",
+    "version": "1.0.0",
+    "description": "Pixelbin Backend SDK for Javascript",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest --coverage",
+        "prettier": "npx prettier -w ./sdk ./tests && npx tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pixelbin-dev/pixelbin-admin.git"
+    },
+    "jest": {
+        "coverageThreshold": {
+            "global": {
+                "branches": 0,
+                "functions": 0,
+                "lines": 0
+            }
+        }
+    },
+    "author": "Pixelbin",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "0.21.1",
+        "crypto-js": "4.0.0",
+        "joi": "17.4.0",
+        "query-string": "6.14.1",
+        "camelcase": "6.2.0",
+        "form-data": "4.0.0"
+    },
+    "devDependencies": {
+        "axios-mock-adapter": "1.19.0",
+        "coveralls": "3.1.0",
+        "dotenv": "10.0.0",
+        "jest": "26.6.3"
+    }
+}
