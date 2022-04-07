@@ -164,40 +164,6 @@ class Validator {
         });
     }
 
-    static BulkUploadItem() {
-        return Joi.object({
-            url: Joi.string().allow("").required(),
-
-            name: Joi.string().allow(""),
-
-            path: Joi.string().allow(""),
-
-            access: Joi.string().allow(""),
-
-            tags: Joi.array().items(Joi.string().allow("")),
-
-            metadata: Joi.any(),
-
-            overwrite: Joi.boolean(),
-        });
-    }
-
-    static BulkUploadRequest() {
-        return Joi.object({
-            urls: Joi.array().items(this.BulkUploadItem()).required(),
-        });
-    }
-
-    static BulkUploadResponse() {
-        return Joi.object({
-            message: Joi.string().allow("").required(),
-
-            taskId: Joi.string().allow("").required(),
-
-            progress: Joi.number().required(),
-        });
-    }
-
     static FilesResponse() {
         return Joi.object({
             _id: Joi.string().allow("").required(),
@@ -228,13 +194,13 @@ class Validator {
 
     static UpdateFileRequest() {
         return Joi.object({
-            name: Joi.string().allow("").required(),
+            name: Joi.string().allow(""),
 
-            path: Joi.string().allow("").required(),
+            path: Joi.string().allow(""),
 
-            access: Joi.string().allow("").required(),
+            access: Joi.string().allow(""),
 
-            isActive: Joi.boolean().required(),
+            isActive: Joi.boolean(),
 
             tags: Joi.array().items(Joi.string().allow("")),
 
@@ -258,7 +224,7 @@ class Validator {
         return Joi.object({
             name: Joi.string().allow("").required(),
 
-            path: Joi.string().allow("").required(),
+            path: Joi.string().allow(""),
         });
     }
 
@@ -320,54 +286,6 @@ class Validator {
         });
     }
 
-    static ErrorSchema() {
-        return Joi.object({
-            message: Joi.string().allow(""),
-        });
-    }
-
-    static AuthenticationInternalServerErrorSchema() {
-        return Joi.object({
-            message: Joi.string().allow(""),
-        });
-    }
-
-    static CreateOrganizationBodySchema() {
-        return Joi.object({
-            name: Joi.string().allow(""),
-
-            cloudName: Joi.string().allow(""),
-
-            active: Joi.boolean(),
-
-            strength: Joi.string().allow(""),
-
-            accountType: Joi.string().allow(""),
-
-            industry: Joi.string().allow(""),
-        });
-    }
-
-    static CreateOrganizationResponseSchema() {
-        return Joi.object({
-            detail: this.OrganizationDetailSchema(),
-
-            preference: this.OrganizationPreferenceSchema(),
-        });
-    }
-
-    static OrganizationResponseSchema() {
-        return Joi.object({
-            org: this.OrganizationDetailSchema(),
-        });
-    }
-
-    static OrganizationsResponseSchema() {
-        return Joi.object({
-            items: Joi.array().items(this.OrganizationDetailSchema()),
-        });
-    }
-
     static OrganizationDetailSchema() {
         return Joi.object({
             _id: Joi.number(),
@@ -382,63 +300,7 @@ class Validator {
 
             createdAt: Joi.string().allow(""),
 
-            modifiedAt: Joi.string().allow(""),
-        });
-    }
-
-    static OrganizationPreferenceSchema() {
-        return Joi.object({
-            _id: Joi.number(),
-
-            orgId: Joi.number(),
-
-            strength: Joi.string().allow(""),
-
-            accountType: Joi.string().allow(""),
-
-            industry: Joi.string().allow(""),
-
-            createdAt: Joi.string().allow(""),
-
-            modifiedAt: Joi.string().allow(""),
-        });
-    }
-
-    static CreateAppBodySchema() {
-        return Joi.object({
-            name: Joi.string().allow(""),
-
-            permissions: Joi.array().items(Joi.string().allow("")),
-
-            active: Joi.boolean(),
-        });
-    }
-
-    static UpdateAppBodySchema() {
-        return Joi.object({
-            name: Joi.any(),
-
-            permissions: Joi.array().items(Joi.string().allow("")),
-
-            active: Joi.boolean(),
-        });
-    }
-
-    static CreateAppResponseSchema() {
-        return Joi.object({
-            items: Joi.array().items(this.AppSchema()),
-        });
-    }
-
-    static UpdateAppResponseSchema() {
-        return Joi.object({
-            items: Joi.array().items(this.AppSchema()),
-        });
-    }
-
-    static AppsSchema() {
-        return Joi.object({
-            items: Joi.array().items(this.AppSchema()),
+            updatedAt: Joi.string().allow(""),
         });
     }
 
@@ -462,51 +324,17 @@ class Validator {
         });
     }
 
-    static CreateTeamBodySchema() {
-        return Joi.object({
-            userId: Joi.string().allow(""),
-
-            type: Joi.string().allow(""),
-
-            permissions: Joi.array().items(Joi.string().allow("")),
-        });
-    }
-
-    static UpdateTeamBodySchema() {
-        return Joi.object({
-            permissions: Joi.array().items(Joi.string().allow("")),
-        });
-    }
-
-    static TeamsSchema() {
-        return Joi.object({
-            items: Joi.array().items(this.TeamSchema()),
-        });
-    }
-
-    static TeamSchema() {
-        return Joi.object({
-            _id: Joi.number(),
-
-            orgId: Joi.number(),
-
-            userId: Joi.string().allow(""),
-
-            type: Joi.string().allow(""),
-
-            permissions: Joi.array().items(Joi.string().allow("")),
-
-            createdAt: Joi.string().allow(""),
-
-            updatedAt: Joi.string().allow(""),
-        });
-    }
-
     static AppDetailsByToken() {
         return Joi.object({
             app: this.AppSchema(),
 
             org: this.OrganizationDetailSchema(),
+        });
+    }
+
+    static ErrorSchema() {
+        return Joi.object({
+            message: Joi.string().allow(""),
         });
     }
 }

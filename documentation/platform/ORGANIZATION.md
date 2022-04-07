@@ -68,184 +68,32 @@ Success. Returns a JSON object as shown below. Refer `AppDetailsByToken` for mor
 
 ### Schemas
 
-#### ErrorSchema
-
-| Properties | Type   | Nullable | Description |
-| ---------- | ------ | -------- | ----------- |
-| message    | string | no       |             |
-
----
-
-#### AuthenticationInternalServerErrorSchema
-
-| Properties | Type   | Nullable | Description |
-| ---------- | ------ | -------- | ----------- |
-| message    | string | no       |             |
-
----
-
-#### CreateOrganizationBodySchema
-
-| Properties  | Type    | Nullable | Description |
-| ----------- | ------- | -------- | ----------- |
-| name        | string  | no       |             |
-| cloudName   | string  | no       |             |
-| active      | boolean | no       |             |
-| strength    | string  | no       |             |
-| accountType | string  | no       |             |
-| industry    | string  | no       |             |
-
----
-
-#### CreateOrganizationResponseSchema
-
-| Properties | Type                                                          | Nullable | Description |
-| ---------- | ------------------------------------------------------------- | -------- | ----------- |
-| detail     | [OrganizationDetailSchema](#organizationdetailschema)         | no       |             |
-| preference | [OrganizationPreferenceSchema](#organizationpreferenceschema) | no       |             |
-
----
-
-#### OrganizationResponseSchema
-
-| Properties | Type                                                  | Nullable | Description |
-| ---------- | ----------------------------------------------------- | -------- | ----------- |
-| org        | [OrganizationDetailSchema](#organizationdetailschema) | no       |             |
-
----
-
-#### OrganizationsResponseSchema
-
-| Properties | Type                                                    | Nullable | Description |
-| ---------- | ------------------------------------------------------- | -------- | ----------- |
-| items      | [[OrganizationDetailSchema](#organizationdetailschema)] | no       |             |
-
----
-
 #### OrganizationDetailSchema
 
-| Properties | Type    | Nullable | Description |
-| ---------- | ------- | -------- | ----------- |
-| \_id       | number  | no       |             |
-| name       | string  | no       |             |
-| cloudName  | string  | no       |             |
-| ownerId    | string  | no       |             |
-| active     | boolean | no       |             |
-| createdAt  | string  | no       |             |
-| modifiedAt | string  | no       |             |
-
----
-
-#### OrganizationPreferenceSchema
-
-| Properties  | Type   | Nullable | Description |
-| ----------- | ------ | -------- | ----------- |
-| \_id        | number | no       |             |
-| orgId       | number | no       |             |
-| strength    | string | no       |             |
-| accountType | string | no       |             |
-| industry    | string | no       |             |
-| createdAt   | string | no       |             |
-| modifiedAt  | string | no       |             |
-
----
-
-#### CreateAppBodySchema
-
-| Properties  | Type     | Nullable | Description |
-| ----------- | -------- | -------- | ----------- |
-| name        | string   | no       |             |
-| permissions | [string] | no       |             |
-| active      | boolean  | no       |             |
-
----
-
-#### UpdateAppBodySchema
-
-| Properties  | Type     | Nullable | Description |
-| ----------- | -------- | -------- | ----------- |
-| name        | any      | no       |             |
-| permissions | [string] | no       |             |
-| active      | boolean  | no       |             |
-
----
-
-#### CreateAppResponseSchema
-
-| Properties | Type                      | Nullable | Description |
-| ---------- | ------------------------- | -------- | ----------- |
-| items      | [[AppSchema](#appschema)] | no       |             |
-
----
-
-#### UpdateAppResponseSchema
-
-| Properties | Type                      | Nullable | Description |
-| ---------- | ------------------------- | -------- | ----------- |
-| items      | [[AppSchema](#appschema)] | no       |             |
-
----
-
-#### AppsSchema
-
-| Properties | Type                      | Nullable | Description |
-| ---------- | ------------------------- | -------- | ----------- |
-| items      | [[AppSchema](#appschema)] | no       |             |
+| Properties | Type    | Nullable | Description                                        |
+| ---------- | ------- | -------- | -------------------------------------------------- |
+| \_id       | number  | no       | Id of the organization                             |
+| name       | string  | no       | Organization Name                                  |
+| cloudName  | string  | no       | Unique cloud name associated with the organization |
+| ownerId    | string  | no       | User Id of the organization owner                  |
+| active     | boolean | no       | Whether the organization is active                 |
+| createdAt  | string  | no       | Timestamp when the organization was created        |
+| updatedAt  | string  | no       | Timestamp when the organization was last updated   |
 
 ---
 
 #### AppSchema
 
-| Properties  | Type     | Nullable | Description |
-| ----------- | -------- | -------- | ----------- |
-| \_id        | number   | no       |             |
-| orgId       | number   | no       |             |
-| name        | string   | no       |             |
-| token       | string   | no       |             |
-| permissions | [string] | no       |             |
-| active      | boolean  | no       |             |
-| createdAt   | string   | no       |             |
-| updatedAt   | string   | no       |             |
-
----
-
-#### CreateTeamBodySchema
-
-| Properties  | Type     | Nullable | Description |
-| ----------- | -------- | -------- | ----------- |
-| userId      | string   | no       |             |
-| type        | string   | no       |             |
-| permissions | [string] | no       |             |
-
----
-
-#### UpdateTeamBodySchema
-
-| Properties  | Type     | Nullable | Description |
-| ----------- | -------- | -------- | ----------- |
-| permissions | [string] | no       |             |
-
----
-
-#### TeamsSchema
-
-| Properties | Type                        | Nullable | Description |
-| ---------- | --------------------------- | -------- | ----------- |
-| items      | [[TeamSchema](#teamschema)] | no       |             |
-
----
-
-#### TeamSchema
-
-| Properties  | Type     | Nullable | Description |
-| ----------- | -------- | -------- | ----------- |
-| \_id        | number   | no       |             |
-| orgId       | number   | no       |             |
-| userId      | string   | no       |             |
-| type        | string   | no       |             |
-| permissions | [string] | no       |             |
-| createdAt   | string   | no       |             |
-| updatedAt   | string   | no       |             |
+| Properties  | Type     | Nullable | Description                             |
+| ----------- | -------- | -------- | --------------------------------------- |
+| \_id        | number   | no       | App id                                  |
+| orgId       | number   | no       | Organization id the app belongs to      |
+| name        | string   | no       | Name of the app                         |
+| token       | string   | no       | api token for the app                   |
+| permissions | [string] | no       | Permissions applied on the app          |
+| active      | boolean  | no       | Whether the app is active               |
+| createdAt   | string   | no       | Timestamp when the app was created      |
+| updatedAt   | string   | no       | Timestamp when the app was last updated |
 
 ---
 
@@ -255,5 +103,13 @@ Success. Returns a JSON object as shown below. Refer `AppDetailsByToken` for mor
 | ---------- | ----------------------------------------------------- | -------- | ----------- |
 | app        | [AppSchema](#appschema)                               | no       |             |
 | org        | [OrganizationDetailSchema](#organizationdetailschema) | no       |             |
+
+---
+
+#### ErrorSchema
+
+| Properties | Type   | Nullable | Description |
+| ---------- | ------ | -------- | ----------- |
+| message    | string | no       |             |
 
 ---

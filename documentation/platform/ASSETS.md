@@ -53,7 +53,7 @@ const data = await assets.fileUpload({
 
 | Argument         | Type    | Required | Description                                                                                                                                                                                                                      |
 | ---------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| file             | file    | no       | Asset file                                                                                                                                                                                                                       |
+| file             | file    | yes      | Asset file                                                                                                                                                                                                                       |
 | path             | string  | no       | Path where you want to store the asset                                                                                                                                                                                           |
 | name             | string  | no       | Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe                                                                                                 |
 | access           | string  | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
@@ -125,7 +125,7 @@ const data = await assets.urlUpload({
 
 | Argument         | Type    | Required | Description                                                                                                                                                                                                                      |
 | ---------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| url              | string  | no       | Asset URL                                                                                                                                                                                                                        |
+| url              | string  | yes      | Asset URL                                                                                                                                                                                                                        |
 | path             | string  | no       | Path where you want to store the asset                                                                                                                                                                                           |
 | name             | string  | no       | Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe                                                                                                 |
 | access           | string  | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
@@ -571,7 +571,7 @@ const data = await assets.deleteFiles({
 
 | Argument | Type  | Required | Description                   |
 | -------- | ----- | -------- | ----------------------------- |
-| ids      | array | no       | Array of file \_ids to delete |
+| ids      | array | yes      | Array of file \_ids to delete |
 
 _Returned Response:_
 
@@ -624,7 +624,7 @@ const data = await assets.createFolder({
 
 | Argument | Type   | Required | Description        |
 | -------- | ------ | -------- | ------------------ |
-| name     | string | no       | Name of the folder |
+| name     | string | yes      | Name of the folder |
 | path     | string | no       | Path of the folder |
 
 Create a new folder at the specified path. Also creates the ancestors if they do not exist.
@@ -1037,38 +1037,6 @@ Success
 
 ---
 
-#### BulkUploadItem
-
-| Properties | Type     | Nullable | Description                                                                                                              |
-| ---------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
-| url        | string   | yes      | url for the asset to be uploaded                                                                                         |
-| name       | string   | no       | name for the asset                                                                                                       |
-| path       | string   | no       | path for the asset                                                                                                       |
-| access     | string   | no       | Access level of asset, can be either `public-read` or `private`                                                          |
-| tags       | [string] | no       | Tags associated with the asset                                                                                           |
-| metadata   | string   | no       | metadata associated with the asset                                                                                       |
-| overwrite  | boolean  | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`. |
-
----
-
-#### BulkUploadRequest
-
-| Properties | Type                                | Nullable | Description            |
-| ---------- | ----------------------------------- | -------- | ---------------------- |
-| urls       | [[BulkUploadItem](#bulkuploaditem)] | yes      | List of asset details. |
-
----
-
-#### BulkUploadResponse
-
-| Properties | Type   | Nullable | Description                   |
-| ---------- | ------ | -------- | ----------------------------- |
-| message    | string | yes      | Status of upload process      |
-| taskId     | string | yes      | TaskId to lookup the progress |
-| progress   | number | yes      | Progress of the task          |
-
----
-
 #### FilesResponse
 
 | Properties | Type     | Nullable | Description                                                    |
@@ -1092,10 +1060,10 @@ Success
 
 | Properties | Type     | Nullable | Description                                                     |
 | ---------- | -------- | -------- | --------------------------------------------------------------- |
-| name       | string   | yes      | Name of the file                                                |
-| path       | string   | yes      | Path of the file                                                |
-| access     | string   | yes      | Access level of asset, can be either `public-read` or `private` |
-| isActive   | boolean  | yes      | Whether the file is active                                      |
+| name       | string   | no       | Name of the file                                                |
+| path       | string   | no       | Path of the file                                                |
+| access     | string   | no       | Access level of asset, can be either `public-read` or `private` |
+| isActive   | boolean  | no       | Whether the file is active                                      |
 | tags       | [string] | no       | Tags associated with the file                                   |
 | metadata   | string   | no       | Metadata associated with the file                               |
 
@@ -1117,7 +1085,7 @@ Success
 | Properties | Type   | Nullable | Description        |
 | ---------- | ------ | -------- | ------------------ |
 | name       | string | yes      | Name of the folder |
-| path       | string | yes      | Path of the folder |
+| path       | string | no       | Path of the folder |
 
 ---
 

@@ -210,49 +210,6 @@ class PixelbinClient {
     */
 
 /**
-        @typedef BulkUploadItem
-        
-        
-        @property { string } url
-        
-        @property { string } [name]
-        
-        @property { string } [path]
-        
-        @property { string } [access]
-        
-        @property { Array<string> } [tags]
-        
-        @property { Object } [metadata]
-        
-        @property { boolean } [overwrite]
-        
-         
-    */
-
-/**
-        @typedef BulkUploadRequest
-        
-        
-        @property { Array<BulkUploadItem> } urls
-        
-         
-    */
-
-/**
-        @typedef BulkUploadResponse
-        
-        
-        @property { string } message
-        
-        @property { string } taskId
-        
-        @property { number } progress
-        
-         
-    */
-
-/**
         @typedef FilesResponse
         
         
@@ -287,13 +244,13 @@ class PixelbinClient {
         @typedef UpdateFileRequest
         
         
-        @property { string } name
+        @property { string } [name]
         
-        @property { string } path
+        @property { string } [path]
         
-        @property { string } access
+        @property { string } [access]
         
-        @property { boolean } isActive
+        @property { boolean } [isActive]
         
         @property { Array<string> } [tags]
         
@@ -323,7 +280,7 @@ class PixelbinClient {
         
         @property { string } name
         
-        @property { string } path
+        @property { string } [path]
         
          
     */
@@ -408,72 +365,6 @@ class PixelbinClient {
     */
 
 /**
-        @typedef ErrorSchema
-        
-        
-        @property { string } [message]
-        
-         
-    */
-
-/**
-        @typedef AuthenticationInternalServerErrorSchema
-        
-        
-        @property { string } [message]
-        
-         
-    */
-
-/**
-        @typedef CreateOrganizationBodySchema
-        
-        
-        @property { string } [name]
-        
-        @property { string } [cloudName]
-        
-        @property { boolean } [active]
-        
-        @property { string } [strength]
-        
-        @property { string } [accountType]
-        
-        @property { string } [industry]
-        
-         
-    */
-
-/**
-        @typedef CreateOrganizationResponseSchema
-        
-        
-        @property { OrganizationDetailSchema } [detail]
-        
-        @property { OrganizationPreferenceSchema } [preference]
-        
-         
-    */
-
-/**
-        @typedef OrganizationResponseSchema
-        
-        
-        @property { OrganizationDetailSchema } [org]
-        
-         
-    */
-
-/**
-        @typedef OrganizationsResponseSchema
-        
-        
-        @property { Array<OrganizationDetailSchema> } [items]
-        
-         
-    */
-
-/**
         @typedef OrganizationDetailSchema
         
         
@@ -489,81 +380,7 @@ class PixelbinClient {
         
         @property { string } [createdAt]
         
-        @property { string } [modifiedAt]
-        
-         
-    */
-
-/**
-        @typedef OrganizationPreferenceSchema
-        
-        
-        @property { number } [_id]
-        
-        @property { number } [orgId]
-        
-        @property { string } [strength]
-        
-        @property { string } [accountType]
-        
-        @property { string } [industry]
-        
-        @property { string } [createdAt]
-        
-        @property { string } [modifiedAt]
-        
-         
-    */
-
-/**
-        @typedef CreateAppBodySchema
-        
-        
-        @property { string } [name]
-        
-        @property { Array<string> } [permissions]
-        
-        @property { boolean } [active]
-        
-         
-    */
-
-/**
-        @typedef UpdateAppBodySchema
-        
-        
-        @property { Object } [name]
-        
-        @property { Array<string> } [permissions]
-        
-        @property { boolean } [active]
-        
-         
-    */
-
-/**
-        @typedef CreateAppResponseSchema
-        
-        
-        @property { Array<AppSchema> } [items]
-        
-         
-    */
-
-/**
-        @typedef UpdateAppResponseSchema
-        
-        
-        @property { Array<AppSchema> } [items]
-        
-         
-    */
-
-/**
-        @typedef AppsSchema
-        
-        
-        @property { Array<AppSchema> } [items]
+        @property { string } [updatedAt]
         
          
     */
@@ -592,64 +409,21 @@ class PixelbinClient {
     */
 
 /**
-        @typedef CreateTeamBodySchema
-        
-        
-        @property { string } [userId]
-        
-        @property { string } [type]
-        
-        @property { Array<string> } [permissions]
-        
-         
-    */
-
-/**
-        @typedef UpdateTeamBodySchema
-        
-        
-        @property { Array<string> } [permissions]
-        
-         
-    */
-
-/**
-        @typedef TeamsSchema
-        
-        
-        @property { Array<TeamSchema> } [items]
-        
-         
-    */
-
-/**
-        @typedef TeamSchema
-        
-        
-        @property { number } [_id]
-        
-        @property { number } [orgId]
-        
-        @property { string } [userId]
-        
-        @property { string } [type]
-        
-        @property { Array<string> } [permissions]
-        
-        @property { string } [createdAt]
-        
-        @property { string } [updatedAt]
-        
-         
-    */
-
-/**
         @typedef AppDetailsByToken
         
         
         @property { AppSchema } [app]
         
         @property { OrganizationDetailSchema } [org]
+        
+         
+    */
+
+/**
+        @typedef ErrorSchema
+        
+        
+        @property { string } [message]
         
          
     */
