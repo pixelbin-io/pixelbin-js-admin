@@ -79,6 +79,17 @@ class PixelbinClient {
     */
 
 /**
+        @typedef ListFilesResponse
+        
+        
+        @property { Array<exploreItem> } items
+        
+        @property { page } page
+        
+         
+    */
+
+/**
         @typedef exploreFolderResponse
         
         
@@ -630,7 +641,7 @@ which can be then used to upload your asset.
         return PlatformAPIClient.execute(
             this.config,
             "get",
-            `/service/platform/assets/v1.0/search`,
+            `/service/platform/assets/v1.0/listFiles`,
             query_params,
             undefined,
         );

@@ -54,6 +54,14 @@ class Validator {
         });
     }
 
+    static ListFilesResponse() {
+        return Joi.object({
+            items: Joi.array().items(this.exploreItem()).required(),
+
+            page: this.page().required(),
+        });
+    }
+
     static exploreFolderResponse() {
         return Joi.object({
             folder: this.folderItem().required(),

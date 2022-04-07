@@ -282,7 +282,7 @@ List all files and folders in root folder. Search for files if name is provided.
 
 _Returned Response:_
 
-[exploreResponse](#exploreresponse)
+[ListFilesResponse](#listfilesresponse)
 
 Success
 
@@ -937,6 +937,15 @@ Success
 ---
 
 #### exploreResponse
+
+| Properties | Type                          | Nullable | Description                  |
+| ---------- | ----------------------------- | -------- | ---------------------------- |
+| items      | [[exploreItem](#exploreitem)] | yes      | exploreItems in current page |
+| page       | [page](#page)                 | yes      | page details                 |
+
+---
+
+#### ListFilesResponse
 
 | Properties | Type                          | Nullable | Description                  |
 | ---------- | ----------------------------- | -------- | ---------------------------- |

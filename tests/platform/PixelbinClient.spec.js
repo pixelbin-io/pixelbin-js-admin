@@ -127,7 +127,7 @@ describe("Pixelbin Client", () => {
         expect(requestMock.mock.calls[0][0]).toEqual({
             baseURL: config.domain,
             method: "get",
-            url: "/service/platform/assets/v1.0/search",
+            url: "/service/platform/assets/v1.0/listFiles",
             params: {
                 onlyFiles: true,
                 onlyFolders: false,
@@ -165,7 +165,7 @@ describe("Pixelbin Client", () => {
         expect(requestMock.mock.calls[0][0]).toEqual({
             baseURL: config.domain,
             method: "get",
-            url: "/service/platform/assets/v1.0/search",
+            url: "/service/platform/assets/v1.0/listFiles",
             params: {
                 onlyFiles: true,
                 onlyFolders: false,
