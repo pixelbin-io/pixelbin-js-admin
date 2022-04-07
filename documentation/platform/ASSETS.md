@@ -1097,22 +1097,6 @@ Success
 
 ---
 
-#### JobItem
-
-| Properties | Type   | Nullable | Description |
-| ---------- | ------ | -------- | ----------- |
-| id         | string | no       | job id      |
-
----
-
-#### GetJobsResponse
-
-| Properties | Type                  | Nullable | Description  |
-| ---------- | --------------------- | -------- | ------------ |
-| jobs       | [[JobItem](#jobitem)] | no       | list of jobs |
-
----
-
 #### TransformationsResponse
 
 | Properties | Type                                                        | Nullable | Description                                         |

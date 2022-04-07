@@ -295,24 +295,6 @@ class PixelbinClient {
     */
 
 /**
-        @typedef JobItem
-        
-        
-        @property { string } [id]
-        
-         
-    */
-
-/**
-        @typedef GetJobsResponse
-        
-        
-        @property { Array<JobItem> } [jobs]
-        
-         
-    */
-
-/**
         @typedef TransformationsResponse
         
         

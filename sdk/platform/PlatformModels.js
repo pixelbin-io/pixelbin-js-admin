@@ -234,18 +234,6 @@ class Validator {
         });
     }
 
-    static JobItem() {
-        return Joi.object({
-            id: Joi.string().allow(""),
-        });
-    }
-
-    static GetJobsResponse() {
-        return Joi.object({
-            jobs: Joi.array().items(this.JobItem()),
-        });
-    }
-
     static TransformationsResponse() {
         return Joi.object({
             delimiters: this.Delimiter(),
