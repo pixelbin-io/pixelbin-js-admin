@@ -22,7 +22,7 @@
     },
     "author": "Pixelbin",
     "license": "ISC",
-    "dependencies": {
+    "peerDependencies": {
         "axios": "0.21.1",
         "crypto-js": "4.0.0",
         "joi": "17.4.0",
