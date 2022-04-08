@@ -339,20 +339,7 @@ Success
 Paginator exposes `hasNext` and `next` methods to paginate through pages.
 
 ```javascript
-// Promise
-const promise = assets.listFilesPaginator({
-    name: string,
-    path: string,
-    format: string,
-    tags: array,
-    onlyFiles: boolean,
-    onlyFolders: boolean,
-    pageSize: integer,
-    sort: string,
-});
-
-// Async/Await
-const paginator = await assets.listFilesPaginator({
+const paginator = assets.listFilesPaginator({
     name: string,
     path: string,
     format: string,
