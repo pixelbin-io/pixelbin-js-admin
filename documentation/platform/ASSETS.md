@@ -8,6 +8,7 @@ Asset Uploader Service
 -   [urlUpload](#urlupload)
 -   [createSignedUrl](#createsignedurl)
 -   [listFiles](#listfiles)
+-   [listFilesPaginator](#listfilespaginator)
 -   [getFileById](#getfilebyid)
 -   [getFileByPath](#getfilebypath)
 -   [updateFile](#updatefile)
@@ -330,6 +331,107 @@ Success
 </details>
 
 ---
+
+### listFilesPaginator
+
+**Summary**: Paginator for listFiles
+
+Paginator exposes `hasNext` and `next` methods to paginate through pages.
+
+```javascript
+// Promise
+const promise = assets.listFilesPaginator({
+    name: string,
+    path: string,
+    format: string,
+    tags: array,
+    onlyFiles: boolean,
+    onlyFolders: boolean,
+    pageSize: integer,
+    sort: string,
+});
+
+// Async/Await
+const paginator = await assets.listFilesPaginator({
+    name: string,
+    path: string,
+    format: string,
+    tags: array,
+    onlyFiles: boolean,
+    onlyFolders: boolean,
+    pageSize: integer,
+    sort: string,
+});
+while (paginator.hasNext()) {
+    const { items, page } = await paginator.next();
+    console.log(page.current); // 1
+    console.log(page.hasNext); // false
+    console.log(page.size); // 3
+    console.log(items.length); // 3
+}
+```
+
+| Argument    | Type          | Required | Description                                                                  |
+| ----------- | ------------- | -------- | ---------------------------------------------------------------------------- |
+| name        | string        | no       | Find items with matching name                                                |
+| path        | string        | no       | Find items with matching path                                                |
+| format      | string        | no       | Find items with matching format                                              |
+| tags        | Array<string> | no       | Find items containing these tags                                             |
+| onlyFiles   | boolean       | no       | If true will fetch only files                                                |
+| onlyFolders | boolean       | no       | If true will fetch only folders                                              |
+| pageSize    | number        | no       | Page Size                                                                    |
+| sort        | string        | no       | Key to sort results by. A "-" suffix will sort results in descending orders. |
+
+List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
+
+_Returned Response:_
+
+[ListFilesResponse](#listfilesresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "items": [
+        {
+            "_id": "dummy-uuid",
+            "name": "dir",
+            "type": "folder"
+        },
+        {
+            "_id": "dummy-uuid",
+            "name": "asset2",
+            "type": "file",
+            "path": "dir",
+            "fileID": "dir/asset2",
+            "format": "jpeg",
+            "size": 1000,
+            "access": "private"
+        },
+        {
+            "_id": "dummy-uuid",
+            "name": "asset1",
+            "type": "file",
+            "path": "dir",
+            "fileID": "dir/asset1",
+            "format": "jpeg",
+            "size": 1000,
+            "access": "private"
+        }
+    ],
+    "page": {
+        "type": "number",
+        "size": 4,
+        "current": 1,
+        "hasNext": false
+    }
+}
+```
+
+</details>
 
 ### getFileById
 
