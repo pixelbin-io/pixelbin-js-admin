@@ -65,6 +65,8 @@ const data = await assets.fileUpload({
 | overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
 | filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
 
+Upload File to Pixelbin
+
 _Returned Response:_
 
 [UploadResponse](#uploadresponse)
@@ -98,7 +100,7 @@ Success
 
 ### urlUpload
 
-**Summary**: Upload Asset
+**Summary**: Upload Asset with url
 
 ```javascript
 // Promise
@@ -138,6 +140,8 @@ const data = await assets.urlUpload({
 | metadata         | string                    | no       | Asset related metadata                                                                                                                                                                                                           |
 | overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
 | filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
+
+Upload Asset with url
 
 _Returned Response:_
 

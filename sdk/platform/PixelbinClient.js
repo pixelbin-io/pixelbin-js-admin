@@ -429,12 +429,12 @@ class Assets {
     /**
     *
     * @summary: Upload File
-    * @description: 
+    * @description: Upload File to Pixelbin
     * @param {Object} arg - arg object.    
     * @param {file} arg.file Asset file
     * @param {string} arg.path Path where you want to store the asset. Path of containing folder
     * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
-    * @param {} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {[string]} arg.tags Asset tags
     * @param {object} arg.metadata Asset related metadata
     * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
@@ -479,13 +479,13 @@ class Assets {
 
     /**
     *
-    * @summary: Upload Asset
-    * @description: 
+    * @summary: Upload Asset with url
+    * @description: Upload Asset with url
     * @param {Object} arg - arg object.     
     * @param {string} arg.url Asset URL
     * @param {string} arg.path Path where you want to store the asset. Path of containing folder.
     * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
-    * @param {} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {[string]} arg.tags Asset tags
     * @param {object} arg.metadata Asset related metadata
     * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
@@ -538,7 +538,7 @@ which can be then used to upload your asset.
     * @param {string} arg.name name of the file
     * @param {string} arg.path Path of containing folder.
     * @param {string} arg.format Format of the file
-    * @param {} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {[string]} arg.tags Tags associated with the file.
     * @param {object} arg.metadata Metadata associated with the file.
     * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
