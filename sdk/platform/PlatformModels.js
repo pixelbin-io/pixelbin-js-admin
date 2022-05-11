@@ -84,7 +84,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             overwrite: Joi.boolean(),
 
@@ -104,7 +104,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             overwrite: Joi.boolean(),
 
@@ -130,7 +130,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             url: Joi.string().allow(""),
 
@@ -150,7 +150,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             overwrite: Joi.boolean(),
 
@@ -168,7 +168,7 @@ class Validator {
         return Joi.object({
             url: Joi.string().allow(""),
 
-            fields: Joi.any(),
+            fields: Joi.object(),
         });
     }
 
@@ -192,7 +192,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             url: Joi.string().allow(""),
 
@@ -212,7 +212,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
         });
     }
 
@@ -274,7 +274,7 @@ class Validator {
 
             description: Joi.string().allow(""),
 
-            credentials: Joi.any(),
+            credentials: Joi.object(),
 
             operations: Joi.array().items(Joi.string().allow("")),
 

@@ -463,9 +463,9 @@ class Assets {
         if (name) body.append("name", name);
         if (access) body.append("access", access);
         if (tags) body.append("tags", tags);
-        if (metadata) body.append("metadata", metadata);
-        if (overwrite) body.append("overwrite", overwrite);
-        if (filenameOverride) body.append("filenameOverride", filenameOverride);
+        if (metadata) body.append("metadata", JSON.stringify(metadata));
+        if (overwrite) body.append("overwrite", overwrite.toString());
+        if (filenameOverride) body.append("filenameOverride", filenameOverride.toString());
 
         return PlatformAPIClient.execute(
             this.config,
