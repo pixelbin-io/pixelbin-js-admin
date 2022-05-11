@@ -1,4 +1,5 @@
-const { getUrlParts, version2Regex } = require("./urlParts");
+const { getUrlParts } = require("./urlParts");
+const { version2Regex, zoneSlug } = require("./regex");
 const { PDKInvalidUrlError, PDKIllegalArgumentError } = require("../../common/PDKError");
 
 module.exports.getUrlFromObj = function (obj, config) {
@@ -7,7 +8,7 @@ module.exports.getUrlFromObj = function (obj, config) {
     if (!obj.filePath) throw new PDKIllegalArgumentError("key filePath should be defined");
     obj["pattern"] = getPatternFromTransformations(obj["transformations"], config) || "original";
     if (!obj.version || !version2Regex.test(obj.version)) obj.version = "v2";
-    if (!obj.zone || !/([a-zA-Z0-9_-]{6})/.test(obj.zone)) obj.zone = "";
+    if (!obj.zone || !zoneSlug.test(obj.zone)) obj.zone = "";
     const urlKeySorted = ["baseUrl", "version", "cloudName", "zoneSlug", "pattern", "filePath"];
     const urlArr = [];
     urlKeySorted.forEach((key) => {

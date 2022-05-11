@@ -217,7 +217,7 @@ describe("Pixelbin Client", () => {
 
         const pixelbin = new PixelbinClient(config);
         const response = await pixelbin.assets.updateFile({
-            filePath: "path/to/file",
+            fileId: "path/to/file",
             name: "New Name",
             path: "new/file/path",
             access: "private",

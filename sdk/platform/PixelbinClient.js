@@ -112,7 +112,7 @@ class PixelbinClient {
         
         @property { string } [name]
         
-        @property { string } [access]
+        @property { AccessEnum } [access]
         
         @property { Array<string> } [tags]
         
@@ -135,7 +135,7 @@ class PixelbinClient {
         
         @property { string } [name]
         
-        @property { string } [access]
+        @property { AccessEnum } [access]
         
         @property { Array<string> } [tags]
         
@@ -187,7 +187,7 @@ class PixelbinClient {
         
         @property { string } [format]
         
-        @property { string } [access]
+        @property { AccessEnum } [access]
         
         @property { Array<string> } [tags]
         
@@ -306,7 +306,7 @@ class PixelbinClient {
     */
 
 /**
-        @typedef TransformationsResponse
+        @typedef TransformationModulesResponse
         
         
         @property { Delimiter } [delimiters]
@@ -339,7 +339,7 @@ class PixelbinClient {
     */
 
 /**
-        @typedef TransformationResponse
+        @typedef TransformationModuleResponse
         
         
         @property { string } [identifier]
@@ -352,7 +352,7 @@ class PixelbinClient {
         
         @property { Array<any> } [operations]
         
-        @property {  } [enabled]
+        @property { boolean } [enabled]
         
          
     */
@@ -432,9 +432,9 @@ class Assets {
     * @description: 
     * @param {Object} arg - arg object.    
     * @param {file} arg.file Asset file
-    * @param {string} arg.path Path where you want to store the asset
+    * @param {string} arg.path Path where you want to store the asset. Path of containing folder
     * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
-    * @param {string} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {[string]} arg.tags Asset tags
     * @param {object} arg.metadata Asset related metadata
     * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
@@ -483,9 +483,9 @@ class Assets {
     * @description: 
     * @param {Object} arg - arg object.     
     * @param {string} arg.url Asset URL
-    * @param {string} arg.path Path where you want to store the asset
+    * @param {string} arg.path Path where you want to store the asset. Path of containing folder.
     * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
-    * @param {string} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {[string]} arg.tags Asset tags
     * @param {object} arg.metadata Asset related metadata
     * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
@@ -536,9 +536,9 @@ which can be then used to upload your asset.
 
     * @param {Object} arg - arg object.     
     * @param {string} arg.name name of the file
-    * @param {string} arg.path Path of the file
+    * @param {string} arg.path Path of containing folder.
     * @param {string} arg.format Format of the file
-    * @param {string} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {[string]} arg.tags Tags associated with the file.
     * @param {object} arg.metadata Metadata associated with the file.
     * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
@@ -692,14 +692,44 @@ which can be then used to upload your asset.
 
     /**
     *
+    * @summary: Get file details with _id
+    * @description: 
+    * @param {Object} arg - arg object. 
+    * @param {string} arg._id - _id of File
+    
+    **/
+    getFileById({ _id } = {}) {
+        const { error } = AssetsValidator.getFileById().validate(
+            {
+                _id,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/files/id/${_id}`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
     * @summary: Get file details with fileId
     * @description: 
     * @param {Object} arg - arg object. 
-    * @param {string} arg.fileId - _id of File
+    * @param {string} arg.fileId - Combination of `path` and `name` of file
     
     **/
-    getFileById({ fileId } = {}) {
-        const { error } = AssetsValidator.getFileById().validate(
+    getFileByFileId({ fileId } = {}) {
+        const { error } = AssetsValidator.getFileByFileId().validate(
             {
                 fileId,
             },
@@ -714,37 +744,7 @@ which can be then used to upload your asset.
         return PlatformAPIClient.execute(
             this.config,
             "get",
-            `/service/platform/assets/v1.0/files/id/${fileId}`,
-            query_params,
-            undefined,
-        );
-    }
-
-    /**
-    *
-    * @summary: Get file details with filePath
-    * @description: 
-    * @param {Object} arg - arg object. 
-    * @param {string} arg.filePath - filePath of File
-    
-    **/
-    getFileByPath({ filePath } = {}) {
-        const { error } = AssetsValidator.getFileByPath().validate(
-            {
-                filePath,
-            },
-            { abortEarly: false },
-        );
-        if (error) {
-            return Promise.reject(new PDKClientValidationError(error));
-        }
-
-        const query_params = {};
-
-        return PlatformAPIClient.execute(
-            this.config,
-            "get",
-            `/service/platform/assets/v1.0/files/${filePath}`,
+            `/service/platform/assets/v1.0/files/${fileId}`,
             query_params,
             undefined,
         );
@@ -755,19 +755,19 @@ which can be then used to upload your asset.
     * @summary: Update file details
     * @description: 
     * @param {Object} arg - arg object.     
-    * @param {string} arg.filePath - filePath of File
+    * @param {string} arg.fileId - Combination of `path` and `name`
     * @param {string} arg.name Name of the file
-    * @param {string} arg.path Path of the file
+    * @param {string} arg.path path of containing folder.
     * @param {string} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {boolean} arg.isActive Whether the file is active
     * @param {[string]} arg.tags Tags associated with the file
     * @param {object} arg.metadata Metadata associated with the file
     
     **/
-    updateFile({ filePath, name, path, access, isActive, tags, metadata } = {}) {
+    updateFile({ fileId, name, path, access, isActive, tags, metadata } = {}) {
         const { error } = AssetsValidator.updateFile().validate(
             {
-                filePath,
+                fileId,
                 body: { name, path, access, isActive, tags, metadata },
             },
             { abortEarly: false },
@@ -792,7 +792,7 @@ which can be then used to upload your asset.
         return PlatformAPIClient.execute(
             this.config,
             "patch",
-            `/service/platform/assets/v1.0/files/${filePath}`,
+            `/service/platform/assets/v1.0/files/${fileId}`,
             query_params,
             body,
             "application/json",
@@ -804,13 +804,13 @@ which can be then used to upload your asset.
     * @summary: Delete file
     * @description: 
     * @param {Object} arg - arg object. 
-    * @param {string} arg.filePath - filePath of File
+    * @param {string} arg.fileId - Combination of `path` and `name`
     
     **/
-    deleteFile({ filePath } = {}) {
+    deleteFile({ fileId } = {}) {
         const { error } = AssetsValidator.deleteFile().validate(
             {
-                filePath,
+                fileId,
             },
             { abortEarly: false },
         );
@@ -823,7 +823,7 @@ which can be then used to upload your asset.
         return PlatformAPIClient.execute(
             this.config,
             "delete",
-            `/service/platform/assets/v1.0/files/${filePath}`,
+            `/service/platform/assets/v1.0/files/${fileId}`,
             query_params,
             undefined,
         );
@@ -873,7 +873,7 @@ which can be then used to upload your asset.
 
     * @param {Object} arg - arg object.     
     * @param {string} arg.name Name of the folder
-    * @param {string} arg.path Path of the folder
+    * @param {string} arg.path path of containing folder.
     
     **/
     createFolder({ name, path } = {}) {
@@ -914,7 +914,7 @@ by making `isActive` as `false`.
 We currently do not support updating folder name or path.
 
     * @param {Object} arg - arg object.     
-    * @param {string} arg.folderId - folderId of Folder
+    * @param {string} arg.folderId - combination of `path` and `name`
     * @param {boolean} arg.isActive whether the folder is active
     
     **/
@@ -954,13 +954,13 @@ We currently do not support updating folder name or path.
     * @description: Delete folder and all its children permanently.
 
     * @param {Object} arg - arg object. 
-    * @param {string} arg.folderId - _id of folder to be deleted
+    * @param {string} arg._id - _id of folder to be deleted
     
     **/
-    deleteFolder({ folderId } = {}) {
+    deleteFolder({ _id } = {}) {
         const { error } = AssetsValidator.deleteFolder().validate(
             {
-                folderId,
+                _id,
             },
             { abortEarly: false },
         );
@@ -973,7 +973,7 @@ We currently do not support updating folder name or path.
         return PlatformAPIClient.execute(
             this.config,
             "delete",
-            `/service/platform/assets/v1.0/folders/${folderId}`,
+            `/service/platform/assets/v1.0/folders/${_id}`,
             query_params,
             undefined,
         );
@@ -981,14 +981,14 @@ We currently do not support updating folder name or path.
 
     /**
     *
-    * @summary: Get all transformations
-    * @description: Get all transformations.
+    * @summary: Get all transformation modules
+    * @description: Get all transformation modules.
 
     * @param {Object} arg - arg object. 
     
     **/
-    getTransformations({} = {}) {
-        const { error } = AssetsValidator.getTransformations().validate({}, { abortEarly: false });
+    getModules({} = {}) {
+        const { error } = AssetsValidator.getModules().validate({}, { abortEarly: false });
         if (error) {
             return Promise.reject(new PDKClientValidationError(error));
         }
@@ -1006,17 +1006,17 @@ We currently do not support updating folder name or path.
 
     /**
     *
-    * @summary: Get Transformation
-    * @description: Get Transformation.
+    * @summary: Get Transformation Module by module identifier
+    * @description: Get Transformation Module by module identifier
 
     * @param {Object} arg - arg object. 
-    * @param {string} arg.pluginId - pluginId of Transformation
+    * @param {string} arg.identifier - identifier of Transformation Module
     
     **/
-    getTransformationById({ pluginId } = {}) {
-        const { error } = AssetsValidator.getTransformationById().validate(
+    getModule({ identifier } = {}) {
+        const { error } = AssetsValidator.getModule().validate(
             {
-                pluginId,
+                identifier,
             },
             { abortEarly: false },
         );
@@ -1029,7 +1029,7 @@ We currently do not support updating folder name or path.
         return PlatformAPIClient.execute(
             this.config,
             "get",
-            `/service/platform/assets/v1.0/playground/plugins/${pluginId}`,
+            `/service/platform/assets/v1.0/playground/plugins/${identifier}`,
             query_params,
             undefined,
         );

@@ -14,13 +14,15 @@ Organization Service
 
 ```javascript
 // Promise
+
 const promise = organization.getAppByToken({
-    token: string,
+    token: "<API-TOKEN>",
 });
 
 // Async/Await
+
 const data = await organization.getAppByToken({
-    token: string,
+    token: "<API-TOKEN>",
 });
 ```
 
