@@ -80,11 +80,11 @@ class Validator {
 
             name: Joi.string().allow(""),
 
-            access: Joi.string().allow(""),
+            access: this.AccessEnum(),
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             overwrite: Joi.boolean(),
 
@@ -100,11 +100,11 @@ class Validator {
 
             name: Joi.string().allow(""),
 
-            access: Joi.string().allow(""),
+            access: this.AccessEnum(),
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             overwrite: Joi.boolean(),
 
@@ -130,7 +130,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             url: Joi.string().allow(""),
 
@@ -146,11 +146,11 @@ class Validator {
 
             format: Joi.string().allow(""),
 
-            access: Joi.string().allow(""),
+            access: this.AccessEnum(),
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             overwrite: Joi.boolean(),
 
@@ -168,7 +168,7 @@ class Validator {
         return Joi.object({
             url: Joi.string().allow(""),
 
-            fields: Joi.any(),
+            fields: Joi.object(),
         });
     }
 
@@ -192,7 +192,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
 
             url: Joi.string().allow(""),
 
@@ -212,7 +212,7 @@ class Validator {
 
             tags: Joi.array().items(Joi.string().allow("")),
 
-            metadata: Joi.any(),
+            metadata: Joi.object(),
         });
     }
 
@@ -242,11 +242,11 @@ class Validator {
         });
     }
 
-    static TransformationsResponse() {
+    static TransformationModulesResponse() {
         return Joi.object({
             delimiters: this.Delimiter(),
 
-            plugins: Joi.object().pattern(/\S/, this.TransformationResponse()),
+            plugins: Joi.object().pattern(/\S/, this.TransformationModuleResponse()),
 
             presets: Joi.array().items(Joi.string().allow("")),
         });
@@ -266,7 +266,7 @@ class Validator {
         });
     }
 
-    static TransformationResponse() {
+    static TransformationModuleResponse() {
         return Joi.object({
             identifier: Joi.string().allow(""),
 
@@ -274,12 +274,24 @@ class Validator {
 
             description: Joi.string().allow(""),
 
-            credentials: Joi.any(),
+            credentials: Joi.object(),
 
             operations: Joi.array().items(Joi.string().allow("")),
 
-            enabled: undefined,
+            enabled: Joi.boolean(),
         });
+    }
+
+    /*
+        Enum: AccessEnum
+        Used By: Assets
+    */
+    static AccessEnum() {
+        return Joi.string().valid(
+            "public-read",
+
+            "private",
+        );
     }
 
     static OrganizationDetailSchema() {
@@ -370,26 +382,26 @@ class AssetsValidator {
 
     static getFileById() {
         return Joi.object({
-            fileId: Joi.string().allow("").required(),
+            _id: Joi.string().allow("").required(),
         }).required();
     }
 
-    static getFileByPath() {
+    static getFileByFileId() {
         return Joi.object({
-            filePath: Joi.string().allow("").required(),
+            fileId: Joi.string().allow("").required(),
         }).required();
     }
 
     static updateFile() {
         return Joi.object({
-            filePath: Joi.string().allow("").required(),
+            fileId: Joi.string().allow("").required(),
             body: Validator.UpdateFileRequest().required(),
         }).required();
     }
 
     static deleteFile() {
         return Joi.object({
-            filePath: Joi.string().allow("").required(),
+            fileId: Joi.string().allow("").required(),
         }).required();
     }
 
@@ -414,17 +426,17 @@ class AssetsValidator {
 
     static deleteFolder() {
         return Joi.object({
-            folderId: Joi.string().allow("").required(),
+            _id: Joi.string().allow("").required(),
         }).required();
     }
 
-    static getTransformations() {
+    static getModules() {
         return Joi.object({});
     }
 
-    static getTransformationById() {
+    static getModule() {
         return Joi.object({
-            pluginId: Joi.string().allow("").required(),
+            identifier: Joi.string().allow("").required(),
         }).required();
     }
 }

@@ -191,6 +191,7 @@ describe("Pixelbin Client", () => {
         const pixelbin = new PixelbinClient(config);
         const response = await pixelbin.assets.fileUpload({
             file: fs.createReadStream("tests/fixtures/pluginResponse.js"),
+            overwrite: true,
         });
         expect(response.items.length).toBe(5);
         expect(requestMock.mock.calls[0][0]).toEqual({
@@ -217,7 +218,7 @@ describe("Pixelbin Client", () => {
 
         const pixelbin = new PixelbinClient(config);
         const response = await pixelbin.assets.updateFile({
-            filePath: "path/to/file",
+            fileId: "path/to/file",
             name: "New Name",
             path: "new/file/path",
             access: "private",
