@@ -631,7 +631,11 @@ which can be then used to upload your asset.
         query_params["name"] = name;
         query_params["path"] = path;
         query_params["format"] = format;
-        query_params["tags"] = tags;
+        if (tags?.join("")) {
+            tags?.forEach((param, idx) => {
+                query_params[`tags[${idx}]`] = param;
+            });
+        }
         query_params["onlyFiles"] = onlyFiles;
         query_params["onlyFolders"] = onlyFolders;
         query_params["pageNo"] = pageNo;

@@ -2,7 +2,7 @@ const { PixelbinConfig, PixelbinClient } = require(".");
 const fs = require("fs");
 
 const config = new PixelbinConfig({
-    domain: "https://api.pixelbinx0.de",
+    domain: "https://api.pixelbin.io",
     apiSecret: "API_TOKEN",
 });
 const pixelbin = new PixelbinClient(config);
