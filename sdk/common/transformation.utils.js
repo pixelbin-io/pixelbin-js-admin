@@ -94,7 +94,7 @@ function txtToOptions(dSplit, originalFormat, config, flatten, isPreset = false)
         }
         const params = getParamsObject(getParamsList(dSplit, ""));
         const presetName = params.find(({ key, value }) => key === "n");
-        if (presetName?.key) {
+        if (presetName && presetName.key) {
             return {
                 name: presetName.value,
                 isPreset: true,
@@ -150,7 +150,7 @@ module.exports.getOriginalFormOfUrl = function (url) {
 };
 
 module.exports.getUrlTransformationString = function (transformationList, config) {
-    return transformationList.length
+    return transformationList && transformationList.length
         ? transformationList
               .map((o) => {
                   if (o) {

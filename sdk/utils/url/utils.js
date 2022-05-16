@@ -72,7 +72,7 @@ module.exports.rgbHex = function (red, green, blue, alpha) {
 };
 
 const getPatternFromTransformations = function (transformationList, config) {
-    return transformationList?.length
+    return transformationList && transformationList.length
         ? transformationList
               .map((o) => {
                   /* eslint-disable no-prototype-builtins */
@@ -152,7 +152,7 @@ function txtToOptions(dSplit) {
     if (pluginId === "p") {
         const params = getParamsObject(getParamsList(dSplit, ""));
         const presetName = params.find(({ key, value }) => key === "n");
-        if (presetName?.key) {
+        if (presetName && presetName.key) {
             return {
                 plugin: pluginId,
                 name: presetName.value,
