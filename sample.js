@@ -14,10 +14,10 @@ pixelbin.assets
     })
     .catch((err) => console.log(err));
 
-const explorer = pixelbin.assets?.listFilesPaginator({ pageSize: 5 });
+const explorer = pixelbin.assets.listFilesPaginator({ pageSize: 5 });
 
 explorer
-    ?.next()
+    .next()
     .then((res) => {
         console.log(res);
     })

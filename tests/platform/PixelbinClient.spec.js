@@ -119,6 +119,7 @@ describe("Pixelbin Client", () => {
             onlyFolders: false,
             pageNo: 1,
             pageSize: 5,
+            tags: ["cats", "dogs"],
         });
         expect(res.items.length).toBe(5);
         expect(requestMock.mock.calls[0][0].headers["Authorization"]).toEqual(
@@ -134,6 +135,8 @@ describe("Pixelbin Client", () => {
                 pageNo: 1,
                 pageSize: 5,
                 sort: undefined,
+                "tags[0]": "cats",
+                "tags[1]": "dogs",
             },
             data: undefined,
             headers: {
