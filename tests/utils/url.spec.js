@@ -196,12 +196,12 @@ describe("URL", () => {
         };
         let generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1/__playground/playground-default.jpeg",
         );
     });
     it("should generate url from obj - 1", async () => {
@@ -253,12 +253,12 @@ describe("URL", () => {
         };
         let generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/t.resize(h:200,w:100,fill:999)~erase.bg(i:general)~t.extend()~p:preset1/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/t.resize(h:200,w:100,fill:999)~erase.bg(i:general)~t.extend()~p:preset1/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/t.resize(h:200,w:100,fill:999)~erase.bg(i:general)~t.extend()~p:preset1/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/t.resize(h:200,w:100,fill:999)~erase.bg(i:general)~t.extend()~p:preset1/__playground/playground-default.jpeg",
         );
     });
     it("should throw error if transformation object is incorrect", async () => {
@@ -374,12 +374,12 @@ describe("URL", () => {
         let generatedUrl = url.objToUrl(obj);
         // expect(urlUtils.generatePixelbinPattern(transformation)).toBe("t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1");
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
     });
     it("should generate url from obj undefined", async () => {
@@ -393,12 +393,12 @@ describe("URL", () => {
         let generatedUrl = url.objToUrl(obj);
         // expect(urlUtils.generatePixelbinPattern(transformation)).toBe("t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1");
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
     });
     it("should generate url from obj  empty object", async () => {
@@ -413,12 +413,12 @@ describe("URL", () => {
         let generatedUrl = url.objToUrl(obj);
         // expect(urlUtils.generatePixelbinPattern(transformation)).toBe("t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1");
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
     });
     it("should generate url from obj  empty object", async () => {
@@ -433,12 +433,12 @@ describe("URL", () => {
         let generatedUrl = url.objToUrl(obj);
         // expect(urlUtils.generatePixelbinPattern(transformation)).toBe("t.resize(h:200,w:100,fill:999)~erase.bg()~t.extend()~p:preset1");
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
         obj.version = "v1";
         generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/original/__playground/playground-default.jpeg",
+            "https://cdn.pixelbin.io/v1/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg",
         );
     });
     it("should throw error to generate url from obj if filePath not defined", async () => {

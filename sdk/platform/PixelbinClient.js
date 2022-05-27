@@ -462,7 +462,7 @@ class Assets {
         if (path) body.append("path", path);
         if (name) body.append("name", name);
         if (access) body.append("access", access);
-        if (tags) body.append("tags", tags);
+        if (tags) body.append("tags", JSON.stringify(tags));
         if (metadata) body.append("metadata", JSON.stringify(metadata));
         if (overwrite) body.append("overwrite", overwrite.toString());
         if (filenameOverride) body.append("filenameOverride", filenameOverride.toString());
