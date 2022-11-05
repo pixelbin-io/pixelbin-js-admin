@@ -55,6 +55,13 @@ class PDKIllegalArgumentError extends Error {
     }
 }
 
+class PDKIllegalQueryParameterError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "PDKIllegalQueryParameterError";
+    }
+}
+
 module.exports = {
     PDKServerResponseError,
     PDKClientValidationError,
@@ -63,4 +70,5 @@ module.exports = {
     PDKOAuthCodeError,
     PDKInvalidUrlError,
     PDKIllegalArgumentError,
+    PDKIllegalQueryParameterError,
 };
