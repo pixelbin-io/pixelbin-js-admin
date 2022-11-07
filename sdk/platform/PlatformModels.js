@@ -332,7 +332,7 @@ class Validator {
         });
     }
 
-    static AppDetailsByToken() {
+    static AppOrgDetails() {
         return Joi.object({
             app: this.AppSchema(),
 
@@ -442,10 +442,8 @@ class AssetsValidator {
 }
 
 class OrganizationValidator {
-    static getAppByToken() {
-        return Joi.object({
-            token: Joi.string().allow("").required(),
-        }).required();
+    static getAppOrgDetails() {
+        return Joi.object({});
     }
 }
 

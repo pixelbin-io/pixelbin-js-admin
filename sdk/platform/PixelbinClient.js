@@ -402,7 +402,7 @@ class PixelbinClient {
     */
 
 /**
-        @typedef AppDetailsByToken
+        @typedef AppOrgDetails
         
         
         @property { AppSchema } [app]
@@ -1048,16 +1048,13 @@ class Organization {
     /**
     *
     * @summary: Get App Details
-    * @description: Get App and org details with the API_TOKEN
+    * @description: Get App and org details
     * @param {Object} arg - arg object. 
-    * @param {string} arg.token - Pixelbin api token
     
     **/
-    getAppByToken({ token } = {}) {
-        const { error } = OrganizationValidator.getAppByToken().validate(
-            {
-                token,
-            },
+    getAppOrgDetails({} = {}) {
+        const { error } = OrganizationValidator.getAppOrgDetails().validate(
+            {},
             { abortEarly: false },
         );
         if (error) {
@@ -1069,7 +1066,7 @@ class Organization {
         return PlatformAPIClient.execute(
             this.config,
             "get",
-            `/service/platform/organization/v1.0/apps/${token}`,
+            `/service/platform/organization/v1.0/apps/info`,
             query_params,
             undefined,
         );

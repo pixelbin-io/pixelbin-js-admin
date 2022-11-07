@@ -1,6 +1,10 @@
 const { getUrlParts } = require("./urlParts");
 const { version2Regex, zoneSlug } = require("./regex");
-const { PDKInvalidUrlError, PDKIllegalArgumentError } = require("../../common/PDKError");
+const {
+    PDKInvalidUrlError,
+    PDKIllegalArgumentError,
+    PDKIllegalQueryParameterError,
+} = require("../../common/PDKError");
 
 module.exports.getUrlFromObj = function (obj, config) {
     if (!obj.baseUrl) obj["baseUrl"] = "https://cdn.pixelbin.io";
@@ -14,13 +18,29 @@ module.exports.getUrlFromObj = function (obj, config) {
     urlKeySorted.forEach((key) => {
         if (obj[key]) urlArr.push(obj[key]);
     });
-    return urlArr.join("/");
+    let queryArr = [];
+    if (obj.options) {
+        const { dpr, f_auto } = obj.options;
+        if (dpr) {
+            validateDPR(dpr);
+            queryArr.push(`dpr=${dpr}`);
+        }
+        if (f_auto) {
+            validateFAuto(f_auto);
+            queryArr.push(`f_auto=${f_auto}`);
+        }
+    }
+    let urlStr = urlArr.join("/");
+    if (queryArr.length) urlStr += "?" + queryArr.join("&");
+    return urlStr;
 };
 
 module.exports.getObjFromUrl = function (url, config, flatten) {
     const parts = getPartsFromUrl(url);
     try {
-        parts.transformations = getTransformationsFromPattern(parts.pattern, url, config, flatten);
+        parts.transformations = parts.pattern
+            ? getTransformationDetailsFromPattern(parts.pattern, url, config, flatten)
+            : [];
     } catch (err) {
         throw new PDKInvalidUrlError("Error Processing url. Please check the url is correct");
     }
@@ -78,25 +98,26 @@ const getPatternFromTransformations = function (transformationList, config) {
                   /* eslint-disable no-prototype-builtins */
                   if (o.hasOwnProperty("name")) {
                       /* eslint-enable no-prototype-builtins */
+                      o.values = o.values || [];
+                      const paramsStr = o.values
+                          .map(({ key, value }) => {
+                              if (!key) {
+                                  throw new PDKIllegalArgumentError("key not specified.");
+                              }
+                              if (!value) {
+                                  throw new PDKIllegalArgumentError(
+                                      `value not specified for key ${key}`,
+                                  );
+                              }
+                              return `${key}:${value}`;
+                          })
+                          .join(config.parameterSeparator);
                       if (o.plugin === "p") {
-                          return `p:${o.name}`;
-                      } else {
-                          o.values = o.values || [];
-                          const paramsStr = o.values
-                              .map(({ key, value }) => {
-                                  if (!key) {
-                                      throw new PDKIllegalArgumentError("key not specified.");
-                                  }
-                                  if (!value) {
-                                      throw new PDKIllegalArgumentError(
-                                          `value not specified for key ${key}`,
-                                      );
-                                  }
-                                  return `${key}:${value}`;
-                              })
-                              .join(config.parameterSeparator);
-                          return `${o.plugin}.${o.name}(${paramsStr})`;
+                          return paramsStr
+                              ? `${o.plugin}:${o.name}(${paramsStr})`
+                              : `${o.plugin}:${o.name}`;
                       }
+                      return `${o.plugin}.${o.name}(${paramsStr})`;
                   } else {
                       return null;
                   }
@@ -108,6 +129,7 @@ const getPatternFromTransformations = function (transformationList, config) {
 
 const getPartsFromUrl = function (url) {
     const parts = getUrlParts(url);
+    const queryObj = processQueryParams(parts);
     return {
         baseUrl: `${parts["protocol"]}//${parts["host"]}`,
         filePath: parts["filePath"],
@@ -115,6 +137,7 @@ const getPartsFromUrl = function (url) {
         version: parts["version"],
         zone: parts["zoneSlug"],
         cloudName: parts["cloudName"],
+        options: { ...queryObj },
     };
 };
 
@@ -130,63 +153,109 @@ function getParamsList(dSplit, prefix) {
 }
 
 function getParamsObject(paramsList) {
-    const params = [];
+    const params = {};
     paramsList.forEach((item) => {
         const [param, val] = item.split(":");
-        if (param) {
-            params.push({
-                key: param,
-                value: val,
-            });
-        }
+        if (param) params[param] = val;
     });
-    return params.length && params;
+    return params;
 }
 
-function txtToOptions(dSplit) {
+// previously txtToOptions
+function getOperationDetailsFromOperation(dSplit) {
     // Figure Out Module
     const fullFnName = dSplit.split("(")[0];
 
-    const [pluginId, operationName] = fullFnName.split(".");
-
-    if (pluginId === "p") {
-        const params = getParamsObject(getParamsList(dSplit, ""));
-        const presetName = params.find(({ key, value }) => key === "n");
-        if (presetName && presetName.key) {
-            return {
-                plugin: pluginId,
-                name: presetName.value,
-            };
-        }
-        return;
+    let pluginId = fullFnName.split(".")[0];
+    let operationName = fullFnName.split(".")[1];
+    if (dSplit.startsWith("p:")) {
+        pluginId = fullFnName.split(":")[0];
+        operationName = fullFnName.split(":")[1];
     }
 
-    const values = getParamsObject(getParamsList(dSplit, "."));
-    const [plugin, name] = dSplit.split("(")[0].split(".");
+    let values = null;
+    if (pluginId === "p") {
+        if (dSplit.includes("(")) {
+            values = getParamsObject(getParamsList(dSplit, ""));
+        }
+    } else {
+        values = getParamsObject(getParamsList(dSplit, ""));
+    }
+
+    // const [plugin, name] = dSplit.split("(")[0].split(".");
     const transformation = {
         values: values,
-        plugin,
-        name,
+        plugin: pluginId,
+        name: operationName,
     };
     if (!transformation.values) delete transformation["values"];
     return transformation;
 }
 
-const getTransformationsFromPattern = function (pattern, url, config, flatten = false) {
+const getTransformationDetailsFromPattern = function (pattern, url, config, flatten = false) {
     if (pattern === "original") {
         return [];
     }
-
     const dSplit = pattern.split(config.operationSeparator);
     let opts = dSplit
         .map((x) => {
-            if (x.startsWith("p:")) {
-                const [, presetString] = x.split(":");
-                x = `p.apply(n:${presetString})`;
+            // if (x.startsWith("p:")) {
+            //     const [, presetString] = x.split(":");
+            //     x = `p.apply(n:${presetString})`;
+            // }
+            let { name, plugin, values } = getOperationDetailsFromOperation(x);
+            if (values && Object.keys(values).length) {
+                values = Object.keys(values).map((key) => {
+                    return {
+                        key: key,
+                        value: values[key],
+                    };
+                });
+
+                return {
+                    name,
+                    plugin,
+                    values,
+                };
             }
-            return txtToOptions(x);
+
+            return {
+                name,
+                plugin,
+            };
         })
         .flat(); // Flatten preset sub-lists
     if (flatten) opts = opts.flat();
     return opts;
+};
+
+const validateDPR = (dpr) => {
+    if (isNaN(dpr) || dpr < 0.1 || dpr > 5.0)
+        throw new PDKIllegalQueryParameterError(
+            "DPR value should be numeric and should be between 0.1 to 5.0",
+        );
+};
+
+const validateFAuto = (f_auto) => {
+    if (typeof f_auto !== "boolean")
+        throw new PDKIllegalQueryParameterError("F_auto value should be boolean");
+};
+
+const processQueryParams = (urlParts) => {
+    const queryParams = urlParts.search.substring(1).split("&");
+    let queryObj = {};
+    for (const params of queryParams) {
+        const queryElements = params.split("=");
+        if (queryElements[0] === "dpr") {
+            const dpr = +queryElements[1];
+            validateDPR(dpr);
+            queryObj[queryElements[0]] = dpr;
+        }
+        if (queryElements[0] === "f_auto") {
+            const f_auto = queryElements[1].toLowerCase() === "true";
+            validateFAuto(f_auto);
+            queryObj[queryElements[0]] = f_auto;
+        }
+    }
+    return queryObj;
 };

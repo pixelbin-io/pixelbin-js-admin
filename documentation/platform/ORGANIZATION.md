@@ -4,39 +4,31 @@
 
 Organization Service
 
--   [getAppByToken](#getappbytoken)
+-   [getAppOrgDetails](#getapporgdetails)
 
 ## Methods with example and description
 
-### getAppByToken
+### getAppOrgDetails
 
 **Summary**: Get App Details
 
 ```javascript
 // Promise
 
-const promise = organization.getAppByToken({
-    token: "<API-TOKEN>",
-});
+const promise = organization.getAppOrgDetails();
 
 // Async/Await
 
-const data = await organization.getAppByToken({
-    token: "<API-TOKEN>",
-});
+const data = await organization.getAppOrgDetails();
 ```
 
-| Argument | Type   | Required | Description        |
-| -------- | ------ | -------- | ------------------ |
-| token    | string | yes      | Pixelbin api token |
-
-Get App and org details with the API_TOKEN
+Get App and org details
 
 _Returned Response:_
 
-[AppDetailsByToken](#appdetailsbytoken)
+[AppOrgDetails](#apporgdetails)
 
-Success. Returns a JSON object as shown below. Refer `AppDetailsByToken` for more details.
+Success. Returns a JSON object as shown below. Refer `AppOrgDetails` for more details.
 
 <details>
 <summary><i>&nbsp; Example:</i></summary>
@@ -99,7 +91,7 @@ Success. Returns a JSON object as shown below. Refer `AppDetailsByToken` for mor
 
 ---
 
-#### AppDetailsByToken
+#### AppOrgDetails
 
 | Properties | Type                                                  | Nullable | Description |
 | ---------- | ----------------------------------------------------- | -------- | ----------- |

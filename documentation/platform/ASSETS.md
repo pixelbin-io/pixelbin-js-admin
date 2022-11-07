@@ -1273,9 +1273,9 @@ Success
 
 Type : string
 
-| Name        | Value       | Description                                |
-| ----------- | ----------- | ------------------------------------------ |
-| public-read | public-read | Object is available for public read access |
-| private     | private     | Object is private                          |
+| Name        | Value       | Description |
+| ----------- | ----------- | ----------- |
+| public-read | public-read | public-read |
+| private     | private     | private     |
 
 ---
