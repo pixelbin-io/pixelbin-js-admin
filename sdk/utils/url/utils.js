@@ -1,6 +1,10 @@
 const { getUrlParts } = require("./urlParts");
 const { version2Regex, zoneSlug } = require("./regex");
-const { PDKInvalidUrlError, PDKIllegalArgumentError, PDKIllegalQueryParameterError } = require("../../common/PDKError");
+const {
+    PDKInvalidUrlError,
+    PDKIllegalArgumentError,
+    PDKIllegalQueryParameterError,
+} = require("../../common/PDKError");
 
 module.exports.getUrlFromObj = function (obj, config) {
     if (!obj.baseUrl) obj["baseUrl"] = "https://cdn.pixelbin.io";
@@ -210,15 +214,13 @@ const getTransformationsFromPattern = function (pattern, url, config, flatten = 
 const validateDPR = (dpr) => {
     if (isNaN(dpr) || dpr < 0.1 || dpr > 5.0)
         throw new PDKIllegalQueryParameterError(
-            "DPR value should be numeric and should be between 0.1 to 5.0"
+            "DPR value should be numeric and should be between 0.1 to 5.0",
         );
 };
 
 const validateFAuto = (f_auto) => {
     if (typeof f_auto !== "boolean")
-        throw new PDKIllegalQueryParameterError(
-            "F_auto value should be boolean"
-        );
+        throw new PDKIllegalQueryParameterError("F_auto value should be boolean");
 };
 
 const processQueryParams = (urlParts) => {

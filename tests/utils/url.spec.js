@@ -1,5 +1,8 @@
 const { url } = require("../../");
-const { PDKIllegalArgumentError, PDKIllegalQueryParameterError } = require("../../sdk/common/PDKError");
+const {
+    PDKIllegalQueryParameterError,
+    PDKIllegalArgumentError,
+} = require("../../sdk/common/PDKError");
 
 describe("URL", () => {
     it("should get obj from url", async () => {
@@ -18,7 +21,7 @@ describe("URL", () => {
             baseUrl: "https://cdn.pixelbin.io",
             pattern: "t.resize()",
             version: "v2",
-            filePath: "__playground/playground-default.jpeg"
+            filePath: "__playground/playground-default.jpeg",
         };
         expect(obj).toMatchObject(expectedObj);
     });
@@ -38,7 +41,7 @@ describe("URL", () => {
             baseUrl: "https://cdn.pixelbin.io",
             pattern: "t.resize()",
             version: "v1",
-            filePath: "__playground/playground-default.jpeg"
+            filePath: "__playground/playground-default.jpeg",
         };
         expect(obj).toMatchObject(expectedObj);
     });
@@ -58,7 +61,7 @@ describe("URL", () => {
             baseUrl: "https://cdn.pixelbinx0.de",
             pattern: "t.resize()",
             version: "v1",
-            filePath: "__playground/playground-default.jpeg"
+            filePath: "__playground/playground-default.jpeg",
         };
         expect(obj).toMatchObject(expectedObj);
     });
@@ -87,7 +90,7 @@ describe("URL", () => {
             zone: undefined,
             baseUrl: "https://cdn.pixelbin.io",
             pattern: "t.resize(h:200,w:100)",
-            filePath: "__playground/playground-default.jpeg"
+            filePath: "__playground/playground-default.jpeg",
         };
         expect(obj).toMatchObject(expectedObj);
     });
@@ -470,12 +473,13 @@ describe("URL", () => {
     });
     it("should get obj from url with options if available", async () => {
         const obj = url.urlToObj(
-            "https://cdn.pixelbin.io/v2/feel/erase.bg(shadow:true)~t.merge(m:underlay,i:eU44YkFJOHlVMmZrWVRDOUNTRm1D,b:screen,r:true)/MZZKB3e1hT48o0NYJ2Kxh.jpeg?dpr=2.5&f_auto=true"
+            "https://cdn.pixelbin.io/v2/feel/erase.bg(shadow:true)~t.merge(m:underlay,i:eU44YkFJOHlVMmZrWVRDOUNTRm1D,b:screen,r:true)/MZZKB3e1hT48o0NYJ2Kxh.jpeg?dpr=2.5&f_auto=true",
         );
         const expectedObj = {
             baseUrl: "https://cdn.pixelbin.io",
             filePath: "MZZKB3e1hT48o0NYJ2Kxh.jpeg",
-            pattern: "erase.bg(shadow:true)~t.merge(m:underlay,i:eU44YkFJOHlVMmZrWVRDOUNTRm1D,b:screen,r:true)",
+            pattern:
+                "erase.bg(shadow:true)~t.merge(m:underlay,i:eU44YkFJOHlVMmZrWVRDOUNTRm1D,b:screen,r:true)",
             version: "v2",
             zone: undefined,
             cloudName: "feel",
@@ -532,15 +536,13 @@ describe("URL", () => {
         };
         let generatedUrl = url.objToUrl(obj);
         expect(generatedUrl).toBe(
-            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg?dpr=2.5&f_auto=true"
+            "https://cdn.pixelbin.io/v2/red-scene-95b6ea/z-slug/original/__playground/playground-default.jpeg?dpr=2.5&f_auto=true",
         );
     });
     it("should get failure while retrieving obj from url with invalid options", async () => {
         const optionsUrl =
             "https://cdn.pixelbin.io/v2/feel/erase.bg(shadow:true)~t.merge(m:underlay,i:eU44YkFJOHlVMmZrWVRDOUNTRm1D,b:screen,r:true)/MZZKB3e1hT48o0NYJ2Kxh.jpeg?dpr=5.5&f_auto=true";
-        expect(() => url.urlToObj(optionsUrl)).toThrow(
-            PDKIllegalQueryParameterError
-        );
+        expect(() => url.urlToObj(optionsUrl)).toThrow(PDKIllegalQueryParameterError);
     });
     it("should get failure while retrieving url from obj with invalid options", async () => {
         const obj = {
