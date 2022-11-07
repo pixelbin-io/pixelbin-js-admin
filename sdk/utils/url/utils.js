@@ -38,7 +38,9 @@ module.exports.getUrlFromObj = function (obj, config) {
 module.exports.getObjFromUrl = function (url, config, flatten) {
     const parts = getPartsFromUrl(url);
     try {
-        parts.transformations = getTransformationsFromPattern(parts.pattern, url, config, flatten);
+        parts.transformations = parts.pattern
+            ? getTransformationDetailsFromPattern(parts.pattern, url, config, flatten)
+            : [];
     } catch (err) {
         throw new PDKInvalidUrlError("Error Processing url. Please check the url is correct");
     }
@@ -96,25 +98,26 @@ const getPatternFromTransformations = function (transformationList, config) {
                   /* eslint-disable no-prototype-builtins */
                   if (o.hasOwnProperty("name")) {
                       /* eslint-enable no-prototype-builtins */
+                      o.values = o.values || [];
+                      const paramsStr = o.values
+                          .map(({ key, value }) => {
+                              if (!key) {
+                                  throw new PDKIllegalArgumentError("key not specified.");
+                              }
+                              if (!value) {
+                                  throw new PDKIllegalArgumentError(
+                                      `value not specified for key ${key}`,
+                                  );
+                              }
+                              return `${key}:${value}`;
+                          })
+                          .join(config.parameterSeparator);
                       if (o.plugin === "p") {
-                          return `p:${o.name}`;
-                      } else {
-                          o.values = o.values || [];
-                          const paramsStr = o.values
-                              .map(({ key, value }) => {
-                                  if (!key) {
-                                      throw new PDKIllegalArgumentError("key not specified.");
-                                  }
-                                  if (!value) {
-                                      throw new PDKIllegalArgumentError(
-                                          `value not specified for key ${key}`,
-                                      );
-                                  }
-                                  return `${key}:${value}`;
-                              })
-                              .join(config.parameterSeparator);
-                          return `${o.plugin}.${o.name}(${paramsStr})`;
+                          return paramsStr
+                              ? `${o.plugin}:${o.name}(${paramsStr})`
+                              : `${o.plugin}:${o.name}`;
                       }
+                      return `${o.plugin}.${o.name}(${paramsStr})`;
                   } else {
                       return null;
                   }
@@ -150,61 +153,76 @@ function getParamsList(dSplit, prefix) {
 }
 
 function getParamsObject(paramsList) {
-    const params = [];
+    const params = {};
     paramsList.forEach((item) => {
         const [param, val] = item.split(":");
-        if (param) {
-            params.push({
-                key: param,
-                value: val,
-            });
-        }
+        if (param) params[param] = val;
     });
-    return params.length && params;
+    return params;
 }
 
-function txtToOptions(dSplit) {
+// previously txtToOptions
+function getOperationDetailsFromOperation(dSplit) {
     // Figure Out Module
     const fullFnName = dSplit.split("(")[0];
 
-    const [pluginId, operationName] = fullFnName.split(".");
-
-    if (pluginId === "p") {
-        const params = getParamsObject(getParamsList(dSplit, ""));
-        const presetName = params.find(({ key, value }) => key === "n");
-        if (presetName && presetName.key) {
-            return {
-                plugin: pluginId,
-                name: presetName.value,
-            };
-        }
-        return;
+    let pluginId = fullFnName.split(".")[0];
+    let operationName = fullFnName.split(".")[1];
+    if (dSplit.startsWith("p:")) {
+        pluginId = fullFnName.split(":")[0];
+        operationName = fullFnName.split(":")[1];
     }
 
-    const values = getParamsObject(getParamsList(dSplit, "."));
-    const [plugin, name] = dSplit.split("(")[0].split(".");
+    let values = null;
+    if (pluginId === "p") {
+        if (dSplit.includes("(")) {
+            values = getParamsObject(getParamsList(dSplit, ""));
+        }
+    } else {
+        values = getParamsObject(getParamsList(dSplit, ""));
+    }
+
+    // const [plugin, name] = dSplit.split("(")[0].split(".");
     const transformation = {
         values: values,
-        plugin,
-        name,
+        plugin: pluginId,
+        name: operationName,
     };
     if (!transformation.values) delete transformation["values"];
     return transformation;
 }
 
-const getTransformationsFromPattern = function (pattern, url, config, flatten = false) {
+const getTransformationDetailsFromPattern = function (pattern, url, config, flatten = false) {
     if (pattern === "original") {
         return [];
     }
-
     const dSplit = pattern.split(config.operationSeparator);
     let opts = dSplit
         .map((x) => {
-            if (x.startsWith("p:")) {
-                const [, presetString] = x.split(":");
-                x = `p.apply(n:${presetString})`;
+            // if (x.startsWith("p:")) {
+            //     const [, presetString] = x.split(":");
+            //     x = `p.apply(n:${presetString})`;
+            // }
+            let { name, plugin, values } = getOperationDetailsFromOperation(x);
+            if (values && Object.keys(values).length) {
+                values = Object.keys(values).map((key) => {
+                    return {
+                        key: key,
+                        value: values[key],
+                    };
+                });
+
+                return {
+                    name,
+                    plugin,
+                    values,
+                };
             }
-            return txtToOptions(x);
+
+            return {
+                name,
+                plugin,
+            };
         })
         .flat(); // Flatten preset sub-lists
     if (flatten) opts = opts.flat();

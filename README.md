@@ -53,6 +53,116 @@ async function getData() {
 getData();
 ```
 
+## Utilities
+
+Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
+
+### urlToObj
+
+Deconstruct a pixelbin url
+
+| parameter            | description          | example                                                                                               |
+| -------------------- | -------------------- | ----------------------------------------------------------------------------------------------------- |
+| pixelbinUrl (string) | A valid pixelbin url | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
+
+**Returns**:
+
+| property                | description                            | example                          |
+| ----------------------- | -------------------------------------- | -------------------------------- |
+| cloudName (string)      | The cloudname extracted from the url   | `your-cloud-name`                |
+| zone (string)           | 6 character zone slug                  | `z-slug`                         |
+| version (string)        | cdn api version                        | `v2`                             |
+| pattern (string)        | tranformation pattern                  | `t.resize(h:100,w:200)~t.flip()` |
+| transformations (array) | Extracted transformations from the url |                                  |
+| filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`            |
+| baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/`       |
+
+Example:
+
+```javascript
+const { url } = require("@pixelbin/admin");
+
+const pixelbinUrl =
+    "https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg";
+
+const obj = url.urlToObj(pixelbinUrl);
+// obj
+// {
+//     "cloudName": "your-cloud-name",
+//     "zone": "z-slug",
+//     "version": "v2",
+//     "pattern": "t.resize(h:100,w:200)~t.flip()",
+//     "transformations": [
+//         {
+//             "plugin": "t",
+//             "name": "resize",
+//             "values": [
+//                 {
+//                     "key": "h",
+//                     "value": "100"
+//                 },
+//                 {
+//                     "key": "w",
+//                     "value": "200"
+//                 }
+//             ]
+//         },
+//         {
+//             "plugin": "t",
+//             "name": "flip",
+//         }
+//     ],
+//     "filePath": "path/to/image.jpeg",
+//     "baseUrl": "https://cdn.pixelbin.io"
+// }
+```
+
+### objToUrl
+
+Converts the extracted url obj to a Pixelbin url.
+
+| property                | description                            | example                    |
+| ----------------------- | -------------------------------------- | -------------------------- |
+| cloudName (string)      | The cloudname extracted from the url   | `your-cloud-name`          |
+| zone (string)           | 6 character zone slug                  | `z-slug`                   |
+| version (string)        | cdn api version                        | `v2`                       |
+| transformations (array) | Extracted transformations from the url |                            |
+| filePath                | Path to the file on Pixelbin storage   | `/path/to/image.jpeg`      |
+| baseUrl (string)        | Base url                               | `https://cdn.pixelbin.io/` |
+
+```javascript
+const obj = {
+    cloudName: "your-cloud-name",
+    zone: "z-slug",
+    version: "v2",
+    transformations: [
+        {
+            plugin: "t",
+            name: "resize",
+            values: [
+                {
+                    key: "h",
+                    value: "100",
+                },
+                {
+                    key: "w",
+                    value: "200",
+                },
+            ],
+        },
+        {
+            plugin: "t",
+            name: "flip",
+        },
+    ],
+    filePath: "path/to/image.jpeg",
+    baseUrl: "https://cdn.pixelbin.io",
+};
+const url = url.objToUrl(obj); // obj is as shown above
+// url
+// https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg
+```
+
 ## Documentation
 
 -   [API docs](documentation/platform/README.md)
