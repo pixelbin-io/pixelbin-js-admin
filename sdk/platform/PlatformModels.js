@@ -350,24 +350,28 @@ class Validator {
 class AssetsValidator {
     static fileUpload() {
         return Joi.object({
+            options: Joi.object(),
             body: Validator.FileUploadRequest().required(),
         }).required();
     }
 
     static urlUpload() {
         return Joi.object({
+            options: Joi.object(),
             body: Validator.UrlUploadRequest().required(),
         }).required();
     }
 
     static createSignedUrl() {
         return Joi.object({
+            options: Joi.object(),
             body: Validator.SignedUploadRequest().required(),
         }).required();
     }
 
     static listFiles() {
         return Joi.object({
+            options: Joi.object(),
             name: Joi.string().allow(""),
             path: Joi.string().allow(""),
             format: Joi.string().allow(""),
@@ -382,18 +386,21 @@ class AssetsValidator {
 
     static getFileById() {
         return Joi.object({
+            options: Joi.object(),
             _id: Joi.string().allow("").required(),
         }).required();
     }
 
     static getFileByFileId() {
         return Joi.object({
+            options: Joi.object(),
             fileId: Joi.string().allow("").required(),
         }).required();
     }
 
     static updateFile() {
         return Joi.object({
+            options: Joi.object(),
             fileId: Joi.string().allow("").required(),
             body: Validator.UpdateFileRequest().required(),
         }).required();
@@ -401,24 +408,28 @@ class AssetsValidator {
 
     static deleteFile() {
         return Joi.object({
+            options: Joi.object(),
             fileId: Joi.string().allow("").required(),
         }).required();
     }
 
     static deleteFiles() {
         return Joi.object({
+            options: Joi.object(),
             body: Validator.DeleteMultipleFilesRequest().required(),
         }).required();
     }
 
     static createFolder() {
         return Joi.object({
+            options: Joi.object(),
             body: Validator.CreateFolderRequest().required(),
         }).required();
     }
 
     static updateFolder() {
         return Joi.object({
+            options: Joi.object(),
             folderId: Joi.string().allow("").required(),
             body: Validator.UpdateFolderRequest().required(),
         }).required();
@@ -426,16 +437,20 @@ class AssetsValidator {
 
     static deleteFolder() {
         return Joi.object({
+            options: Joi.object(),
             _id: Joi.string().allow("").required(),
         }).required();
     }
 
     static getModules() {
-        return Joi.object({});
+        return Joi.object({
+            options: Joi.object(),
+        });
     }
 
     static getModule() {
         return Joi.object({
+            options: Joi.object(),
             identifier: Joi.string().allow("").required(),
         }).required();
     }
@@ -443,7 +458,9 @@ class AssetsValidator {
 
 class OrganizationValidator {
     static getAppOrgDetails() {
-        return Joi.object({});
+        return Joi.object({
+            options: Joi.object(),
+        });
     }
 }
 

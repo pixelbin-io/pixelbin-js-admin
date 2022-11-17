@@ -4,3 +4,4 @@
 .env.production
 node_modules
 coverage
+*.jpeg

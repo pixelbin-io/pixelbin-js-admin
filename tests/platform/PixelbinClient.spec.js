@@ -195,6 +195,10 @@ describe("Pixelbin Client", () => {
         const response = await pixelbin.assets.fileUpload({
             file: fs.createReadStream("tests/fixtures/pluginResponse.js"),
             overwrite: true,
+            options: {
+                contentType: "image/jpeg",
+                filename: "test",
+            },
         });
         expect(response.items.length).toBe(5);
         expect(requestMock.mock.calls[0][0]).toEqual({

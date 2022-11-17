@@ -430,7 +430,8 @@ class Assets {
     *
     * @summary: Upload File
     * @description: Upload File to Pixelbin
-    * @param {Object} arg - arg object.    
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable    
     * @param {file} arg.file Asset file
     * @param {string} arg.path Path where you want to store the asset. Path of containing folder
     * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
@@ -441,9 +442,22 @@ class Assets {
     * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
     
     **/
-    fileUpload({ file, path, name, access, tags, metadata, overwrite, filenameOverride } = {}) {
+    fileUpload({
+        options,
+
+        file,
+        path,
+        name,
+        access,
+        tags,
+        metadata,
+        overwrite,
+        filenameOverride,
+    } = {}) {
         const { error } = AssetsValidator.fileUpload().validate(
             {
+                options,
+
                 body: { file, path, name, access, tags, metadata, overwrite, filenameOverride },
             },
             { abortEarly: false },
@@ -458,7 +472,7 @@ class Assets {
 
         body = new FormData();
 
-        if (file) body.append("file", file);
+        if (file) body.append("file", file, { filename: name, contentType: options?.contentType });
         if (path) body.append("path", path);
         if (name) body.append("name", name);
         if (access) body.append("access", access);
@@ -481,7 +495,8 @@ class Assets {
     *
     * @summary: Upload Asset with url
     * @description: Upload Asset with url
-    * @param {Object} arg - arg object.     
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
     * @param {string} arg.url Asset URL
     * @param {string} arg.path Path where you want to store the asset. Path of containing folder.
     * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
@@ -492,9 +507,22 @@ class Assets {
     * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
     
     **/
-    urlUpload({ url, path, name, access, tags, metadata, overwrite, filenameOverride } = {}) {
+    urlUpload({
+        options,
+
+        url,
+        path,
+        name,
+        access,
+        tags,
+        metadata,
+        overwrite,
+        filenameOverride,
+    } = {}) {
         const { error } = AssetsValidator.urlUpload().validate(
             {
+                options,
+
                 body: { url, path, name, access, tags, metadata, overwrite, filenameOverride },
             },
             { abortEarly: false },
@@ -534,7 +562,8 @@ class Assets {
     * @description: For the given asset details, a S3 signed URL will be generated,
 which can be then used to upload your asset.
 
-    * @param {Object} arg - arg object.     
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
     * @param {string} arg.name name of the file
     * @param {string} arg.path Path of containing folder.
     * @param {string} arg.format Format of the file
@@ -546,6 +575,8 @@ which can be then used to upload your asset.
     
     **/
     createSignedUrl({
+        options,
+
         name,
         path,
         format,
@@ -557,6 +588,8 @@ which can be then used to upload your asset.
     } = {}) {
         const { error } = AssetsValidator.createSignedUrl().validate(
             {
+                options,
+
                 body: { name, path, format, access, tags, metadata, overwrite, filenameOverride },
             },
             { abortEarly: false },
@@ -595,7 +628,8 @@ which can be then used to upload your asset.
     * @summary: List and search files and folders.
     * @description: List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
 
-    * @param {Object} arg - arg object. 
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
     * @param {string} [arg.name] - Find items with matching name
     * @param {string} [arg.path] - Find items with matching path
     * @param {string} [arg.format] - Find items with matching format
@@ -608,9 +642,21 @@ which can be then used to upload your asset.
 
     
     **/
-    listFiles({ name, path, format, tags, onlyFiles, onlyFolders, pageNo, pageSize, sort } = {}) {
+    listFiles({
+        options,
+        name,
+        path,
+        format,
+        tags,
+        onlyFiles,
+        onlyFolders,
+        pageNo,
+        pageSize,
+        sort,
+    } = {}) {
         const { error } = AssetsValidator.listFiles().validate(
             {
+                options,
                 name,
                 path,
                 format,
@@ -698,13 +744,15 @@ which can be then used to upload your asset.
     *
     * @summary: Get file details with _id
     * @description: 
-    * @param {Object} arg - arg object. 
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
     * @param {string} arg._id - _id of File
     
     **/
-    getFileById({ _id } = {}) {
+    getFileById({ options, _id } = {}) {
         const { error } = AssetsValidator.getFileById().validate(
             {
+                options,
                 _id,
             },
             { abortEarly: false },
@@ -728,13 +776,15 @@ which can be then used to upload your asset.
     *
     * @summary: Get file details with fileId
     * @description: 
-    * @param {Object} arg - arg object. 
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
     * @param {string} arg.fileId - Combination of `path` and `name` of file
     
     **/
-    getFileByFileId({ fileId } = {}) {
+    getFileByFileId({ options, fileId } = {}) {
         const { error } = AssetsValidator.getFileByFileId().validate(
             {
+                options,
                 fileId,
             },
             { abortEarly: false },
@@ -758,7 +808,8 @@ which can be then used to upload your asset.
     *
     * @summary: Update file details
     * @description: 
-    * @param {Object} arg - arg object.     
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
     * @param {string} arg.fileId - Combination of `path` and `name`
     * @param {string} arg.name Name of the file
     * @param {string} arg.path path of containing folder.
@@ -768,9 +819,10 @@ which can be then used to upload your asset.
     * @param {object} arg.metadata Metadata associated with the file
     
     **/
-    updateFile({ fileId, name, path, access, isActive, tags, metadata } = {}) {
+    updateFile({ options, fileId, name, path, access, isActive, tags, metadata } = {}) {
         const { error } = AssetsValidator.updateFile().validate(
             {
+                options,
                 fileId,
                 body: { name, path, access, isActive, tags, metadata },
             },
@@ -807,13 +859,15 @@ which can be then used to upload your asset.
     *
     * @summary: Delete file
     * @description: 
-    * @param {Object} arg - arg object. 
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
     * @param {string} arg.fileId - Combination of `path` and `name`
     
     **/
-    deleteFile({ fileId } = {}) {
+    deleteFile({ options, fileId } = {}) {
         const { error } = AssetsValidator.deleteFile().validate(
             {
+                options,
                 fileId,
             },
             { abortEarly: false },
@@ -837,13 +891,20 @@ which can be then used to upload your asset.
     *
     * @summary: Delete multiple files
     * @description: 
-    * @param {Object} arg - arg object.     
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
     * @param {[string]} arg.ids Array of file _ids to delete
     
     **/
-    deleteFiles({ ids } = {}) {
+    deleteFiles({
+        options,
+
+        ids,
+    } = {}) {
         const { error } = AssetsValidator.deleteFiles().validate(
             {
+                options,
+
                 body: { ids },
             },
             { abortEarly: false },
@@ -875,14 +936,22 @@ which can be then used to upload your asset.
     * @summary: Create folder
     * @description: Create a new folder at the specified path. Also creates the ancestors if they do not exist.
 
-    * @param {Object} arg - arg object.     
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
     * @param {string} arg.name Name of the folder
     * @param {string} arg.path path of containing folder.
     
     **/
-    createFolder({ name, path } = {}) {
+    createFolder({
+        options,
+
+        name,
+        path,
+    } = {}) {
         const { error } = AssetsValidator.createFolder().validate(
             {
+                options,
+
                 body: { name, path },
             },
             { abortEarly: false },
@@ -917,14 +986,16 @@ which can be then used to upload your asset.
 by making `isActive` as `false`.
 We currently do not support updating folder name or path.
 
-    * @param {Object} arg - arg object.     
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
     * @param {string} arg.folderId - combination of `path` and `name`
     * @param {boolean} arg.isActive whether the folder is active
     
     **/
-    updateFolder({ folderId, isActive } = {}) {
+    updateFolder({ options, folderId, isActive } = {}) {
         const { error } = AssetsValidator.updateFolder().validate(
             {
+                options,
                 folderId,
                 body: { isActive },
             },
@@ -957,13 +1028,15 @@ We currently do not support updating folder name or path.
     * @summary: Delete folder
     * @description: Delete folder and all its children permanently.
 
-    * @param {Object} arg - arg object. 
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
     * @param {string} arg._id - _id of folder to be deleted
     
     **/
-    deleteFolder({ _id } = {}) {
+    deleteFolder({ options, _id } = {}) {
         const { error } = AssetsValidator.deleteFolder().validate(
             {
+                options,
                 _id,
             },
             { abortEarly: false },
@@ -988,11 +1061,17 @@ We currently do not support updating folder name or path.
     * @summary: Get all transformation modules
     * @description: Get all transformation modules.
 
-    * @param {Object} arg - arg object. 
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
     
     **/
-    getModules({} = {}) {
-        const { error } = AssetsValidator.getModules().validate({}, { abortEarly: false });
+    getModules({ options } = {}) {
+        const { error } = AssetsValidator.getModules().validate(
+            {
+                options,
+            },
+            { abortEarly: false },
+        );
         if (error) {
             return Promise.reject(new PDKClientValidationError(error));
         }
@@ -1013,13 +1092,15 @@ We currently do not support updating folder name or path.
     * @summary: Get Transformation Module by module identifier
     * @description: Get Transformation Module by module identifier
 
-    * @param {Object} arg - arg object. 
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
     * @param {string} arg.identifier - identifier of Transformation Module
     
     **/
-    getModule({ identifier } = {}) {
+    getModule({ options, identifier } = {}) {
         const { error } = AssetsValidator.getModule().validate(
             {
+                options,
                 identifier,
             },
             { abortEarly: false },
@@ -1049,12 +1130,15 @@ class Organization {
     *
     * @summary: Get App Details
     * @description: Get App and org details
-    * @param {Object} arg - arg object. 
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
     
     **/
-    getAppOrgDetails({} = {}) {
+    getAppOrgDetails({ options } = {}) {
         const { error } = OrganizationValidator.getAppOrgDetails().validate(
-            {},
+            {
+                options,
+            },
             { abortEarly: false },
         );
         if (error) {
