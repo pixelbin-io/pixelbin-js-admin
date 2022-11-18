@@ -4,6 +4,12 @@ const path = require("path");
 
 const FileType = require("file-type");
 const SLUG_DELIMETER = ":::";
+const MIME_TYPE_LOOKUP = {
+    "image/x-icon": "image/vnd.microsoft.icon",
+    "application/x-msdownload": "application/x-msdos-program",
+    "application/x-deb": "application/x-debian-package",
+};
+
 const transformRequestOptions = (params) => {
     let options = "";
 
