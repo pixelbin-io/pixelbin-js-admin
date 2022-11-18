@@ -1,5 +1,11 @@
 const FileType = require("file-type");
 const path = require("path");
+const MIME_TYPE_LOOKUP = {
+    "image/x-icon": "image/vnd.microsoft.icon",
+    "application/x-msdownload": "application/x-msdos-program",
+    "application/x-deb": "application/x-debian-package",
+};
+
 /**
  * Some Content-Types are incorrectly detected by the core libraries we use.
  * This function returns the correct types considering the file extension.
