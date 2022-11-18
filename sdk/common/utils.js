@@ -1,5 +1,5 @@
 const { PDKInvalidUrlError } = require("./PDKError");
-
+const FileType = require("file-type");
 const SLUG_DELIMETER = ":::";
 const transformRequestOptions = (params) => {
     let options = "";
