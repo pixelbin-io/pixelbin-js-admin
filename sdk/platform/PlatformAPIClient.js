@@ -25,6 +25,7 @@ class APIClient {
                 Authorization: "Bearer " + token,
                 ...headers,
             },
+            maxBodyLength: Infinity
         };
 
         return pdkAxios.request(rawRequest);
