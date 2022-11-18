@@ -474,7 +474,7 @@ class Assets {
 
         if (file)
             body.append("file", file, {
-                filename: options?.originalname,
+                filename: options?.originalFilename,
                 contentType: options?.contentType,
             });
         if (path) body.append("path", path);
