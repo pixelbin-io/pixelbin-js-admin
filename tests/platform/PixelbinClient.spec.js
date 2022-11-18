@@ -142,6 +142,7 @@ describe("Pixelbin Client", () => {
             headers: {
                 Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
             },
+            "maxBodyLength": Infinity,
         });
         requestMock.mockRestore();
     });
@@ -180,6 +181,7 @@ describe("Pixelbin Client", () => {
             headers: {
                 Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
             },
+            "maxBodyLength": Infinity,
         });
         requestMock.mockRestore();
     });
@@ -211,6 +213,7 @@ describe("Pixelbin Client", () => {
                 Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
                 "content-type": expect.stringMatching(/^multipart\/form-data; boundary=.*/),
             },
+            "maxBodyLength": Infinity,
         });
         expect(requestMock.mock.calls[0][0].data).toBeInstanceOf(FormData);
         requestMock.mockRestore();
@@ -243,6 +246,7 @@ describe("Pixelbin Client", () => {
             headers: {
                 Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
             },
+            "maxBodyLength": Infinity,
         });
         expect(requestMock.mock.calls[0][0].data).toEqual({
             name: "New Name",
