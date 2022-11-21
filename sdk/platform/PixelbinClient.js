@@ -472,11 +472,7 @@ class Assets {
 
         body = new FormData();
 
-        if (file)
-            body.append("file", file, {
-                filename: options && options.originalFilename,
-                contentType: options && options.contentType,
-            });
+        if (file) body.append("file", file, { filename: options && options.originalFilename });
         if (path) body.append("path", path);
         if (name) body.append("name", name);
         if (access) body.append("access", access);
