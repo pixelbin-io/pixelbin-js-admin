@@ -165,18 +165,15 @@ const url = url.objToUrl(obj); // obj is as shown above
 
 ## For Uploading File Buffer
 
-Pixelbin SDK requires the user to upload files as Readable streams. To upload buffer, `contentType` and `originalFilename` must be passed in the options object.
+To upload a Buffer, `originalFilename` must be passed in the options object.
 
 ```javascript
-const { utils } = require("@pixelbin/admin");
-const fileType = await utils.assets.fileTypeFromBuffer(req.file.buffer, {
-    filename: req.file.originalname,
-    contentType: req.file.mimetype,
-});
+const { Readable } = require("stream");
+
 const res = await pixelbin.assets.fileUpload({
     file: Readable.from(req.file.buffer),
     name: req.body.name,
-    options: { contentType: fileType.mime, originalFilename: req.file.originalname },
+    options: { originalFilename: req.file.originalname },
     overwrite: true,
 });
 ```
