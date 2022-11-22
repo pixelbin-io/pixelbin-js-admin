@@ -169,7 +169,6 @@ To upload a Buffer, `originalFilename` must be passed in the options object.
 
 ```javascript
 const { Readable } = require("stream");
-
 const res = await pixelbin.assets.fileUpload({
     file: Readable.from(req.file.buffer),
     name: req.body.name,
