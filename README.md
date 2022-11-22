@@ -163,6 +163,21 @@ const url = url.objToUrl(obj); // obj is as shown above
 // https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg
 ```
 
+## For Uploading File Buffer
+
+To upload a Buffer, `originalFilename` must be passed in the options object.
+
+```javascript
+const { Readable } = require("stream");
+
+const res = await pixelbin.assets.fileUpload({
+    file: Readable.from(req.file.buffer),
+    name: req.body.name,
+    options: { originalFilename: req.file.originalname },
+    overwrite: true,
+});
+```
+
 ## Documentation
 
 -   [API docs](documentation/platform/README.md)
