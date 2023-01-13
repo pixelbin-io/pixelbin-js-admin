@@ -190,6 +190,8 @@ describe("Pixelbin Client", () => {
             domain: "https://api.testdomain.com",
             apiSecret: "test-api-secret",
         });
+        const appendSpy = jest.spyOn(FormData.prototype, "append");
+
         const requestMock = jest.spyOn(pdkAxios, "request");
         requestMock.mockResolvedValue(exploreResponse);
 
@@ -197,11 +199,15 @@ describe("Pixelbin Client", () => {
         const response = await pixelbin.assets.fileUpload({
             file: fs.createReadStream("tests/fixtures/pluginResponse.js"),
             overwrite: true,
+            tags: ["tag1", "tag2"],
             options: {
                 contentType: "image/jpeg",
                 filename: "test",
             },
         });
+        expect(appendSpy.mock.calls).toContainEqual(["tags", "tag1"]);
+        expect(appendSpy.mock.calls).toContainEqual(["tags", "tag2"]);
+        expect(appendSpy.mock.calls).toContainEqual(["overwrite", "true"]);
         expect(response.items.length).toBe(5);
         expect(requestMock.mock.calls[0][0]).toEqual({
             baseURL: config.domain,
@@ -217,6 +223,7 @@ describe("Pixelbin Client", () => {
         });
         expect(requestMock.mock.calls[0][0].data).toBeInstanceOf(FormData);
         requestMock.mockRestore();
+        appendSpy.mockRestore();
     });
     it("should be able to use updateFile successfully", async () => {
         const config = new PixelbinConfig({
@@ -255,6 +262,505 @@ describe("Pixelbin Client", () => {
             isActive: false,
             tags: ["new tag"],
             metadata: {},
+        });
+        requestMock.mockRestore();
+    });
+    it("should be able to use getFolderDetails successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        requestMock.mockResolvedValue([
+            {
+                _id: "dummy-uuid",
+                createdAt: "2022-10-05T10:43:04.117Z",
+                updatedAt: "2022-10-05T10:43:04.117Z",
+                name: "asset2",
+                type: "file",
+                path: "dir",
+                fileId: "dir/asset2",
+                format: "jpeg",
+                size: 1000,
+                access: "private",
+                metadata: {},
+                height: 100,
+                width: 100,
+            },
+        ]);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.getFolderDetails({
+            path: "dir1/dir2",
+            name: "dir",
+        });
+
+        expect(response.length).toBe(1);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "get",
+            url: "/service/platform/assets/v1.0/folders",
+            params: {
+                path: "dir1/dir2",
+                name: "dir",
+            },
+            data: undefined,
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+    it("should be able to use getFolderAncestors successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        requestMock.mockResolvedValue({
+            folder: {
+                _id: "dummy-uuid",
+                name: "subDir",
+                path: "dir1/dir2",
+                isActive: true,
+            },
+            ancestors: [
+                {
+                    _id: "dummy-uuid-2",
+                    name: "dir1",
+                    path: "",
+                    isActive: true,
+                },
+                {
+                    _id: "dummy-uuid-2",
+                    name: "dir2",
+                    path: "dir1",
+                    isActive: true,
+                },
+            ],
+        });
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.getFolderAncestors({
+            _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+        });
+
+        expect(response.ancestors.length).toBe(2);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "get",
+            url: "/service/platform/assets/v1.0/folders/c9138153-94ea-4dbe-bea9-65d43dba85ae/ancestors",
+            params: {},
+            data: undefined,
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use addCredentials successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const addCredentialsResponse = {
+            _id: "123ee789-7ae8-4336-b9bd-e4f33c049002",
+            createdAt: "2022-10-04T09:52:09.545Z",
+            updatedAt: "2022-10-04T09:52:09.545Z",
+            orgId: 23,
+            pluginId: "awsRek",
+        };
+        requestMock.mockResolvedValue(addCredentialsResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.addCredentials({
+            credentials: {
+                region: "ap-south-1",
+                accessKeyId: "123456789ABC",
+                secretAccessKey: "DUMMY1234567890",
+            },
+            pluginId: "awsRek",
+        });
+
+        expect(response).toBe(addCredentialsResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "post",
+            url: "/service/platform/assets/v1.0/credentials",
+            params: {},
+            data: {
+                credentials: {
+                    region: "ap-south-1",
+                    accessKeyId: "123456789ABC",
+                    secretAccessKey: "DUMMY1234567890",
+                },
+                pluginId: "awsRek",
+            },
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use updateCredentials successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const updateCredentialsResponse = {
+            _id: "123ee789-7ae8-4336-b9bd-e4f33c049002",
+            createdAt: "2022-10-04T09:52:09.545Z",
+            updatedAt: "2022-10-04T09:52:09.545Z",
+            orgId: 23,
+            pluginId: "awsRek",
+        };
+        requestMock.mockResolvedValue(updateCredentialsResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.updateCredentials({
+            pluginId: "awsRek",
+            credentials: {
+                region: "ap-south-1",
+                accessKeyId: "123456789ABC",
+                secretAccessKey: "DUMMY1234567890",
+            },
+        });
+
+        expect(response).toBe(updateCredentialsResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "patch",
+            url: "/service/platform/assets/v1.0/credentials/awsRek",
+            params: {},
+            data: {
+                credentials: {
+                    region: "ap-south-1",
+                    accessKeyId: "123456789ABC",
+                    secretAccessKey: "DUMMY1234567890",
+                },
+            },
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use deleteCredentials successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const deleteCredentialsResponse = {
+            _id: "123ee789-7ae8-4336-b9bd-e4f33c049002",
+            createdAt: "2022-10-04T09:52:09.545Z",
+            updatedAt: "2022-10-04T09:52:09.545Z",
+            orgId: 23,
+            pluginId: "awsRek",
+        };
+        requestMock.mockResolvedValue(deleteCredentialsResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.deleteCredentials({
+            pluginId: "awsRek",
+        });
+
+        expect(response).toBe(deleteCredentialsResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "delete",
+            url: "/service/platform/assets/v1.0/credentials/awsRek",
+            params: {},
+            data: undefined,
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use addPreset successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const addPresetResponse = {
+            presetName: "p1",
+            transformation: "t.flip()~t.flop()",
+            params: {
+                w: {
+                    type: "integer",
+                    default: 200,
+                },
+                h: {
+                    type: "integer",
+                    default: 400,
+                },
+            },
+            archived: false,
+        };
+        requestMock.mockResolvedValue(addPresetResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.addPreset({
+            presetName: "p1",
+            transformation: "t.flip()~t.flop()",
+            params: { w: { type: "integer", default: 200 }, h: { type: "integer", default: 400 } },
+        });
+
+        expect(response).toBe(addPresetResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "post",
+            url: "/service/platform/assets/v1.0/presets",
+            params: {},
+            data: {
+                presetName: "p1",
+                transformation: "t.flip()~t.flop()",
+                params: {
+                    w: {
+                        type: "integer",
+                        default: 200,
+                    },
+                    h: {
+                        type: "integer",
+                        default: 400,
+                    },
+                },
+            },
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use getPresets successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const getPresetsResponse = {
+            items: [
+                {
+                    presetName: "p1",
+                    transformation: "t.flip()~t.flop()",
+                    params: {
+                        w: {
+                            type: "integer",
+                            default: 200,
+                        },
+                        h: {
+                            type: "integer",
+                            default: 400,
+                        },
+                    },
+                    archived: true,
+                },
+            ],
+            page: {
+                type: "number",
+                size: 1,
+                current: 1,
+                hasNext: false,
+            },
+        };
+        requestMock.mockResolvedValue(getPresetsResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.getPresets();
+
+        expect(response).toBe(getPresetsResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "get",
+            url: "/service/platform/assets/v1.0/presets",
+            params: {},
+            data: undefined,
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+    it("should be able to use updatePresets successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const updatePresetsResponse = {
+            presetName: "p1",
+            transformation: "t.flip()~t.flop()",
+            params: {
+                w: {
+                    type: "integer",
+                    default: 200,
+                },
+                h: {
+                    type: "integer",
+                    default: 400,
+                },
+            },
+            archived: true,
+        };
+        requestMock.mockResolvedValue(updatePresetsResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.updatePreset({
+            presetName: "p1",
+            archived: true,
+        });
+
+        expect(response).toBe(updatePresetsResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "patch",
+            url: "/service/platform/assets/v1.0/presets/p1",
+            params: {},
+            data: { archived: true },
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use deletePreset successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const deletePresetsResponse = {
+            presetName: "p1",
+            transformation: "t.flip()~t.flop()",
+            params: {
+                w: {
+                    type: "integer",
+                    default: 200,
+                },
+                h: {
+                    type: "integer",
+                    default: 400,
+                },
+            },
+            archived: true,
+        };
+        requestMock.mockResolvedValue(deletePresetsResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.deletePreset({
+            presetName: "p1",
+        });
+
+        expect(response).toBe(deletePresetsResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "delete",
+            url: "/service/platform/assets/v1.0/presets/p1",
+            params: {},
+            data: undefined,
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use getPreset successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const getPresetResponse = {
+            presetName: "p1",
+            transformation: "t.flip()~t.flop()",
+            params: {
+                w: {
+                    type: "integer",
+                    default: 200,
+                },
+                h: {
+                    type: "integer",
+                    default: 400,
+                },
+            },
+            archived: true,
+        };
+        requestMock.mockResolvedValue(getPresetResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.getPreset({ presetName: "p1" });
+
+        expect(response).toBe(getPresetResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "get",
+            url: "/service/platform/assets/v1.0/presets/p1",
+            params: {},
+            data: undefined,
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use getDefaultAssetForPlayground successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const getDefaultAssetForPlaygroundResponse = {
+            _id: "dummy-uuid",
+            name: "asset",
+            path: "dir",
+            fileId: "dir/asset",
+            format: "jpeg",
+            size: 1000,
+            access: "private",
+            isActive: true,
+            tags: ["tag1", "tag2"],
+            metadata: {
+                key: "value",
+            },
+            url: "https://domain.com/filename.jpeg",
+        };
+        requestMock.mockResolvedValue(getDefaultAssetForPlaygroundResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.getDefaultAssetForPlayground();
+        expect(response).toBe(getDefaultAssetForPlaygroundResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "get",
+            url: "/service/platform/assets/v1.0/playground/default",
+            params: {},
+            data: undefined,
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
         });
         requestMock.mockRestore();
     });
