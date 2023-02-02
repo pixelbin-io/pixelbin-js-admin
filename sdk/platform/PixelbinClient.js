@@ -358,6 +358,173 @@ class PixelbinClient {
     */
 
 /**
+        @typedef Credentials
+        
+        
+        @property { string } [_id]
+        
+        @property { string } [createdAt]
+        
+        @property { string } [updatedAt]
+        
+        @property { boolean } [isActive]
+        
+        @property { string } [orgId]
+        
+        @property { string } [pluginId]
+        
+        @property { Object } [credentials]
+        
+        @property { Object } [description]
+        
+         
+    */
+
+/**
+        @typedef CredentialsItem
+        
+        
+        @property { Object } [pluginId]
+        
+         
+    */
+
+/**
+        @typedef AddCredentialsRequest
+        
+        
+        @property { Object } credentials
+        
+        @property { string } pluginId
+        
+         
+    */
+
+/**
+        @typedef UpdateCredentialsRequest
+        
+        
+        @property { Object } credentials
+        
+         
+    */
+
+/**
+        @typedef AddCredentialsResponse
+        
+        
+        @property { Object } [credentials]
+        
+         
+    */
+
+/**
+        @typedef DeleteCredentialsResponse
+        
+        
+        @property { string } [_id]
+        
+        @property { string } [createdAt]
+        
+        @property { string } [updatedAt]
+        
+        @property { boolean } [isActive]
+        
+        @property { string } [orgId]
+        
+        @property { string } [pluginId]
+        
+        @property { Object } [credentials]
+        
+         
+    */
+
+/**
+        @typedef GetAncestorsResponse
+        
+        
+        @property { folderItem } [folder]
+        
+        @property { Array<FoldersResponse> } [ancestors]
+        
+         
+    */
+
+/**
+        @typedef GetFilesWithConstraintsItem
+        
+        
+        @property { string } [path]
+        
+        @property { string } [name]
+        
+        @property { string } [type]
+        
+         
+    */
+
+/**
+        @typedef GetFilesWithConstraintsRequest
+        
+        
+        @property { Array<GetFilesWithConstraintsItem> } [items]
+        
+        @property { number } [maxCount]
+        
+        @property { number } [maxSize]
+        
+         
+    */
+
+/**
+        @typedef AddPresetRequest
+        
+        
+        @property { string } presetName
+        
+        @property { string } transformation
+        
+        @property { Object } [params]
+        
+         
+    */
+
+/**
+        @typedef AddPresetResponse
+        
+        
+        @property { string } presetName
+        
+        @property { string } transformation
+        
+        @property { Object } [params]
+        
+        @property { boolean } [archived]
+        
+         
+    */
+
+/**
+        @typedef UpdatePresetRequest
+        
+        
+        @property { boolean } archived
+        
+         
+    */
+
+/**
+        @typedef GetPresetsResponse
+        
+        
+        @property { Array<AddPresetResponse> } items
+        
+        @property { page } page
+        
+         
+    */
+
+/**
         @typedef OrganizationDetailSchema
         
         
@@ -476,7 +643,7 @@ class Assets {
         if (path) body.append("path", path);
         if (name) body.append("name", name);
         if (access) body.append("access", access);
-        if (tags) body.append("tags", JSON.stringify(tags));
+        if (tags) tags.forEach((prop) => body.append("tags", prop));
         if (metadata) body.append("metadata", JSON.stringify(metadata));
         if (overwrite) body.append("overwrite", overwrite.toString());
         if (filenameOverride) body.append("filenameOverride", filenameOverride.toString());
@@ -981,6 +1148,43 @@ which can be then used to upload your asset.
 
     /**
     *
+    * @summary: Get folder details
+    * @description: Get folder details
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    * @param {string} [arg.path] - Folder path
+    * @param {string} [arg.name] - Folder name
+    
+    **/
+    getFolderDetails({ options, path, name } = {}) {
+        const { error } = AssetsValidator.getFolderDetails().validate(
+            {
+                options,
+                path,
+                name,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+        query_params["path"] = path;
+        query_params["name"] = name;
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/folders`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
     * @summary: Update folder details
     * @description: Update folder details. Eg: Soft delete it
 by making `isActive` as `false`.
@@ -1051,6 +1255,382 @@ We currently do not support updating folder name or path.
             this.config,
             "delete",
             `/service/platform/assets/v1.0/folders/${_id}`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Get all ancestors of a folder
+    * @description: Get all ancestors of a folder, using the folder ID.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    * @param {string} arg._id - _id of the folder
+    
+    **/
+    getFolderAncestors({ options, _id } = {}) {
+        const { error } = AssetsValidator.getFolderAncestors().validate(
+            {
+                options,
+                _id,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/folders/${_id}/ancestors`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Add credentials for a transformation module.
+    * @description: Add a transformation modules's credentials for an organization.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
+    * @param {object} arg.credentials Credentials of the plugin
+    * @param {string} arg.pluginId Unique identifier for the plugin this credential belongs to
+    
+    **/
+    addCredentials({
+        options,
+
+        credentials,
+        pluginId,
+    } = {}) {
+        const { error } = AssetsValidator.addCredentials().validate(
+            {
+                options,
+
+                body: { credentials, pluginId },
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        let body;
+
+        body = {
+            credentials,
+            pluginId,
+        };
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "post",
+            `/service/platform/assets/v1.0/credentials`,
+            query_params,
+            body,
+            "application/json",
+        );
+    }
+
+    /**
+    *
+    * @summary: Update credentials of a transformation module.
+    * @description: Update credentials of a transformation module, for an organization.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
+    * @param {string} arg.pluginId - ID of the plugin whose credentials are being updated
+    * @param {object} arg.credentials Credentials of the plugin
+    
+    **/
+    updateCredentials({ options, pluginId, credentials } = {}) {
+        const { error } = AssetsValidator.updateCredentials().validate(
+            {
+                options,
+                pluginId,
+                body: { credentials },
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        let body;
+
+        body = {
+            credentials,
+        };
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "patch",
+            `/service/platform/assets/v1.0/credentials/${pluginId}`,
+            query_params,
+            body,
+            "application/json",
+        );
+    }
+
+    /**
+    *
+    * @summary: Delete credentials of a transformation module.
+    * @description: Delete credentials of a transformation module, for an organization.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    * @param {string} arg.pluginId - ID of the plugin whose credentials are being deleted
+    
+    **/
+    deleteCredentials({ options, pluginId } = {}) {
+        const { error } = AssetsValidator.deleteCredentials().validate(
+            {
+                options,
+                pluginId,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "delete",
+            `/service/platform/assets/v1.0/credentials/${pluginId}`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Add a preset.
+    * @description: Add a preset for an organization.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
+    * @param {string} arg.presetName Name of the preset
+    * @param {string} arg.transformation A chain of transformations, separated by `~`
+    * @param {object} arg.params Parameters object for transformation variables
+    
+    **/
+    addPreset({
+        options,
+
+        presetName,
+        transformation,
+        params,
+    } = {}) {
+        const { error } = AssetsValidator.addPreset().validate(
+            {
+                options,
+
+                body: { presetName, transformation, params },
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        let body;
+
+        body = {
+            presetName,
+            transformation,
+            params,
+        };
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "post",
+            `/service/platform/assets/v1.0/presets`,
+            query_params,
+            body,
+            "application/json",
+        );
+    }
+
+    /**
+    *
+    * @summary: Get all presets.
+    * @description: Get all presets of an organization.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    
+    **/
+    getPresets({ options } = {}) {
+        const { error } = AssetsValidator.getPresets().validate(
+            {
+                options,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/presets`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Update a preset.
+    * @description: Update a preset of an organization.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
+    * @param {string} arg.presetName - Name of the preset to be updated
+    * @param {boolean} arg.archived Indicates if the preset has been archived
+    
+    **/
+    updatePreset({ options, presetName, archived } = {}) {
+        const { error } = AssetsValidator.updatePreset().validate(
+            {
+                options,
+                presetName,
+                body: { archived },
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        let body;
+
+        body = {
+            archived,
+        };
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "patch",
+            `/service/platform/assets/v1.0/presets/${presetName}`,
+            query_params,
+            body,
+            "application/json",
+        );
+    }
+
+    /**
+    *
+    * @summary: Delete a preset.
+    * @description: Delete a preset of an organization.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    * @param {string} arg.presetName - Name of the preset to be deleted
+    
+    **/
+    deletePreset({ options, presetName } = {}) {
+        const { error } = AssetsValidator.deletePreset().validate(
+            {
+                options,
+                presetName,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "delete",
+            `/service/platform/assets/v1.0/presets/${presetName}`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Get a preset.
+    * @description: Get a preset of an organization.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    * @param {string} arg.presetName - Name of the preset to be fetched
+    
+    **/
+    getPreset({ options, presetName } = {}) {
+        const { error } = AssetsValidator.getPreset().validate(
+            {
+                options,
+                presetName,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/presets/${presetName}`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Get default asset for playground
+    * @description: Get default asset for playground
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    
+    **/
+    getDefaultAssetForPlayground({ options } = {}) {
+        const { error } = AssetsValidator.getDefaultAssetForPlayground().validate(
+            {
+                options,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/playground/default`,
             query_params,
             undefined,
         );

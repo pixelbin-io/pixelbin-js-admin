@@ -15,8 +15,19 @@ Asset Uploader Service
 -   [deleteFile](#deletefile)
 -   [deleteFiles](#deletefiles)
 -   [createFolder](#createfolder)
+-   [getFolderDetails](#getfolderdetails)
 -   [updateFolder](#updatefolder)
 -   [deleteFolder](#deletefolder)
+-   [getFolderAncestors](#getfolderancestors)
+-   [addCredentials](#addcredentials)
+-   [updateCredentials](#updatecredentials)
+-   [deleteCredentials](#deletecredentials)
+-   [addPreset](#addpreset)
+-   [getPresets](#getpresets)
+-   [updatePreset](#updatepreset)
+-   [deletePreset](#deletepreset)
+-   [getPreset](#getpreset)
+-   [getDefaultAssetForPlayground](#getdefaultassetforplayground)
 -   [getModules](#getmodules)
 -   [getModule](#getmodule)
 
@@ -772,6 +783,66 @@ Success - List of all created folders
 
 ---
 
+### getFolderDetails
+
+**Summary**: Get folder details
+
+```javascript
+// Promise
+
+const promise = assets.getFolderDetails({
+    path: "dir1/dir2",
+    name: "dir",
+});
+
+// Async/Await
+
+const data = await assets.getFolderDetails({
+    path: "dir1/dir2",
+    name: "dir",
+});
+```
+
+| Argument | Type   | Required | Description |
+| -------- | ------ | -------- | ----------- |
+| path     | string | no       | Folder path |
+| name     | string | no       | Folder name |
+
+Get folder details
+
+_Returned Response:_
+
+[exploreItem](#exploreitem)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+[
+    {
+        "_id": "dummy-uuid",
+        "createdAt": "2022-10-05T10:43:04.117Z",
+        "updatedAt": "2022-10-05T10:43:04.117Z",
+        "name": "asset2",
+        "type": "file",
+        "path": "dir",
+        "fileId": "dir/asset2",
+        "format": "jpeg",
+        "size": 1000,
+        "access": "private",
+        "metadata": {},
+        "height": 100,
+        "width": 100
+    }
+]
+```
+
+</details>
+
+---
+
 ### updateFolder
 
 **Summary**: Update folder details
@@ -871,6 +942,564 @@ Success
         "isActive": true
     }
 ]
+```
+
+</details>
+
+---
+
+### getFolderAncestors
+
+**Summary**: Get all ancestors of a folder
+
+```javascript
+// Promise
+
+const promise = assets.getFolderAncestors({
+    _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+});
+
+// Async/Await
+
+const data = await assets.getFolderAncestors({
+    _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+});
+```
+
+| Argument | Type   | Required | Description        |
+| -------- | ------ | -------- | ------------------ |
+| \_id     | string | yes      | \_id of the folder |
+
+Get all ancestors of a folder, using the folder ID.
+
+_Returned Response:_
+
+[GetAncestorsResponse](#getancestorsresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "folder": {
+        "_id": "dummy-uuid",
+        "name": "subDir",
+        "path": "dir1/dir2",
+        "isActive": true
+    },
+    "ancestors": [
+        {
+            "_id": "dummy-uuid-2",
+            "name": "dir1",
+            "path": "",
+            "isActive": true
+        },
+        {
+            "_id": "dummy-uuid-2",
+            "name": "dir2",
+            "path": "dir1",
+            "isActive": true
+        }
+    ]
+}
+```
+
+</details>
+
+---
+
+### addCredentials
+
+**Summary**: Add credentials for a transformation module.
+
+```javascript
+// Promise
+
+const promise = assets.addCredentials({
+    credentials: {
+        region: "ap-south-1",
+        accessKeyId: "123456789ABC",
+        secretAccessKey: "DUMMY1234567890",
+    },
+    pluginId: "awsRek",
+});
+
+// Async/Await
+
+const data = await assets.addCredentials({
+    credentials: {
+        region: "ap-south-1",
+        accessKeyId: "123456789ABC",
+        secretAccessKey: "DUMMY1234567890",
+    },
+    pluginId: "awsRek",
+});
+```
+
+| Argument    | Type   | Required | Description                                                 |
+| ----------- | ------ | -------- | ----------------------------------------------------------- |
+| credentials | string | yes      | Credentials of the plugin                                   |
+| pluginId    | string | yes      | Unique identifier for the plugin this credential belongs to |
+
+Add a transformation modules's credentials for an organization.
+
+_Returned Response:_
+
+[AddCredentialsResponse](#addcredentialsresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+    "createdAt": "2022-10-04T09:52:09.545Z",
+    "updatedAt": "2022-10-04T09:52:09.545Z",
+    "orgId": 23,
+    "pluginId": "awsRek"
+}
+```
+
+</details>
+
+---
+
+### updateCredentials
+
+**Summary**: Update credentials of a transformation module.
+
+```javascript
+// Promise
+
+const promise = assets.updateCredentials({
+    pluginId: "awsRek",
+    credentials: {
+        region: "ap-south-1",
+        accessKeyId: "123456789ABC",
+        secretAccessKey: "DUMMY1234567890",
+    },
+});
+
+// Async/Await
+
+const data = await assets.updateCredentials({
+    pluginId: "awsRek",
+    credentials: {
+        region: "ap-south-1",
+        accessKeyId: "123456789ABC",
+        secretAccessKey: "DUMMY1234567890",
+    },
+});
+```
+
+| Argument    | Type   | Required | Description                                          |
+| ----------- | ------ | -------- | ---------------------------------------------------- |
+| pluginId    | string | yes      | ID of the plugin whose credentials are being updated |
+| credentials | string | yes      | Credentials of the plugin                            |
+
+Update credentials of a transformation module, for an organization.
+
+_Returned Response:_
+
+[AddCredentialsResponse](#addcredentialsresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+    "createdAt": "2022-10-04T09:52:09.545Z",
+    "updatedAt": "2022-10-04T09:52:09.545Z",
+    "orgId": 23,
+    "pluginId": "awsRek"
+}
+```
+
+</details>
+
+---
+
+### deleteCredentials
+
+**Summary**: Delete credentials of a transformation module.
+
+```javascript
+// Promise
+
+const promise = assets.deleteCredentials({
+    pluginId: "awsRek",
+});
+
+// Async/Await
+
+const data = await assets.deleteCredentials({
+    pluginId: "awsRek",
+});
+```
+
+| Argument | Type   | Required | Description                                          |
+| -------- | ------ | -------- | ---------------------------------------------------- |
+| pluginId | string | yes      | ID of the plugin whose credentials are being deleted |
+
+Delete credentials of a transformation module, for an organization.
+
+_Returned Response:_
+
+[AddCredentialsResponse](#addcredentialsresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+    "createdAt": "2022-10-04T09:52:09.545Z",
+    "updatedAt": "2022-10-04T09:52:09.545Z",
+    "orgId": 23,
+    "pluginId": "awsRek"
+}
+```
+
+</details>
+
+---
+
+### addPreset
+
+**Summary**: Add a preset.
+
+```javascript
+// Promise
+
+const promise = assets.addPreset({
+    presetName: "p1",
+    transformation: "t.flip()~t.flop()",
+    params: { w: { type: "integer", default: 200 }, h: { type: "integer", default: 400 } },
+});
+
+// Async/Await
+
+const data = await assets.addPreset({
+    presetName: "p1",
+    transformation: "t.flip()~t.flop()",
+    params: { w: { type: "integer", default: 200 }, h: { type: "integer", default: 400 } },
+});
+```
+
+| Argument       | Type   | Required | Description                                    |
+| -------------- | ------ | -------- | ---------------------------------------------- |
+| presetName     | string | yes      | Name of the preset                             |
+| transformation | string | yes      | A chain of transformations, separated by `~`   |
+| params         | string | no       | Parameters object for transformation variables |
+
+Add a preset for an organization.
+
+_Returned Response:_
+
+[AddPresetResponse](#addpresetresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "presetName": "p1",
+    "transformation": "t.flip()~t.flop()",
+    "params": {
+        "w": {
+            "type": "integer",
+            "default": 200
+        },
+        "h": {
+            "type": "integer",
+            "default": 400
+        }
+    },
+    "archived": false
+}
+```
+
+</details>
+
+---
+
+### getPresets
+
+**Summary**: Get all presets.
+
+```javascript
+// Promise
+
+const promise = assets.getPresets();
+
+// Async/Await
+
+const data = await assets.getPresets();
+```
+
+Get all presets of an organization.
+
+_Returned Response:_
+
+[AddPresetResponse](#addpresetresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "items": [
+        {
+            "presetName": "p1",
+            "transformation": "t.flip()~t.flop()",
+            "params": {
+                "w": {
+                    "type": "integer",
+                    "default": 200
+                },
+                "h": {
+                    "type": "integer",
+                    "default": 400
+                }
+            },
+            "archived": true
+        }
+    ],
+    "page": {
+        "type": "number",
+        "size": 1,
+        "current": 1,
+        "hasNext": false
+    }
+}
+```
+
+</details>
+
+---
+
+### updatePreset
+
+**Summary**: Update a preset.
+
+```javascript
+// Promise
+
+const promise = assets.updatePreset({
+    presetName: "p1",
+    archived: true,
+});
+
+// Async/Await
+
+const data = await assets.updatePreset({
+    presetName: "p1",
+    archived: true,
+});
+```
+
+| Argument   | Type    | Required | Description                               |
+| ---------- | ------- | -------- | ----------------------------------------- |
+| presetName | string  | yes      | Name of the preset to be updated          |
+| archived   | boolean | yes      | Indicates if the preset has been archived |
+
+Update a preset of an organization.
+
+_Returned Response:_
+
+[AddPresetResponse](#addpresetresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "presetName": "p1",
+    "transformation": "t.flip()~t.flop()",
+    "params": {
+        "w": {
+            "type": "integer",
+            "default": 200
+        },
+        "h": {
+            "type": "integer",
+            "default": 400
+        }
+    },
+    "archived": true
+}
+```
+
+</details>
+
+---
+
+### deletePreset
+
+**Summary**: Delete a preset.
+
+```javascript
+// Promise
+
+const promise = assets.deletePreset({
+    presetName: "p1",
+});
+
+// Async/Await
+
+const data = await assets.deletePreset({
+    presetName: "p1",
+});
+```
+
+| Argument   | Type   | Required | Description                      |
+| ---------- | ------ | -------- | -------------------------------- |
+| presetName | string | yes      | Name of the preset to be deleted |
+
+Delete a preset of an organization.
+
+_Returned Response:_
+
+[AddPresetResponse](#addpresetresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "presetName": "p1",
+    "transformation": "t.flip()~t.flop()",
+    "params": {
+        "w": {
+            "type": "integer",
+            "default": 200
+        },
+        "h": {
+            "type": "integer",
+            "default": 400
+        }
+    },
+    "archived": true
+}
+```
+
+</details>
+
+---
+
+### getPreset
+
+**Summary**: Get a preset.
+
+```javascript
+// Promise
+
+const promise = assets.getPreset({
+    presetName: "p1",
+});
+
+// Async/Await
+
+const data = await assets.getPreset({
+    presetName: "p1",
+});
+```
+
+| Argument   | Type   | Required | Description                      |
+| ---------- | ------ | -------- | -------------------------------- |
+| presetName | string | yes      | Name of the preset to be fetched |
+
+Get a preset of an organization.
+
+_Returned Response:_
+
+[AddPresetResponse](#addpresetresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "presetName": "p1",
+    "transformation": "t.flip()~t.flop()",
+    "params": {
+        "w": {
+            "type": "integer",
+            "default": 200
+        },
+        "h": {
+            "type": "integer",
+            "default": 400
+        }
+    },
+    "archived": true
+}
+```
+
+</details>
+
+---
+
+### getDefaultAssetForPlayground
+
+**Summary**: Get default asset for playground
+
+```javascript
+// Promise
+
+const promise = assets.getDefaultAssetForPlayground();
+
+// Async/Await
+
+const data = await assets.getDefaultAssetForPlayground();
+```
+
+Get default asset for playground
+
+_Returned Response:_
+
+[UploadResponse](#uploadresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "_id": "dummy-uuid",
+    "name": "asset",
+    "path": "dir",
+    "fileId": "dir/asset",
+    "format": "jpeg",
+    "size": 1000,
+    "access": "private",
+    "isActive": true,
+    "tags": ["tag1", "tag2"],
+    "metadata": {
+        "key": "value"
+    },
+    "url": "https://domain.com/filename.jpeg"
+}
 ```
 
 </details>
@@ -1264,6 +1893,135 @@ Success
 | credentials | string  | no       | credentials, if any, associated with the plugin |
 | operations  | [any]   | no       | supported operations in the plugin              |
 | enabled     | boolean | no       | whether the plugin is enabled                   |
+
+---
+
+#### Credentials
+
+| Properties  | Type    | Nullable | Description                                                 |
+| ----------- | ------- | -------- | ----------------------------------------------------------- |
+| \_id        | string  | no       | Unique ID for credential                                    |
+| createdAt   | string  | no       | Credential creation ISO timestamp                           |
+| updatedAt   | string  | no       | Credential update ISO timestamp                             |
+| isActive    | boolean | no       | Tells if credential is active or not                        |
+| orgId       | string  | no       | ID of the organization this credential belongs to           |
+| pluginId    | string  | no       | Unique identifier for the plugin this credential belongs to |
+| credentials | string  | no       | Credentials object. It is different for each plugin         |
+| description | any     | no       |                                                             |
+
+---
+
+#### CredentialsItem
+
+| Properties | Type | Nullable | Description |
+| ---------- | ---- | -------- | ----------- |
+| pluginId   | any  | no       |             |
+
+---
+
+#### AddCredentialsRequest
+
+| Properties  | Type   | Nullable | Description                                                 |
+| ----------- | ------ | -------- | ----------------------------------------------------------- |
+| credentials | string | yes      | Credentials of the plugin                                   |
+| pluginId    | string | yes      | Unique identifier for the plugin this credential belongs to |
+
+---
+
+#### UpdateCredentialsRequest
+
+| Properties  | Type   | Nullable | Description               |
+| ----------- | ------ | -------- | ------------------------- |
+| credentials | string | yes      | Credentials of the plugin |
+
+---
+
+#### AddCredentialsResponse
+
+| Properties  | Type   | Nullable | Description |
+| ----------- | ------ | -------- | ----------- |
+| credentials | string | no       |             |
+
+---
+
+#### DeleteCredentialsResponse
+
+| Properties  | Type    | Nullable | Description                                                 |
+| ----------- | ------- | -------- | ----------------------------------------------------------- |
+| \_id        | string  | no       | Unique Credential ID                                        |
+| createdAt   | string  | no       | Credential creation ISO timestamp                           |
+| updatedAt   | string  | no       | Credential update ISO timestamp                             |
+| isActive    | boolean | no       | Tells if credential is active or not                        |
+| orgId       | string  | no       | ID of the organization this credential belongs to           |
+| pluginId    | string  | no       | Unique identifier for the plugin this credential belongs to |
+| credentials | string  | no       | Credentials object. It is different for each plugin         |
+
+---
+
+#### GetAncestorsResponse
+
+| Properties | Type                                  | Nullable | Description |
+| ---------- | ------------------------------------- | -------- | ----------- |
+| folder     | [folderItem](#folderitem)             | no       |             |
+| ancestors  | [[FoldersResponse](#foldersresponse)] | no       |             |
+
+---
+
+#### GetFilesWithConstraintsItem
+
+| Properties | Type   | Nullable | Description |
+| ---------- | ------ | -------- | ----------- |
+| path       | string | no       |             |
+| name       | string | no       |             |
+| type       | string | no       |             |
+
+---
+
+#### GetFilesWithConstraintsRequest
+
+| Properties | Type                                                          | Nullable | Description |
+| ---------- | ------------------------------------------------------------- | -------- | ----------- |
+| items      | [[GetFilesWithConstraintsItem](#getfileswithconstraintsitem)] | no       |             |
+| maxCount   | number                                                        | no       |             |
+| maxSize    | number                                                        | no       |             |
+
+---
+
+#### AddPresetRequest
+
+| Properties     | Type   | Nullable | Description                                    |
+| -------------- | ------ | -------- | ---------------------------------------------- |
+| presetName     | string | yes      | Name of the preset                             |
+| transformation | string | yes      | A chain of transformations, separated by `~`   |
+| params         | string | no       | Parameters object for transformation variables |
+
+---
+
+#### AddPresetResponse
+
+| Properties     | Type    | Nullable | Description                                    |
+| -------------- | ------- | -------- | ---------------------------------------------- |
+| presetName     | string  | yes      | Name of the preset                             |
+| transformation | string  | yes      | A chain of transformations, separated by `~`   |
+| params         | string  | no       | Parameters object for transformation variables |
+| archived       | boolean | no       | Indicates if the preset has been archived      |
+
+---
+
+#### UpdatePresetRequest
+
+| Properties | Type    | Nullable | Description                               |
+| ---------- | ------- | -------- | ----------------------------------------- |
+| archived   | boolean | yes      | Indicates if the preset has been archived |
+
+---
+
+#### GetPresetsResponse
+
+| Properties | Type                                      | Nullable | Description             |
+| ---------- | ----------------------------------------- | -------- | ----------------------- |
+| items      | [[AddPresetResponse](#addpresetresponse)] | yes      | Presets in current page |
+| page       | [page](#page)                             | yes      | page details            |
 
 ---
 

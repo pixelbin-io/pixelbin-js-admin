@@ -282,6 +282,134 @@ class Validator {
         });
     }
 
+    static Credentials() {
+        return Joi.object({
+            _id: Joi.string().allow(""),
+
+            createdAt: Joi.string().allow(""),
+
+            updatedAt: Joi.string().allow(""),
+
+            isActive: Joi.boolean(),
+
+            orgId: Joi.string().allow(""),
+
+            pluginId: Joi.string().allow(""),
+
+            credentials: Joi.object(),
+
+            description: Joi.any(),
+        });
+    }
+
+    static CredentialsItem() {
+        return Joi.object({
+            pluginId: Joi.any(),
+        });
+    }
+
+    static AddCredentialsRequest() {
+        return Joi.object({
+            credentials: Joi.object().required(),
+
+            pluginId: Joi.string().allow("").required(),
+        });
+    }
+
+    static UpdateCredentialsRequest() {
+        return Joi.object({
+            credentials: Joi.object().required(),
+        });
+    }
+
+    static AddCredentialsResponse() {
+        return Joi.object({
+            credentials: Joi.object(),
+        });
+    }
+
+    static DeleteCredentialsResponse() {
+        return Joi.object({
+            _id: Joi.string().allow(""),
+
+            createdAt: Joi.string().allow(""),
+
+            updatedAt: Joi.string().allow(""),
+
+            isActive: Joi.boolean(),
+
+            orgId: Joi.string().allow(""),
+
+            pluginId: Joi.string().allow(""),
+
+            credentials: Joi.object(),
+        });
+    }
+
+    static GetAncestorsResponse() {
+        return Joi.object({
+            folder: this.folderItem(),
+
+            ancestors: Joi.array().items(this.FoldersResponse()),
+        });
+    }
+
+    static GetFilesWithConstraintsItem() {
+        return Joi.object({
+            path: Joi.string().allow(""),
+
+            name: Joi.string().allow(""),
+
+            type: Joi.string().allow(""),
+        });
+    }
+
+    static GetFilesWithConstraintsRequest() {
+        return Joi.object({
+            items: Joi.array().items(this.GetFilesWithConstraintsItem()),
+
+            maxCount: Joi.number(),
+
+            maxSize: Joi.number(),
+        });
+    }
+
+    static AddPresetRequest() {
+        return Joi.object({
+            presetName: Joi.string().allow("").required(),
+
+            transformation: Joi.string().allow("").required(),
+
+            params: Joi.object(),
+        });
+    }
+
+    static AddPresetResponse() {
+        return Joi.object({
+            presetName: Joi.string().allow("").required(),
+
+            transformation: Joi.string().allow("").required(),
+
+            params: Joi.object(),
+
+            archived: Joi.boolean(),
+        });
+    }
+
+    static UpdatePresetRequest() {
+        return Joi.object({
+            archived: Joi.boolean().required(),
+        });
+    }
+
+    static GetPresetsResponse() {
+        return Joi.object({
+            items: Joi.array().items(this.AddPresetResponse()).required(),
+
+            page: this.page().required(),
+        });
+    }
+
     /*
         Enum: AccessEnum
         Used By: Assets
@@ -427,6 +555,14 @@ class AssetsValidator {
         }).required();
     }
 
+    static getFolderDetails() {
+        return Joi.object({
+            options: Joi.object(),
+            path: Joi.string().allow(""),
+            name: Joi.string().allow(""),
+        });
+    }
+
     static updateFolder() {
         return Joi.object({
             options: Joi.object(),
@@ -440,6 +576,76 @@ class AssetsValidator {
             options: Joi.object(),
             _id: Joi.string().allow("").required(),
         }).required();
+    }
+
+    static getFolderAncestors() {
+        return Joi.object({
+            options: Joi.object(),
+            _id: Joi.string().allow("").required(),
+        }).required();
+    }
+
+    static addCredentials() {
+        return Joi.object({
+            options: Joi.object(),
+            body: Validator.AddCredentialsRequest().required(),
+        }).required();
+    }
+
+    static updateCredentials() {
+        return Joi.object({
+            options: Joi.object(),
+            pluginId: Joi.string().allow("").required(),
+            body: Validator.UpdateCredentialsRequest().required(),
+        }).required();
+    }
+
+    static deleteCredentials() {
+        return Joi.object({
+            options: Joi.object(),
+            pluginId: Joi.string().allow("").required(),
+        }).required();
+    }
+
+    static addPreset() {
+        return Joi.object({
+            options: Joi.object(),
+            body: Validator.AddPresetRequest().required(),
+        }).required();
+    }
+
+    static getPresets() {
+        return Joi.object({
+            options: Joi.object(),
+        });
+    }
+
+    static updatePreset() {
+        return Joi.object({
+            options: Joi.object(),
+            presetName: Joi.string().allow("").required(),
+            body: Validator.UpdatePresetRequest().required(),
+        }).required();
+    }
+
+    static deletePreset() {
+        return Joi.object({
+            options: Joi.object(),
+            presetName: Joi.string().allow("").required(),
+        }).required();
+    }
+
+    static getPreset() {
+        return Joi.object({
+            options: Joi.object(),
+            presetName: Joi.string().allow("").required(),
+        }).required();
+    }
+
+    static getDefaultAssetForPlayground() {
+        return Joi.object({
+            options: Joi.object(),
+        });
     }
 
     static getModules() {
