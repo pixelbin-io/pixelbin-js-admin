@@ -3,4 +3,11 @@ module.exports = {
     testEnvironment: "node",
     bail: true,
     testTimeout: 30000,
+    coverageThreshold: {
+        global: {
+            branches: 0,
+            functions: 0,
+            lines: 0,
+        },
+    },
 };
