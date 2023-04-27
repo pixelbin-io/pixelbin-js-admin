@@ -764,4 +764,61 @@ describe("Pixelbin Client", () => {
         });
         requestMock.mockRestore();
     });
+
+    it("should be able to use getTransformationContext successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const getTransformationContextResponse = {
+            context: {
+                steps: expect.anything(),
+                metadata: {
+                    width: 1140,
+                    height: 760,
+                    channels: 3,
+                    extension: "jpeg",
+                    format: "jpeg",
+                    contentType: "image/jpeg",
+                    size: 218409,
+                    assetType: "image",
+                    isImageAsset: true,
+                    isAudioAsset: false,
+                    isVideoAsset: false,
+                    isRawAsset: false,
+                    isTransformationSupported: true,
+                },
+                headers: {
+                    host: "api.pixelbin.io",
+                    accept: "application/json, text/plain, */*",
+                },
+                params: {},
+            },
+        };
+        requestMock.mockResolvedValue(getTransformationContextResponse);
+
+        const pixelbin = new PixelbinClient(config);
+
+        const response = await pixelbin.transformation.getTransformationContext({
+            url: "/v2/fynd-eg/t.resize()/__playground/playground-default.jpeg",
+        });
+
+        expect(response).toBe(getTransformationContextResponse);
+
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "get",
+            url: "/service/platform/transformation/context",
+            params: {
+                url: "/v2/fynd-eg/t.resize()/__playground/playground-default.jpeg",
+            },
+            data: undefined,
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
 });

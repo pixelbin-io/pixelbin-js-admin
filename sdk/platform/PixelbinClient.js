@@ -1,5 +1,9 @@
 const FormData = require("form-data");
-const { AssetsValidator, OrganizationValidator } = require("./PlatformModels");
+const {
+    AssetsValidator,
+    OrganizationValidator,
+    TransformationValidator,
+} = require("./PlatformModels");
 const Paginator = require("../common/Paginator");
 const PlatformAPIClient = require("./PlatformAPIClient");
 const { PDKClientValidationError } = require("../common/PDKError");
@@ -9,6 +13,7 @@ class PixelbinClient {
         this.config = config;
         this.assets = new Assets(config);
         this.organization = new Organization(config);
+        this.transformation = new Transformation(config);
     }
 }
 
@@ -584,6 +589,15 @@ class PixelbinClient {
         
         
         @property { string } [message]
+        
+         
+    */
+
+/**
+        @typedef GetTransformationContextSuccessResponse
+        
+        
+        @property { Object } [context]
         
          
     */
@@ -1731,6 +1745,45 @@ class Organization {
             this.config,
             "get",
             `/service/platform/organization/v1.0/apps/info`,
+            query_params,
+            undefined,
+        );
+    }
+}
+
+class Transformation {
+    constructor(config) {
+        this.config = config;
+    }
+
+    /**
+    *
+    * @summary: Get transformation context
+    * @description: Get transformation context
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    * @param {string} [arg.url] - CDN URL with transformation.
+    
+    **/
+    getTransformationContext({ options, url } = {}) {
+        const { error } = TransformationValidator.getTransformationContext().validate(
+            {
+                options,
+                url,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+        query_params["url"] = url;
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/transformation/context`,
             query_params,
             undefined,
         );
