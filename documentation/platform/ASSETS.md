@@ -755,7 +755,7 @@ Create a new folder at the specified path. Also creates the ancestors if they do
 
 _Returned Response:_
 
-[[FoldersResponse]](#[foldersresponse])
+[FoldersResponse](#foldersresponse)
 
 Success - List of all created folders
 
@@ -763,20 +763,12 @@ Success - List of all created folders
 <summary><i>&nbsp; Example:</i></summary>
 
 ```json
-[
-    {
-        "_id": "dummy-uuid",
-        "name": "subDir",
-        "path": "dir",
-        "isActive": true
-    },
-    {
-        "_id": "dummy-uuid-2",
-        "name": "subDir",
-        "path": "dir",
-        "isActive": true
-    }
-]
+{
+    "_id": "dummy-uuid",
+    "name": "subDir",
+    "path": "dir",
+    "isActive": true
+}
 ```
 
 </details>
@@ -920,7 +912,7 @@ Delete folder and all its children permanently.
 
 _Returned Response:_
 
-[[FoldersResponse]](#[foldersresponse])
+[FoldersResponse](#foldersresponse)
 
 Success
 
@@ -928,20 +920,12 @@ Success
 <summary><i>&nbsp; Example:</i></summary>
 
 ```json
-[
-    {
-        "_id": "dummy-uuid",
-        "name": "subDir",
-        "path": "dir",
-        "isActive": true
-    },
-    {
-        "_id": "dummy-uuid-2",
-        "name": "subDir",
-        "path": "dir",
-        "isActive": true
-    }
-]
+{
+    "_id": "dummy-uuid",
+    "name": "subDir",
+    "path": "dir",
+    "isActive": true
+}
 ```
 
 </details>

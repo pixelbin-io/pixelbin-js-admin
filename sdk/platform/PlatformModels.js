@@ -473,6 +473,12 @@ class Validator {
             message: Joi.string().allow(""),
         });
     }
+
+    static GetTransformationContextSuccessResponse() {
+        return Joi.object({
+            context: Joi.object(),
+        });
+    }
 }
 
 class AssetsValidator {
@@ -670,7 +676,17 @@ class OrganizationValidator {
     }
 }
 
+class TransformationValidator {
+    static getTransformationContext() {
+        return Joi.object({
+            options: Joi.object(),
+            url: Joi.string().allow(""),
+        });
+    }
+}
+
 module.exports = {
     AssetsValidator,
     OrganizationValidator,
+    TransformationValidator,
 };
