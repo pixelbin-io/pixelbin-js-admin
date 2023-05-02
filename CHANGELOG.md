@@ -1,7 +1,3 @@
-## 3.3.1
-
--   Added .npmignore
-
 ## 3.3.0
 
 -   Added a method for obtaining the context of a file via url.
