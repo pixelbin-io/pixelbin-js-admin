@@ -28,7 +28,7 @@ class Validator {
 
             size: Joi.number(),
 
-            access: Joi.string().allow(""),
+            access: this.AccessEnum(),
         });
     }
 
@@ -126,7 +126,7 @@ class Validator {
 
             size: Joi.number().required(),
 
-            access: Joi.string().allow("").required(),
+            access: this.AccessEnum().required(),
 
             tags: Joi.array().items(Joi.string().allow("")),
 
@@ -186,7 +186,7 @@ class Validator {
 
             size: Joi.number().required(),
 
-            access: Joi.string().allow("").required(),
+            access: this.AccessEnum().required(),
 
             isActive: Joi.boolean().required(),
 
@@ -206,7 +206,7 @@ class Validator {
 
             path: Joi.string().allow(""),
 
-            access: Joi.string().allow(""),
+            access: this.AccessEnum(),
 
             isActive: Joi.boolean(),
 

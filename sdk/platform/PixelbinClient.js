@@ -50,7 +50,7 @@ class PixelbinClient {
         
         @property { number } [size]
         
-        @property { string } [access]
+        @property { AccessEnum } [access]
         
          
     */
@@ -169,7 +169,7 @@ class PixelbinClient {
         
         @property { number } size
         
-        @property { string } access
+        @property { AccessEnum } access
         
         @property { Array<string> } [tags]
         
@@ -241,7 +241,7 @@ class PixelbinClient {
         
         @property { number } size
         
-        @property { string } access
+        @property { AccessEnum } access
         
         @property { boolean } isActive
         
@@ -264,7 +264,7 @@ class PixelbinClient {
         
         @property { string } [path]
         
-        @property { string } [access]
+        @property { AccessEnum } [access]
         
         @property { boolean } [isActive]
         
@@ -994,7 +994,7 @@ which can be then used to upload your asset.
     * @param {string} arg.fileId - Combination of `path` and `name`
     * @param {string} arg.name Name of the file
     * @param {string} arg.path path of containing folder.
-    * @param {string} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {boolean} arg.isActive Whether the file is active
     * @param {[string]} arg.tags Tags associated with the file
     * @param {object} arg.metadata Metadata associated with the file
