@@ -1,3 +1,9 @@
+## 3.4.0
+
+-   Added support for parsing Custom Domains in `objToUrl` and `urlToObj`
+-   Improved support for worker urls in `objToUrl` and `urlToObj`
+-   Fixed documentation for `assets.deleteFiles`
+
 ## 3.3.1
 
 -   Added .npmignore

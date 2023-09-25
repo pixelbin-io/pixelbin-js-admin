@@ -62,6 +62,13 @@ class PDKIllegalQueryParameterError extends Error {
     }
 }
 
+class PDKTransformationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "PDKTransformationError";
+    }
+}
+
 module.exports = {
     PDKServerResponseError,
     PDKClientValidationError,
@@ -71,4 +78,5 @@ module.exports = {
     PDKInvalidUrlError,
     PDKIllegalArgumentError,
     PDKIllegalQueryParameterError,
+    PDKTransformationError,
 };
