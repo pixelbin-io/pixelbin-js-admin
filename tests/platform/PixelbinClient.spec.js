@@ -21,7 +21,7 @@ describe("Pixelbin Client", () => {
                 access: "public-read",
                 width: 256,
                 height: 256,
-                url: "https://cdn.pixelbinx0.de/purple-river-400fad/original/1024x1024.png",
+                url: "https://cdn.pixelbin.io/v2/purple-river-400fad/original/1024x1024.png",
             },
             {
                 _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
@@ -38,7 +38,7 @@ describe("Pixelbin Client", () => {
                 access: "public-read",
                 width: 256,
                 height: 256,
-                url: "https://cdn.pixelbinx0.de/purple-river-400fad/original/1024x1024-kbsw-rPZk.png",
+                url: "https://cdn.pixelbin.io/v2/purple-river-400fad/original/1024x1024-kbsw-rPZk.png",
             },
             {
                 _id: "61eeaffc-289b-43e8-a983-b41edc4b6039",
@@ -55,7 +55,7 @@ describe("Pixelbin Client", () => {
                 access: "public-read",
                 width: 400,
                 height: 301,
-                url: "https://cdn.pixelbinx0.de/purple-river-400fad/original/1_webp_a.png",
+                url: "https://cdn.pixelbin.io/v2/purple-river-400fad/original/1_webp_a.png",
             },
             {
                 _id: "35d54221-fcdf-4683-bbd1-abb63f1c0a83",
@@ -72,7 +72,7 @@ describe("Pixelbin Client", () => {
                 access: "public-read",
                 width: 400,
                 height: 301,
-                url: "https://cdn.pixelbinx0.de/purple-river-400fad/original/1_webp_a-(1).png",
+                url: "https://cdn.pixelbin.io/v2/purple-river-400fad/original/1_webp_a-(1).png",
             },
             {
                 _id: "033ae8e2-48c1-4b04-bac6-64c356b4be39",
@@ -89,7 +89,7 @@ describe("Pixelbin Client", () => {
                 access: "public-read",
                 width: 400,
                 height: 301,
-                url: "https://cdn.pixelbinx0.de/purple-river-400fad/original/1_webp_a-(1)-573L-CEUT.png",
+                url: "https://cdn.pixelbin.io/v2/purple-river-400fad/original/1_webp_a-(1)-573L-CEUT.png",
             },
         ],
         page: { type: "number", size: 5, current: 1, hasNext: false, itemTotal: 5 },
