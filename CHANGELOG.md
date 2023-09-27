@@ -1,3 +1,7 @@
+## 3.5.0
+
+-   Added support for generating `Signed PixelBin Urls`
+
 ## 3.4.0
 
 -   Added support for parsing Custom Domains in `objToUrl` and `urlToObj`
