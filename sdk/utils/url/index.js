@@ -26,8 +26,15 @@ Converts a URL to an object representation.
 @returns {urlToObjResult} - The object representation of the URL.
 */
 const urlToObj = function (url, opts = { isCustomDomain: false }) {
-    config.isCustomDomain = opts.isCustomDomain;
-    return getObjFromUrl(url, config, false);
+    return getObjFromUrl(
+        url,
+        {
+            operationSeparator: config.operationSeparator,
+            parameterSeparator: config.parameterSeparator,
+            isCustomDomain: opts.isCustomDomain,
+        },
+        false,
+    );
 };
 
 /**
