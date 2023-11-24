@@ -530,6 +530,53 @@ class PixelbinClient {
     */
 
 /**
+        @typedef SignedUploadRequestV2
+        
+        
+        @property { string } [name]
+        
+        @property { string } [path]
+        
+        @property { string } [format]
+        
+        @property { AccessEnum } [access]
+        
+        @property { Array<string> } [tags]
+        
+        @property { Object } [metadata]
+        
+        @property { boolean } [overwrite]
+        
+        @property { boolean } [filenameOverride]
+        
+        @property { number } [expiry]
+        
+         
+    */
+
+/**
+        @typedef SignedUploadV2Response
+        
+        
+        @property { PresignedUrlV2 } presignedUrl
+        
+         
+    */
+
+/**
+        @typedef PresignedUrlV2
+        
+        
+        @property { string } [url]
+        
+        @property { string } [completionUrl]
+        
+        @property { Object } [fields]
+        
+         
+    */
+
+/**
         @typedef OrganizationDetailSchema
         
         
@@ -1711,6 +1758,84 @@ We currently do not support updating folder name or path.
             `/service/platform/assets/v1.0/playground/plugins/${identifier}`,
             query_params,
             undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Signed multipart upload
+    * @description: For the given asset details, a presigned URL will be generated, which can be then used to upload your asset in chunks via multipart upload.
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable     
+    * @param {string} arg.name name of the file
+    * @param {string} arg.path Path of containing folder.
+    * @param {string} arg.format Format of the file
+    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {[string]} arg.tags Tags associated with the file.
+    * @param {object} arg.metadata Metadata associated with the file.
+    * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
+    * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
+    * @param {integer} arg.expiry Expiry time in seconds for the signed URL. Defaults to 3000 seconds.
+    
+    **/
+    createSignedUrlV2({
+        options,
+
+        name,
+        path,
+        format,
+        access,
+        tags,
+        metadata,
+        overwrite,
+        filenameOverride,
+        expiry,
+    } = {}) {
+        const { error } = AssetsValidator.createSignedUrlV2().validate(
+            {
+                options,
+
+                body: {
+                    name,
+                    path,
+                    format,
+                    access,
+                    tags,
+                    metadata,
+                    overwrite,
+                    filenameOverride,
+                    expiry,
+                },
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        let body;
+
+        body = {
+            name,
+            path,
+            format,
+            access,
+            tags,
+            metadata,
+            overwrite,
+            filenameOverride,
+            expiry,
+        };
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "post",
+            `/service/platform/assets/v2.0/upload/signed-url`,
+            query_params,
+            body,
+            "application/json",
         );
     }
 }

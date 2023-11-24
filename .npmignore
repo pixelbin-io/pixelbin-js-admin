@@ -4,3 +4,4 @@ documentation
 tests
 sample.js
 jest.config.js
+coverage/
