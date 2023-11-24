@@ -410,6 +410,44 @@ class Validator {
         });
     }
 
+    static SignedUploadRequestV2() {
+        return Joi.object({
+            name: Joi.string().allow(""),
+
+            path: Joi.string().allow(""),
+
+            format: Joi.string().allow(""),
+
+            access: this.AccessEnum(),
+
+            tags: Joi.array().items(Joi.string().allow("")),
+
+            metadata: Joi.object(),
+
+            overwrite: Joi.boolean(),
+
+            filenameOverride: Joi.boolean(),
+
+            expiry: Joi.number(),
+        });
+    }
+
+    static SignedUploadV2Response() {
+        return Joi.object({
+            presignedUrl: this.PresignedUrlV2().required(),
+        });
+    }
+
+    static PresignedUrlV2() {
+        return Joi.object({
+            url: Joi.string().allow(""),
+
+            completionUrl: Joi.string().allow(""),
+
+            fields: Joi.object().pattern(/\S/, Joi.string().allow("")),
+        });
+    }
+
     /*
         Enum: AccessEnum
         Used By: Assets
@@ -664,6 +702,13 @@ class AssetsValidator {
         return Joi.object({
             options: Joi.object(),
             identifier: Joi.string().allow("").required(),
+        }).required();
+    }
+
+    static createSignedUrlV2() {
+        return Joi.object({
+            options: Joi.object(),
+            body: Validator.SignedUploadRequestV2().required(),
         }).required();
     }
 }

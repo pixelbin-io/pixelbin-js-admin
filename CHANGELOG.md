@@ -1,6 +1,11 @@
+## 3.6.0
+
+-   Added support for generating Presigned Urls for Multipart Upload. See `createSignedUrlV2` in `assets` module. 
+-   Fixed regex for Custom Domain URLs 
+
 ## 3.5.0
 
--   Added support for generating `Signed PixelBin Urls`
+-   Added support for generating `Signed PixelBin Urls` 
 
 ## 3.4.0
 

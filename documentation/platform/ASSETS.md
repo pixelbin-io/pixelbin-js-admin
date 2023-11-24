@@ -30,6 +30,7 @@ Asset Uploader Service
 -   [getDefaultAssetForPlayground](#getdefaultassetforplayground)
 -   [getModules](#getmodules)
 -   [getModule](#getmodule)
+-   [createSignedUrlV2](#createsignedurlv2)
 
 ## Methods with example and description
 
@@ -1632,6 +1633,79 @@ Success
 
 ---
 
+### createSignedUrlV2
+
+**Summary**: Signed multipart upload
+
+```javascript
+// Promise
+
+const promise = assets.createSignedUrlV2({
+    name: "filename",
+    path: "path/to/containing/folder",
+    format: "jpeg",
+    access: "public-read",
+    tags: ["tag1", "tag2"],
+    metadata: {},
+    overwrite: false,
+    filenameOverride: true,
+    expiry: 3000,
+});
+
+// Async/Await
+
+const data = await assets.createSignedUrlV2({
+    name: "filename",
+    path: "path/to/containing/folder",
+    format: "jpeg",
+    access: "public-read",
+    tags: ["tag1", "tag2"],
+    metadata: {},
+    overwrite: false,
+    filenameOverride: true,
+    expiry: 3000,
+});
+```
+
+| Argument         | Type                      | Required | Description                                                                                                                                                                                                                      |
+| ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name             | string                    | no       | name of the file                                                                                                                                                                                                                 |
+| path             | string                    | no       | Path of containing folder.                                                                                                                                                                                                       |
+| format           | string                    | no       | Format of the file                                                                                                                                                                                                               |
+| access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
+| tags             | [string]                  | no       | Tags associated with the file.                                                                                                                                                                                                   |
+| metadata         | string                    | no       | Metadata associated with the file.                                                                                                                                                                                               |
+| overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
+| filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
+| expiry           | number                    | no       | Expiry time in seconds for the signed URL. Defaults to 3000 seconds.                                                                                                                                                             |
+
+For the given asset details, a presigned URL will be generated, which can be then used to upload your asset in chunks via multipart upload.
+
+_Returned Response:_
+
+[SignedUploadV2Response](#signeduploadv2response)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "presignedUrl": {
+        "url": "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?pbs=8b49e6cdd446be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209",
+        "completionUrl": "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart/complete?pbs=8b49e6cdd446be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209",
+        "fields": {
+            "x-pixb-meta-assetdata": "{\"orgId\":1,\"type\":\"file\",\"name\":\"filename.jpeg\",\"path\":\"\",\"fileId\":\"filename.jpeg\",\"format\":\"jpeg\",\"s3Bucket\":\"erase-erase-erasebg-assets\",\"s3Key\":\"uploads/floral-sun-9617c8/original/a34f1d3-28bf-489c-9aff-cc549ac9e003.jpeg\",\"access\":\"public-read\",\"tags\":[],\"metadata\":{\"source\":\"signedUrl\"},\"overwrite\":false,\"filenameOverride\":false}"
+        }
+    }
+}
+```
+
+</details>
+
+---
+
 ### Schemas
 
 #### folderItem
@@ -2008,6 +2082,40 @@ Success
 | ---------- | ----------------------------------------- | -------- | ----------------------- |
 | items      | [[AddPresetResponse](#addpresetresponse)] | yes      | Presets in current page |
 | page       | [page](#page)                             | yes      | page details            |
+
+---
+
+#### SignedUploadRequestV2
+
+| Properties       | Type                      | Nullable | Description                                                                                                                                                                                                                      |
+| ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name             | string                    | no       | name of the file                                                                                                                                                                                                                 |
+| path             | string                    | no       | Path of containing folder.                                                                                                                                                                                                       |
+| format           | string                    | no       | Format of the file                                                                                                                                                                                                               |
+| access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
+| tags             | [string]                  | no       | Tags associated with the file.                                                                                                                                                                                                   |
+| metadata         | string                    | no       | Metadata associated with the file.                                                                                                                                                                                               |
+| overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
+| filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
+| expiry           | number                    | no       | Expiry time in seconds for the signed URL. Defaults to 3000 seconds.                                                                                                                                                             |
+
+---
+
+#### SignedUploadV2Response
+
+| Properties   | Type                              | Nullable | Description                                 |
+| ------------ | --------------------------------- | -------- | ------------------------------------------- |
+| presignedUrl | [PresignedUrlV2](#presignedurlv2) | yes      | Presigned URL for uploading asset in chunks |
+
+---
+
+#### PresignedUrlV2
+
+| Properties    | Type             | Nullable | Description                                                      |
+| ------------- | ---------------- | -------- | ---------------------------------------------------------------- |
+| url           | string           | no       | Presigned URL for uploading asset in chunks                      |
+| completionUrl | string           | no       | URL to finalize upload once all chunks are successfully uploaded |
+| fields        | [String: string] | no       | signed fields to be sent along with request                      |
 
 ---
 

@@ -821,4 +821,62 @@ describe("Pixelbin Client", () => {
         });
         requestMock.mockRestore();
     });
+
+    it("should be able to use createSignedUrlV2 successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+        const requestMock = jest.spyOn(pdkAxios, "request");
+        const createSignedUrlV2Response = {
+            presignedUrl: {
+                url: "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?pbs=8b49e6cdd445ceda287b160db2a6f5cf50109ea062b696e4e6be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209",
+                completionUrl:
+                    "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart/complete?pbs=8b49e6cdd445ceda287b160db2a6f5cf50109ea062b696e4e6be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209",
+                fields: {
+                    "x-pixb-meta-assetdata":
+                        '{"orgId":143209,"type":"file","name":"filename666666.jpeg","path":"","fileId":"filename666666.jpeg","format":"jpeg","s3Bucket":"erase-erase-erasebg-assets","s3Key":"uploads/floral-moon-9617c8/original/a34f1de1-28bf-489c-9aff-cc549ac9e003.jpeg","access":"public-read","tags":[],"metadata":{"source":"signedUrl"},"overwrite":false,"filenameOverride":false}',
+                },
+            },
+        };
+        requestMock.mockResolvedValue(createSignedUrlV2Response);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.assets.createSignedUrlV2({
+            name: "filename666666.jpeg",
+            path: "",
+            format: "jpeg",
+            tags: [],
+            metadata: { source: "signedUrl" },
+            overwrite: false,
+            filenameOverride: false,
+            access: "public-read",
+            expiry: 2000,
+        });
+        expect(response).toBe(createSignedUrlV2Response);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "post",
+            url: "/service/platform/assets/v2.0/upload/signed-url",
+            params: {},
+            data: {
+                access: "public-read",
+                expiry: 2000,
+                filenameOverride: false,
+                format: "jpeg",
+                metadata: {
+                    source: "signedUrl",
+                },
+                name: "filename666666.jpeg",
+                overwrite: false,
+                path: "",
+                tags: [],
+            },
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
 });
