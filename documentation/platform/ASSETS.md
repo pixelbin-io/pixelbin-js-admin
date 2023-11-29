@@ -1693,10 +1693,9 @@ Success
 ```json
 {
     "presignedUrl": {
-        "url": "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?pbs=8b49e6cdd446be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209",
-        "completionUrl": "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart/complete?pbs=8b49e6cdd446be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209",
+        "url": "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?pbs=8b49e6cdd446be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209&pbu=5fe187e8-8649-4546-9a28-ff551839e0f5",
         "fields": {
-            "x-pixb-meta-assetdata": "{\"orgId\":1,\"type\":\"file\",\"name\":\"filename.jpeg\",\"path\":\"\",\"fileId\":\"filename.jpeg\",\"format\":\"jpeg\",\"s3Bucket\":\"erase-erase-erasebg-assets\",\"s3Key\":\"uploads/floral-sun-9617c8/original/a34f1d3-28bf-489c-9aff-cc549ac9e003.jpeg\",\"access\":\"public-read\",\"tags\":[],\"metadata\":{\"source\":\"signedUrl\"},\"overwrite\":false,\"filenameOverride\":false}"
+            "x-pixb-meta-assetdata": "{\"orgId\":1,\"type\":\"file\",\"name\":\"filename.jpeg\",\"path\":\"\",\"fileId\":\"filename.jpeg\",\"format\":\"jpeg\",\"s3Bucket\":\"erase-erase-erasebg-assets\",\"s3Key\":\"uploads/floral-sun-9617c8/original/a34f1d3-28bf-489c-9aff-cc549ac9e003.jpeg\",\"access\":\"public-read\",\"tags\":[],\"metadata\":{\"source\":\"signedUrl\",\"publicUploadId\":\"5fe187e8-8649-4546-9a28-ff551839e0f5\"},\"overwrite\":false,\"filenameOverride\":false}"
         }
     }
 }
@@ -2111,11 +2110,10 @@ Success
 
 #### PresignedUrlV2
 
-| Properties    | Type             | Nullable | Description                                                      |
-| ------------- | ---------------- | -------- | ---------------------------------------------------------------- |
-| url           | string           | no       | Presigned URL for uploading asset in chunks                      |
-| completionUrl | string           | no       | URL to finalize upload once all chunks are successfully uploaded |
-| fields        | [String: string] | no       | signed fields to be sent along with request                      |
+| Properties | Type             | Nullable | Description                                 |
+| ---------- | ---------------- | -------- | ------------------------------------------- |
+| url        | string           | no       | Presigned URL for uploading asset in chunks |
+| fields     | [String: string] | no       | signed fields to be sent along with request |
 
 ---
 

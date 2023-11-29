@@ -442,8 +442,6 @@ class Validator {
         return Joi.object({
             url: Joi.string().allow(""),
 
-            completionUrl: Joi.string().allow(""),
-
             fields: Joi.object().pattern(/\S/, Joi.string().allow("")),
         });
     }

@@ -569,8 +569,6 @@ class PixelbinClient {
         
         @property { string } [url]
         
-        @property { string } [completionUrl]
-        
         @property { Object } [fields]
         
          
