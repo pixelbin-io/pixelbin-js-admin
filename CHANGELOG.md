@@ -1,4 +1,4 @@
-## 3.6.0
+## 3.7.0
 
 -   Added support for generating Presigned Urls for Multipart Upload. See `createSignedUrlV2` in `assets` module.
 -   Fixed regex for Custom Domain URLs
