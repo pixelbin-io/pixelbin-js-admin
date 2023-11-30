@@ -830,12 +830,10 @@ describe("Pixelbin Client", () => {
         const requestMock = jest.spyOn(pdkAxios, "request");
         const createSignedUrlV2Response = {
             presignedUrl: {
-                url: "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?pbs=8b49e6cdd445ceda287b160db2a6f5cf50109ea062b696e4e6be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209",
-                completionUrl:
-                    "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart/complete?pbs=8b49e6cdd445ceda287b160db2a6f5cf50109ea062b696e4e6be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209",
+                url: "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?pbs=8b49e6cdd445ceda287b160db2a6f5cf50109ea062b696e4e6be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209&pbu=5fe187e8-8649-4546-9a28-ff551839e0f5",
                 fields: {
                     "x-pixb-meta-assetdata":
-                        '{"orgId":143209,"type":"file","name":"filename666666.jpeg","path":"","fileId":"filename666666.jpeg","format":"jpeg","s3Bucket":"erase-erase-erasebg-assets","s3Key":"uploads/floral-moon-9617c8/original/a34f1de1-28bf-489c-9aff-cc549ac9e003.jpeg","access":"public-read","tags":[],"metadata":{"source":"signedUrl"},"overwrite":false,"filenameOverride":false}',
+                        '{"orgId":143209,"type":"file","name":"filename666666.jpeg","path":"","fileId":"filename666666.jpeg","format":"jpeg","s3Bucket":"erase-erase-erasebg-assets","s3Key":"uploads/floral-moon-9617c8/original/a34f1de1-28bf-489c-9aff-cc549ac9e003.jpeg","access":"public-read","tags":[],"metadata":{"source":"signedUrl","publicUploadId":"5fe187e8-8649-4546-9a28-ff551839e0f5"},"overwrite":false,"filenameOverride":false}',
                 },
             },
         };
