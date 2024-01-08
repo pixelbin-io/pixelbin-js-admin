@@ -515,6 +515,42 @@ class Validator {
             context: Joi.object(),
         });
     }
+
+    static NotFoundSchema() {
+        return Joi.object({
+            message: Joi.string().allow(""),
+        });
+    }
+
+    static UsageSchema() {
+        return Joi.object({
+            storage: Joi.string().allow(""),
+        });
+    }
+
+    static ConsumedCreditsSchema() {
+        return Joi.object({
+            used: Joi.number(),
+        });
+    }
+
+    static TotalUsageSchema() {
+        return Joi.object({
+            credits: Joi.number(),
+
+            storage: Joi.number(),
+        });
+    }
+
+    static CompleteUsageSchema() {
+        return Joi.object({
+            credits: this.ConsumedCreditsSchema(),
+
+            total: this.TotalUsageSchema(),
+
+            usage: this.UsageSchema(),
+        });
+    }
 }
 
 class AssetsValidator {
@@ -728,8 +764,17 @@ class TransformationValidator {
     }
 }
 
+class BillingValidator {
+    static getUsage() {
+        return Joi.object({
+            options: Joi.object(),
+        });
+    }
+}
+
 module.exports = {
     AssetsValidator,
     OrganizationValidator,
     TransformationValidator,
+    BillingValidator,
 };

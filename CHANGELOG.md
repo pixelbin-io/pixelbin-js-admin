@@ -1,3 +1,8 @@
+## 3.8.0
+
+-   Added `billing` module.
+-   Added `getUsage` function in `billing` module.
+
 ## 3.7.0
 
 -   Added support for generating Presigned Urls for Multipart Upload. See `createSignedUrlV2` in `assets` module.
