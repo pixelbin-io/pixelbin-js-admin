@@ -104,6 +104,7 @@ describe("Pixelbin Client", () => {
         expect(pixelbin.config).toEqual(config);
         expect(pixelbin.assets).not.toBeUndefined();
         expect(pixelbin.organization).not.toBeUndefined();
+        expect(pixelbin.billing).not.toBeUndefined();
     });
     it("should be able to explore assets correctly", async () => {
         const config = new PixelbinConfig({
@@ -870,6 +871,47 @@ describe("Pixelbin Client", () => {
                 path: "",
                 tags: [],
             },
+            headers: {
+                Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
+            },
+            maxBodyLength: Infinity,
+        });
+        requestMock.mockRestore();
+    });
+
+    it("should be able to use getUsage successfully", async () => {
+        const config = new PixelbinConfig({
+            domain: "https://api.testdomain.com",
+            apiSecret: "test-api-secret",
+        });
+
+        const requestMock = jest.spyOn(pdkAxios, "request");
+
+        const getUsageResponse = {
+            usage: {
+                storage: 101730347423394,
+            },
+            credits: {
+                used: 2100468.720988592,
+            },
+            total: {
+                storage: 100000,
+                credits: 100000,
+            },
+        };
+
+        requestMock.mockResolvedValue(getUsageResponse);
+
+        const pixelbin = new PixelbinClient(config);
+        const response = await pixelbin.billing.getUsage();
+
+        expect(response).toBe(getUsageResponse);
+        expect(requestMock.mock.calls[0][0]).toEqual({
+            baseURL: config.domain,
+            method: "get",
+            url: "/service/platform/payment/v1.0/usage/subscription",
+            params: {},
+            data: undefined,
             headers: {
                 Authorization: `Bearer ${Buffer.from("test-api-secret").toString("base64")}`,
             },

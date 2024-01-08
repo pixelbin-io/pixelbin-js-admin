@@ -3,6 +3,7 @@ const {
     AssetsValidator,
     OrganizationValidator,
     TransformationValidator,
+    BillingValidator,
 } = require("./PlatformModels");
 const Paginator = require("../common/Paginator");
 const PlatformAPIClient = require("./PlatformAPIClient");
@@ -14,6 +15,7 @@ class PixelbinClient {
         this.assets = new Assets(config);
         this.organization = new Organization(config);
         this.transformation = new Transformation(config);
+        this.billing = new Billing(config);
     }
 }
 
@@ -643,6 +645,57 @@ class PixelbinClient {
         
         
         @property { Object } [context]
+        
+         
+    */
+
+/**
+        @typedef NotFoundSchema
+        
+        
+        @property { string } [message]
+        
+         
+    */
+
+/**
+        @typedef UsageSchema
+        
+        
+        @property { string } [storage]
+        
+         
+    */
+
+/**
+        @typedef ConsumedCreditsSchema
+        
+        
+        @property { number } [used]
+        
+         
+    */
+
+/**
+        @typedef TotalUsageSchema
+        
+        
+        @property { number } [credits]
+        
+        @property { number } [storage]
+        
+         
+    */
+
+/**
+        @typedef CompleteUsageSchema
+        
+        
+        @property { ConsumedCreditsSchema } [credits]
+        
+        @property { TotalUsageSchema } [total]
+        
+        @property { UsageSchema } [usage]
         
          
     */
@@ -1907,6 +1960,42 @@ class Transformation {
             this.config,
             "get",
             `/service/platform/transformation/context`,
+            query_params,
+            undefined,
+        );
+    }
+}
+
+class Billing {
+    constructor(config) {
+        this.config = config;
+    }
+
+    /**
+    *
+    * @summary: Get current usage of organization
+    * @description: Get current usage of organization
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    
+    **/
+    getUsage({ options } = {}) {
+        const { error } = BillingValidator.getUsage().validate(
+            {
+                options,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/payment/v1.0/usage/subscription`,
             query_params,
             undefined,
         );
