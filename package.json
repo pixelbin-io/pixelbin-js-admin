@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/pixelbin-dev/pixelbin-js-admin.git"
+        "url": "git+https://github.com/pixelbin-io/pixelbin-js-admin.git"
     },
     "author": "Pixelbin",
     "license": "MIT",
