@@ -1,3 +1,7 @@
+## 3.8.1
+
+- Fixed paginator.hasNext() returning `undefined` on first call. 
+
 ## 3.8.0
 
 -   Added `billing` module.

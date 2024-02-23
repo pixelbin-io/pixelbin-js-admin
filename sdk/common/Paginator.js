@@ -2,6 +2,7 @@ class Paginator {
     constructor(pageNo) {
         this.pageNo = pageNo;
         this.callback = undefined;
+        this.isNext = true;
     }
 
     setCallback(callback) {
