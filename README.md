@@ -63,7 +63,7 @@ Generate a signed PixelBin url
 | ------------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `url` (string)           | A valid Pixelbin URL to be signed                    | `https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg` |
 | `expirySeconds` (number) | Number of seconds the signed URL should be valid for | `20`                                                                                       |
-| `tokenId` (number)       | ID of the token used for signing                     | `42`                                                                                       |
+| `accessKey` (string)       | Access key of the token used for signing                     | `42`                                                                                       |
 | `token` (string)         | Value of the token used for signing                  | `dummy-token`                                                                              |
 
 Example:
@@ -74,11 +74,11 @@ const { security } = require("@pixelbin/admin");
 const signedUrl = security.signURL(
     "https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg", // url
     20, // expirySeconds
-    42, // tokenId
+    "0b55aaff-d7db-45f0-b556-9b45a6f2200e", // accessKey
     "dummy-token", // token
 );
 // signedUrl
-// https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg?pbs=8eb6a00af74e57967a42316e4de238aa88d92961649764fad1832c1bff101f25&pbe=1695635915&pbt=1
+// https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg?pbs=8eb6a00af74e57967a42316e4de238aa88d92961649764fad1832c1bff101f25&pbe=1695635915&pbt=0b55aaff-d7db-45f0-b556-9b45a6f2200e
 ```
 
 Usage with custom domain url
@@ -89,11 +89,11 @@ const { security } = require("@pixelbin/admin");
 const signedUrl = security.signURL(
     "https://krit.imagebin.io/v2/original/__playground/playground-default.jpeg", // url
     30, // expirySeconds
-    22, // tokenId
+    "0b55aaff-d7db-45f0-b556-9b45a6f2200e", // accessKey
     "dummy-token", // token
 );
 // signedUrl
-// https://krit.imagebin.io/v2/original/__playground/playground-default.jpeg?pbs=1aef31c1e0ecd8a875b1d3184f324327f4ab4bce419d81d1eb1a818ee5f2e3eb&pbe=1695705975&pbt=22
+// https://krit.imagebin.io/v2/original/__playground/playground-default.jpeg?pbs=1aef31c1e0ecd8a875b1d3184f324327f4ab4bce419d81d1eb1a818ee5f2e3eb&pbe=1695705975&pbt=0b55aaff-d7db-45f0-b556-9b45a6f2200e
 ```
 
 ## URL Utils

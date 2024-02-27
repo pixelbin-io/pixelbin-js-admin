@@ -1,6 +1,8 @@
-## 3.8.1
+## 4.0.0
+-   Updated Signature Generation for `Signed PixelBin Urls` to use `accessKey` instead of `tokenId`.
 
-- Fixed paginator.hasNext() returning `undefined` on first call. 
+## 3.8.1
+-   Fixed paginator.hasNext() returning `undefined` on first call. 
 
 ## 3.8.0
 
