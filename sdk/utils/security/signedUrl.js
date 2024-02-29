@@ -8,10 +8,10 @@ function generateSignature(urlPath, expiryTimestamp, key) {
     return hash.toString();
 }
 
-const generateSignedURL = (url, expirySeconds, tokenId, token) => {
-    if (!url || !tokenId || !token || !expirySeconds)
+const generateSignedURL = (url, expirySeconds, accessKey, token) => {
+    if (!url || !accessKey || !token || !expirySeconds)
         throw new PDKIllegalArgumentError(
-            "url, tokenId, token & expirySeconds are required for generating signed URL",
+            "url, accessKey, token & expirySeconds are required for generating signed URL",
         );
 
     if (!(typeof expirySeconds === "number"))
@@ -31,7 +31,7 @@ const generateSignedURL = (url, expirySeconds, tokenId, token) => {
 
     urlObj.searchParams.set("pbs", signature);
     urlObj.searchParams.set("pbe", expiryTimestamp);
-    urlObj.searchParams.set("pbt", tokenId);
+    urlObj.searchParams.set("pbt", accessKey);
 
     return urlObj.toString();
 };

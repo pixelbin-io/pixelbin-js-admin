@@ -6,7 +6,7 @@ describe("Signed URL", () => {
         const signedURL = signURL(
             "https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg",
             20,
-            1,
+            "459337ed-f378-4ddf-bad7-d7a4555c4572",
             "dummy-token",
         );
         const signedURLObj = new URL(signedURL);
@@ -19,7 +19,7 @@ describe("Signed URL", () => {
         const signedURL = signURL(
             "https://krit.imagebin.io/v2/original/__playground/playground-default.jpeg",
             20,
-            42,
+            "08040485-dc83-450b-9e1f-f1040044ae3f",
             "dummy-token-2",
         );
         const signedURLObj = new URL(signedURL);
@@ -34,7 +34,7 @@ describe("Signed URL", () => {
         }).toThrow(PDKIllegalArgumentError);
     });
 
-    it("should throw error when tokenId is not provided", () => {
+    it("should throw error when accessKey is not provided", () => {
         expect(() => {
             signURL(
                 "https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg",
