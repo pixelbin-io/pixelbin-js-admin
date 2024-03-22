@@ -313,19 +313,6 @@ class PixelbinClient {
     */
 
 /**
-        @typedef TransformationModulesResponse
-        
-        
-        @property { Delimiter } [delimiters]
-        
-        @property { Object } [plugins]
-        
-        @property { Array<any> } [presets]
-        
-         
-    */
-
-/**
         @typedef DeleteMultipleFilesRequest
         
         
@@ -341,25 +328,6 @@ class PixelbinClient {
         @property { string } [operationSeparator]
         
         @property { string } [parameterSeparator]
-        
-         
-    */
-
-/**
-        @typedef TransformationModuleResponse
-        
-        
-        @property { string } [identifier]
-        
-        @property { string } [name]
-        
-        @property { string } [description]
-        
-        @property { Object } [credentials]
-        
-        @property { Array<any> } [operations]
-        
-        @property { boolean } [enabled]
         
          
     */
@@ -527,6 +495,38 @@ class PixelbinClient {
         @property { Array<AddPresetResponse> } items
         
         @property { page } page
+        
+         
+    */
+
+/**
+        @typedef TransformationModuleResponse
+        
+        
+        @property { string } [identifier]
+        
+        @property { string } [name]
+        
+        @property { string } [description]
+        
+        @property { Object } [credentials]
+        
+        @property { Array<any> } [operations]
+        
+        @property { boolean } [enabled]
+        
+         
+    */
+
+/**
+        @typedef TransformationModulesResponse
+        
+        
+        @property { Delimiter } [delimiters]
+        
+        @property { Object } [plugins]
+        
+        @property { Array<any> } [presets]
         
          
     */
@@ -707,102 +707,26 @@ class Assets {
 
     /**
     *
-    * @summary: Upload File
-    * @description: Upload File to Pixelbin
-    * @param {Object} arg - arg object.
-    * @param {Object} arg.options - extra options if avaiable    
-    * @param {file} arg.file Asset file
-    * @param {string} arg.path Path where you want to store the asset. Path of containing folder
-    * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
-    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
-    * @param {[string]} arg.tags Asset tags
-    * @param {object} arg.metadata Asset related metadata
-    * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
-    * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
-    
-    **/
-    fileUpload({
-        options,
+    * @summary: Add credentials for a transformation module.
+    * @description: Add a transformation modules's credentials for an organization.
 
-        file,
-        path,
-        name,
-        access,
-        tags,
-        metadata,
-        overwrite,
-        filenameOverride,
-    } = {}) {
-        const { error } = AssetsValidator.fileUpload().validate(
-            {
-                options,
-
-                body: { file, path, name, access, tags, metadata, overwrite, filenameOverride },
-            },
-            { abortEarly: false },
-        );
-        if (error) {
-            return Promise.reject(new PDKClientValidationError(error));
-        }
-
-        const query_params = {};
-
-        let body;
-
-        body = new FormData();
-
-        if (file) body.append("file", file, { filename: options && options.originalFilename });
-        if (path) body.append("path", path);
-        if (name) body.append("name", name);
-        if (access) body.append("access", access);
-        if (tags) tags.forEach((prop) => body.append("tags", prop));
-        if (metadata) body.append("metadata", JSON.stringify(metadata));
-        if (overwrite) body.append("overwrite", overwrite.toString());
-        if (filenameOverride) body.append("filenameOverride", filenameOverride.toString());
-
-        return PlatformAPIClient.execute(
-            this.config,
-            "post",
-            `/service/platform/assets/v1.0/upload/direct`,
-            query_params,
-            body,
-            "multipart/form-data",
-        );
-    }
-
-    /**
-    *
-    * @summary: Upload Asset with url
-    * @description: Upload Asset with url
     * @param {Object} arg - arg object.
     * @param {Object} arg.options - extra options if avaiable     
-    * @param {string} arg.url Asset URL
-    * @param {string} arg.path Path where you want to store the asset. Path of containing folder.
-    * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
-    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
-    * @param {[string]} arg.tags Asset tags
-    * @param {object} arg.metadata Asset related metadata
-    * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
-    * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
+    * @param {object} arg.credentials Credentials of the plugin
+    * @param {string} arg.pluginId Unique identifier for the plugin this credential belongs to
     
     **/
-    urlUpload({
+    addCredentials({
         options,
 
-        url,
-        path,
-        name,
-        access,
-        tags,
-        metadata,
-        overwrite,
-        filenameOverride,
+        credentials,
+        pluginId,
     } = {}) {
-        const { error } = AssetsValidator.urlUpload().validate(
+        const { error } = AssetsValidator.addCredentials().validate(
             {
                 options,
 
-                body: { url, path, name, access, tags, metadata, overwrite, filenameOverride },
+                body: { credentials, pluginId },
             },
             { abortEarly: false },
         );
@@ -815,20 +739,14 @@ class Assets {
         let body;
 
         body = {
-            url,
-            path,
-            name,
-            access,
-            tags,
-            metadata,
-            overwrite,
-            filenameOverride,
+            credentials,
+            pluginId,
         };
 
         return PlatformAPIClient.execute(
             this.config,
             "post",
-            `/service/platform/assets/v1.0/upload/url`,
+            `/service/platform/assets/v1.0/credentials`,
             query_params,
             body,
             "application/json",
@@ -837,39 +755,21 @@ class Assets {
 
     /**
     *
-    * @summary: S3 Signed URL upload
-    * @description: For the given asset details, a S3 signed URL will be generated,
-which can be then used to upload your asset.
+    * @summary: Update credentials of a transformation module.
+    * @description: Update credentials of a transformation module, for an organization.
 
     * @param {Object} arg - arg object.
     * @param {Object} arg.options - extra options if avaiable     
-    * @param {string} arg.name name of the file
-    * @param {string} arg.path Path of containing folder.
-    * @param {string} arg.format Format of the file
-    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
-    * @param {[string]} arg.tags Tags associated with the file.
-    * @param {object} arg.metadata Metadata associated with the file.
-    * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
-    * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
+    * @param {string} arg.pluginId - ID of the plugin whose credentials are being updated
+    * @param {object} arg.credentials Credentials of the plugin
     
     **/
-    createSignedUrl({
-        options,
-
-        name,
-        path,
-        format,
-        access,
-        tags,
-        metadata,
-        overwrite,
-        filenameOverride,
-    } = {}) {
-        const { error } = AssetsValidator.createSignedUrl().validate(
+    updateCredentials({ options, pluginId, credentials } = {}) {
+        const { error } = AssetsValidator.updateCredentials().validate(
             {
                 options,
-
-                body: { name, path, format, access, tags, metadata, overwrite, filenameOverride },
+                pluginId,
+                body: { credentials },
             },
             { abortEarly: false },
         );
@@ -882,20 +782,13 @@ which can be then used to upload your asset.
         let body;
 
         body = {
-            name,
-            path,
-            format,
-            access,
-            tags,
-            metadata,
-            overwrite,
-            filenameOverride,
+            credentials,
         };
 
         return PlatformAPIClient.execute(
             this.config,
-            "post",
-            `/service/platform/assets/v1.0/upload/signed-url`,
+            "patch",
+            `/service/platform/assets/v1.0/credentials/${pluginId}`,
             query_params,
             body,
             "application/json",
@@ -904,47 +797,19 @@ which can be then used to upload your asset.
 
     /**
     *
-    * @summary: List and search files and folders.
-    * @description: List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
+    * @summary: Delete credentials of a transformation module.
+    * @description: Delete credentials of a transformation module, for an organization.
 
     * @param {Object} arg - arg object.
     * @param {Object} arg.options - extra options if avaiable 
-    * @param {string} [arg.name] - Find items with matching name
-    * @param {string} [arg.path] - Find items with matching path
-    * @param {string} [arg.format] - Find items with matching format
-    * @param {Array<string>} [arg.tags] - Find items containing these tags
-    * @param {boolean} [arg.onlyFiles] - If true will fetch only files
-    * @param {boolean} [arg.onlyFolders] - If true will fetch only folders
-    * @param {number} [arg.pageNo] - Page No.
-    * @param {number} [arg.pageSize] - Page Size
-    * @param {string} [arg.sort] - Key to sort results by. A "-" suffix will sort results in descending orders.
-
+    * @param {string} arg.pluginId - ID of the plugin whose credentials are being deleted
     
     **/
-    listFiles({
-        options,
-        name,
-        path,
-        format,
-        tags,
-        onlyFiles,
-        onlyFolders,
-        pageNo,
-        pageSize,
-        sort,
-    } = {}) {
-        const { error } = AssetsValidator.listFiles().validate(
+    deleteCredentials({ options, pluginId } = {}) {
+        const { error } = AssetsValidator.deleteCredentials().validate(
             {
                 options,
-                name,
-                path,
-                format,
-                tags,
-                onlyFiles,
-                onlyFolders,
-                pageNo,
-                pageSize,
-                sort,
+                pluginId,
             },
             { abortEarly: false },
         );
@@ -953,70 +818,14 @@ which can be then used to upload your asset.
         }
 
         const query_params = {};
-        query_params["name"] = name;
-        query_params["path"] = path;
-        query_params["format"] = format;
-        if (tags && tags instanceof Array && tags.join("")) {
-            tags.forEach((param, idx) => {
-                query_params[`tags[${idx}]`] = param;
-            });
-        }
-        query_params["onlyFiles"] = onlyFiles;
-        query_params["onlyFolders"] = onlyFolders;
-        query_params["pageNo"] = pageNo;
-        query_params["pageSize"] = pageSize;
-        query_params["sort"] = sort;
 
         return PlatformAPIClient.execute(
             this.config,
-            "get",
-            `/service/platform/assets/v1.0/listFiles`,
+            "delete",
+            `/service/platform/assets/v1.0/credentials/${pluginId}`,
             query_params,
             undefined,
         );
-    }
-
-    /**
-    *
-    * @summary: List and search files and folders.
-    * @description: List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
-
-    * @param {Object} arg - arg object.
-    * @param {string} [arg.name] - Find items with matching name
-    * @param {string} [arg.path] - Find items with matching path
-    * @param {string} [arg.format] - Find items with matching format
-    * @param {Array<string>} [arg.tags] - Find items containing these tags
-    * @param {boolean} [arg.onlyFiles] - If true will fetch only files
-    * @param {boolean} [arg.onlyFolders] - If true will fetch only folders
-    * @param {number} [arg.pageSize] - Page Size
-    * @param {string} [arg.sort] - Key to sort results by. A "-" suffix will sort results in descending orders.
-
-    
-    **/
-    listFilesPaginator({ name, path, format, tags, onlyFiles, onlyFolders, pageSize, sort } = {}) {
-        const paginator = new Paginator();
-        const callback = async () => {
-            const pageNo = paginator.pageNo;
-            const pageType = "number";
-            const data = await this.listFiles({
-                name: name,
-                path: path,
-                format: format,
-                tags: tags,
-                onlyFiles: onlyFiles,
-                onlyFolders: onlyFolders,
-                pageNo: pageNo || 1,
-                pageSize: pageSize || 25,
-                sort: sort,
-            });
-            paginator.setPaginator({
-                hasNext: data.page.hasNext ? true : false,
-                pageNo: data.page.current + 1,
-            });
-            return data;
-        };
-        paginator.setCallback(callback);
-        return paginator;
     }
 
     /**
@@ -1091,7 +900,7 @@ which can be then used to upload your asset.
     * @param {Object} arg.options - extra options if avaiable     
     * @param {string} arg.fileId - Combination of `path` and `name`
     * @param {string} arg.name Name of the file
-    * @param {string} arg.path path of containing folder.
+    * @param {string} arg.path Path of the file
     * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
     * @param {boolean} arg.isActive Whether the file is active
     * @param {[string]} arg.tags Tags associated with the file
@@ -1218,7 +1027,7 @@ which can be then used to upload your asset.
     * @param {Object} arg - arg object.
     * @param {Object} arg.options - extra options if avaiable     
     * @param {string} arg.name Name of the folder
-    * @param {string} arg.path path of containing folder.
+    * @param {string} arg.path Path of the folder
     
     **/
     createFolder({
@@ -1407,109 +1216,133 @@ We currently do not support updating folder name or path.
 
     /**
     *
-    * @summary: Add credentials for a transformation module.
-    * @description: Add a transformation modules's credentials for an organization.
-
-    * @param {Object} arg - arg object.
-    * @param {Object} arg.options - extra options if avaiable     
-    * @param {object} arg.credentials Credentials of the plugin
-    * @param {string} arg.pluginId Unique identifier for the plugin this credential belongs to
-    
-    **/
-    addCredentials({
-        options,
-
-        credentials,
-        pluginId,
-    } = {}) {
-        const { error } = AssetsValidator.addCredentials().validate(
-            {
-                options,
-
-                body: { credentials, pluginId },
-            },
-            { abortEarly: false },
-        );
-        if (error) {
-            return Promise.reject(new PDKClientValidationError(error));
-        }
-
-        const query_params = {};
-
-        let body;
-
-        body = {
-            credentials,
-            pluginId,
-        };
-
-        return PlatformAPIClient.execute(
-            this.config,
-            "post",
-            `/service/platform/assets/v1.0/credentials`,
-            query_params,
-            body,
-            "application/json",
-        );
-    }
-
-    /**
-    *
-    * @summary: Update credentials of a transformation module.
-    * @description: Update credentials of a transformation module, for an organization.
-
-    * @param {Object} arg - arg object.
-    * @param {Object} arg.options - extra options if avaiable     
-    * @param {string} arg.pluginId - ID of the plugin whose credentials are being updated
-    * @param {object} arg.credentials Credentials of the plugin
-    
-    **/
-    updateCredentials({ options, pluginId, credentials } = {}) {
-        const { error } = AssetsValidator.updateCredentials().validate(
-            {
-                options,
-                pluginId,
-                body: { credentials },
-            },
-            { abortEarly: false },
-        );
-        if (error) {
-            return Promise.reject(new PDKClientValidationError(error));
-        }
-
-        const query_params = {};
-
-        let body;
-
-        body = {
-            credentials,
-        };
-
-        return PlatformAPIClient.execute(
-            this.config,
-            "patch",
-            `/service/platform/assets/v1.0/credentials/${pluginId}`,
-            query_params,
-            body,
-            "application/json",
-        );
-    }
-
-    /**
-    *
-    * @summary: Delete credentials of a transformation module.
-    * @description: Delete credentials of a transformation module, for an organization.
+    * @summary: List and search files and folders.
+    * @description: List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
 
     * @param {Object} arg - arg object.
     * @param {Object} arg.options - extra options if avaiable 
-    * @param {string} arg.pluginId - ID of the plugin whose credentials are being deleted
+    * @param {string} [arg.name] - Find items with matching name
+    * @param {string} [arg.path] - Find items with matching path
+    * @param {string} [arg.format] - Find items with matching format
+    * @param {Array<string>} [arg.tags] - Find items containing these tags
+    * @param {boolean} [arg.onlyFiles] - If true will fetch only files
+    * @param {boolean} [arg.onlyFolders] - If true will fetch only folders
+    * @param {number} [arg.pageNo] - Page No.
+    * @param {number} [arg.pageSize] - Page Size
+    * @param {string} [arg.sort] - Key to sort results by. A "-" suffix will sort results in descending orders.
+
     
     **/
-    deleteCredentials({ options, pluginId } = {}) {
-        const { error } = AssetsValidator.deleteCredentials().validate(
+    listFiles({
+        options,
+        name,
+        path,
+        format,
+        tags,
+        onlyFiles,
+        onlyFolders,
+        pageNo,
+        pageSize,
+        sort,
+    } = {}) {
+        const { error } = AssetsValidator.listFiles().validate(
             {
                 options,
-                pluginId,
+                name,
+                path,
+                format,
+                tags,
+                onlyFiles,
+                onlyFolders,
+                pageNo,
+                pageSize,
+                sort,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+        query_params["name"] = name;
+        query_params["path"] = path;
+        query_params["format"] = format;
+        if (tags && tags instanceof Array && tags.join("")) {
+            tags.forEach((param, idx) => {
+                query_params[`tags[${idx}]`] = param;
+            });
+        }
+        query_params["onlyFiles"] = onlyFiles;
+        query_params["onlyFolders"] = onlyFolders;
+        query_params["pageNo"] = pageNo;
+        query_params["pageSize"] = pageSize;
+        query_params["sort"] = sort;
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/listFiles`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: List and search files and folders.
+    * @description: List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
+
+    * @param {Object} arg - arg object.
+    * @param {string} [arg.name] - Find items with matching name
+    * @param {string} [arg.path] - Find items with matching path
+    * @param {string} [arg.format] - Find items with matching format
+    * @param {Array<string>} [arg.tags] - Find items containing these tags
+    * @param {boolean} [arg.onlyFiles] - If true will fetch only files
+    * @param {boolean} [arg.onlyFolders] - If true will fetch only folders
+    * @param {number} [arg.pageSize] - Page Size
+    * @param {string} [arg.sort] - Key to sort results by. A "-" suffix will sort results in descending orders.
+
+    
+    **/
+    listFilesPaginator({ name, path, format, tags, onlyFiles, onlyFolders, pageSize, sort } = {}) {
+        const paginator = new Paginator();
+        const callback = async () => {
+            const pageNo = paginator.pageNo;
+            const pageType = "number";
+            const data = await this.listFiles({
+                name: name,
+                path: path,
+                format: format,
+                tags: tags,
+                onlyFiles: onlyFiles,
+                onlyFolders: onlyFolders,
+                pageNo: pageNo || 1,
+                pageSize: pageSize || 25,
+                sort: sort,
+            });
+            paginator.setPaginator({
+                hasNext: data.page.hasNext ? true : false,
+                pageNo: data.page.current + 1,
+            });
+            return data;
+        };
+        paginator.setCallback(callback);
+        return paginator;
+    }
+
+    /**
+    *
+    * @summary: Get default asset for playground
+    * @description: Get default asset for playground
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    
+    **/
+    getDefaultAssetForPlayground({ options } = {}) {
+        const { error } = AssetsValidator.getDefaultAssetForPlayground().validate(
+            {
+                options,
             },
             { abortEarly: false },
         );
@@ -1521,8 +1354,72 @@ We currently do not support updating folder name or path.
 
         return PlatformAPIClient.execute(
             this.config,
-            "delete",
-            `/service/platform/assets/v1.0/credentials/${pluginId}`,
+            "get",
+            `/service/platform/assets/v1.0/playground/default`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Get all transformation modules
+    * @description: Get all transformation modules.
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    
+    **/
+    getModules({ options } = {}) {
+        const { error } = AssetsValidator.getModules().validate(
+            {
+                options,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/playground/plugins`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Get Transformation Module by module identifier
+    * @description: Get Transformation Module by module identifier
+
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    * @param {string} arg.identifier - identifier of Transformation Module
+    
+    **/
+    getModule({ options, identifier } = {}) {
+        const { error } = AssetsValidator.getModule().validate(
+            {
+                options,
+                identifier,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/assets/v1.0/playground/plugins/${identifier}`,
             query_params,
             undefined,
         );
@@ -1720,16 +1617,37 @@ We currently do not support updating folder name or path.
 
     /**
     *
-    * @summary: Get default asset for playground
-    * @description: Get default asset for playground
+    * @summary: Upload File
+    * @description: Upload File to Pixelbin
     * @param {Object} arg - arg object.
-    * @param {Object} arg.options - extra options if avaiable 
+    * @param {Object} arg.options - extra options if avaiable    
+    * @param {file} arg.file Asset file
+    * @param {string} arg.path Path where you want to store the asset
+    * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
+    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {[string]} arg.tags Asset tags
+    * @param {object} arg.metadata Asset related metadata
+    * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
+    * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
     
     **/
-    getDefaultAssetForPlayground({ options } = {}) {
-        const { error } = AssetsValidator.getDefaultAssetForPlayground().validate(
+    fileUpload({
+        options,
+
+        file,
+        path,
+        name,
+        access,
+        tags,
+        metadata,
+        overwrite,
+        filenameOverride,
+    } = {}) {
+        const { error } = AssetsValidator.fileUpload().validate(
             {
                 options,
+
+                body: { file, path, name, access, tags, metadata, overwrite, filenameOverride },
             },
             { abortEarly: false },
         );
@@ -1739,28 +1657,62 @@ We currently do not support updating folder name or path.
 
         const query_params = {};
 
+        let body;
+
+        body = new FormData();
+
+        if (file) body.append("file", file, { filename: options && options.originalFilename });
+        if (path) body.append("path", path);
+        if (name) body.append("name", name);
+        if (access) body.append("access", access);
+        if (tags) tags.forEach((prop) => body.append("tags", prop));
+        if (metadata) body.append("metadata", JSON.stringify(metadata));
+        if (overwrite) body.append("overwrite", overwrite.toString());
+        if (filenameOverride) body.append("filenameOverride", filenameOverride.toString());
+
         return PlatformAPIClient.execute(
             this.config,
-            "get",
-            `/service/platform/assets/v1.0/playground/default`,
+            "post",
+            `/service/platform/assets/v1.0/upload/direct`,
             query_params,
-            undefined,
+            body,
+            "multipart/form-data",
         );
     }
 
     /**
     *
-    * @summary: Get all transformation modules
-    * @description: Get all transformation modules.
-
+    * @summary: Upload Asset with url
+    * @description: Upload Asset with url
     * @param {Object} arg - arg object.
-    * @param {Object} arg.options - extra options if avaiable 
+    * @param {Object} arg.options - extra options if avaiable     
+    * @param {string} arg.url Asset URL
+    * @param {string} arg.path Path where you want to store the asset
+    * @param {string} arg.name Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe
+    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {[string]} arg.tags Asset tags
+    * @param {object} arg.metadata Asset related metadata
+    * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
+    * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
     
     **/
-    getModules({ options } = {}) {
-        const { error } = AssetsValidator.getModules().validate(
+    urlUpload({
+        options,
+
+        url,
+        path,
+        name,
+        access,
+        tags,
+        metadata,
+        overwrite,
+        filenameOverride,
+    } = {}) {
+        const { error } = AssetsValidator.urlUpload().validate(
             {
                 options,
+
+                body: { url, path, name, access, tags, metadata, overwrite, filenameOverride },
             },
             { abortEarly: false },
         );
@@ -1770,30 +1722,64 @@ We currently do not support updating folder name or path.
 
         const query_params = {};
 
+        let body;
+
+        body = {
+            url,
+            path,
+            name,
+            access,
+            tags,
+            metadata,
+            overwrite,
+            filenameOverride,
+        };
+
         return PlatformAPIClient.execute(
             this.config,
-            "get",
-            `/service/platform/assets/v1.0/playground/plugins`,
+            "post",
+            `/service/platform/assets/v1.0/upload/url`,
             query_params,
-            undefined,
+            body,
+            "application/json",
         );
     }
 
     /**
     *
-    * @summary: Get Transformation Module by module identifier
-    * @description: Get Transformation Module by module identifier
+    * @summary: S3 Signed URL upload
+    * @description: For the given asset details, a S3 signed URL will be generated,
+which can be then used to upload your asset.
 
     * @param {Object} arg - arg object.
-    * @param {Object} arg.options - extra options if avaiable 
-    * @param {string} arg.identifier - identifier of Transformation Module
+    * @param {Object} arg.options - extra options if avaiable     
+    * @param {string} arg.name name of the file
+    * @param {string} arg.path Path of the file
+    * @param {string} arg.format Format of the file
+    * @param {AccessEnum} arg.access Access level of asset, can be either `public-read` or `private`
+    * @param {[string]} arg.tags Tags associated with the file.
+    * @param {object} arg.metadata Metadata associated with the file.
+    * @param {boolean} arg.overwrite Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.
+    * @param {boolean} arg.filenameOverride If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised.
     
     **/
-    getModule({ options, identifier } = {}) {
-        const { error } = AssetsValidator.getModule().validate(
+    createSignedUrl({
+        options,
+
+        name,
+        path,
+        format,
+        access,
+        tags,
+        metadata,
+        overwrite,
+        filenameOverride,
+    } = {}) {
+        const { error } = AssetsValidator.createSignedUrl().validate(
             {
                 options,
-                identifier,
+
+                body: { name, path, format, access, tags, metadata, overwrite, filenameOverride },
             },
             { abortEarly: false },
         );
@@ -1803,12 +1789,26 @@ We currently do not support updating folder name or path.
 
         const query_params = {};
 
+        let body;
+
+        body = {
+            name,
+            path,
+            format,
+            access,
+            tags,
+            metadata,
+            overwrite,
+            filenameOverride,
+        };
+
         return PlatformAPIClient.execute(
             this.config,
-            "get",
-            `/service/platform/assets/v1.0/playground/plugins/${identifier}`,
+            "post",
+            `/service/platform/assets/v1.0/upload/signed-url`,
             query_params,
-            undefined,
+            body,
+            "application/json",
         );
     }
 
