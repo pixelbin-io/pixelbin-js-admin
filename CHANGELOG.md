@@ -1,3 +1,7 @@
+## 3.8.2
+
+- Vulnerability fix 
+
 ## 3.8.1
 
 - Fixed paginator.hasNext() returning `undefined` on first call. 
