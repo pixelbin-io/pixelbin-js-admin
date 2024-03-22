@@ -63,7 +63,7 @@ Generate a signed PixelBin url
 | ------------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `url` (string)           | A valid Pixelbin URL to be signed                    | `https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg` |
 | `expirySeconds` (number) | Number of seconds the signed URL should be valid for | `20`                                                                                       |
-| `accessKey` (string)       | Access key of the token used for signing                     | `42`                                                                                       |
+| `accessKey` (string)     | Access key of the token used for signing             | `42`                                                                                       |
 | `token` (string)         | Value of the token used for signing                  | `dummy-token`                                                                              |
 
 Example:

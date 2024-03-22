@@ -4,11 +4,9 @@
 
 Asset Uploader Service
 
--   [fileUpload](#fileupload)
--   [urlUpload](#urlupload)
--   [createSignedUrl](#createsignedurl)
--   [listFiles](#listfiles)
--   [listFilesPaginator](#listfilespaginator)
+-   [addCredentials](#addcredentials)
+-   [updateCredentials](#updatecredentials)
+-   [deleteCredentials](#deletecredentials)
 -   [getFileById](#getfilebyid)
 -   [getFileByFileId](#getfilebyfileid)
 -   [updateFile](#updatefile)
@@ -19,166 +17,74 @@ Asset Uploader Service
 -   [updateFolder](#updatefolder)
 -   [deleteFolder](#deletefolder)
 -   [getFolderAncestors](#getfolderancestors)
--   [addCredentials](#addcredentials)
--   [updateCredentials](#updatecredentials)
--   [deleteCredentials](#deletecredentials)
+-   [listFiles](#listfiles)
+-   [listFilesPaginator](#listfilespaginator)
+-   [getDefaultAssetForPlayground](#getdefaultassetforplayground)
+-   [getModules](#getmodules)
+-   [getModule](#getmodule)
 -   [addPreset](#addpreset)
 -   [getPresets](#getpresets)
 -   [updatePreset](#updatepreset)
 -   [deletePreset](#deletepreset)
 -   [getPreset](#getpreset)
--   [getDefaultAssetForPlayground](#getdefaultassetforplayground)
--   [getModules](#getmodules)
--   [getModule](#getmodule)
+-   [fileUpload](#fileupload)
+-   [urlUpload](#urlupload)
+-   [createSignedUrl](#createsignedurl)
 -   [createSignedUrlV2](#createsignedurlv2)
 
 ## Methods with example and description
 
-### fileUpload
+### addCredentials
 
-**Summary**: Upload File
+**Summary**: Add credentials for a transformation module.
 
 ```javascript
 // Promise
-const fs = require("fs");
-const promise = assets.fileUpload({
-    file: fs.createReadStream("your-file-path"),
-    path: "path/to/containing/folder",
-    name: "filename",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
-});
 
-// Async/Await
-const fs = require("fs");
-const data = await assets.fileUpload({
-    file: fs.createReadStream("your-file-path"),
-    path: "path/to/containing/folder",
-    name: "filename",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
-});
-```
-
-| Argument         | Type                      | Required | Description                                                                                                                                                                                                                      |
-| ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| file             | file                      | yes      | Asset file                                                                                                                                                                                                                       |
-| path             | string                    | no       | Path where you want to store the asset. Path of containing folder                                                                                                                                                                |
-| name             | string                    | no       | Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe                                                                                                 |
-| access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
-| tags             | [string]                  | no       | Asset tags                                                                                                                                                                                                                       |
-| metadata         | string                    | no       | Asset related metadata                                                                                                                                                                                                           |
-| overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
-| filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
-
-Upload File to Pixelbin
-
-_Returned Response:_
-
-[UploadResponse](#uploadresponse)
-
-Success
-
-<details>
-<summary><i>&nbsp; Example:</i></summary>
-
-```json
-{
-    "_id": "dummy-uuid",
-    "name": "asset",
-    "path": "dir",
-    "fileId": "dir/asset",
-    "format": "jpeg",
-    "size": 1000,
-    "access": "private",
-    "isActive": true,
-    "tags": ["tag1", "tag2"],
-    "metadata": {
-        "key": "value"
+const promise = assets.addCredentials({
+    credentials: {
+        region: "ap-south-1",
+        accessKeyId: "123456789ABC",
+        secretAccessKey: "DUMMY1234567890",
     },
-    "url": "https://domain.com/filename.jpeg"
-}
-```
-
-</details>
-
----
-
-### urlUpload
-
-**Summary**: Upload Asset with url
-
-```javascript
-// Promise
-
-const promise = assets.urlUpload({
-    url: "www.dummy.com/image.png",
-    path: "path/to/containing/folder",
-    name: "filename",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+    pluginId: "awsRek",
 });
 
 // Async/Await
 
-const data = await assets.urlUpload({
-    url: "www.dummy.com/image.png",
-    path: "path/to/containing/folder",
-    name: "filename",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
-});
-```
-
-| Argument         | Type                      | Required | Description                                                                                                                                                                                                                      |
-| ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| url              | string                    | yes      | Asset URL                                                                                                                                                                                                                        |
-| path             | string                    | no       | Path where you want to store the asset. Path of containing folder.                                                                                                                                                               |
-| name             | string                    | no       | Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe                                                                                                 |
-| access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
-| tags             | [string]                  | no       | Asset tags                                                                                                                                                                                                                       |
-| metadata         | string                    | no       | Asset related metadata                                                                                                                                                                                                           |
-| overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
-| filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
-
-Upload Asset with url
-
-_Returned Response:_
-
-[UploadResponse](#uploadresponse)
-
-Success
-
-<details>
-<summary><i>&nbsp; Example:</i></summary>
-
-```json
-{
-    "_id": "dummy-uuid",
-    "name": "asset",
-    "path": "dir",
-    "fileId": "dir/asset",
-    "format": "jpeg",
-    "size": 1000,
-    "access": "private",
-    "isActive": true,
-    "tags": ["tag1", "tag2"],
-    "metadata": {
-        "key": "value"
+const data = await assets.addCredentials({
+    credentials: {
+        region: "ap-south-1",
+        accessKeyId: "123456789ABC",
+        secretAccessKey: "DUMMY1234567890",
     },
-    "url": "https://domain.com/filename.jpeg"
+    pluginId: "awsRek",
+});
+```
+
+| Argument    | Type   | Required | Description                                                 |
+| ----------- | ------ | -------- | ----------------------------------------------------------- |
+| credentials | string | yes      | Credentials of the plugin                                   |
+| pluginId    | string | yes      | Unique identifier for the plugin this credential belongs to |
+
+Add a transformation modules's credentials for an organization.
+
+_Returned Response:_
+
+[AddCredentialsResponse](#addcredentialsresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+    "createdAt": "2022-10-04T09:52:09.545Z",
+    "updatedAt": "2022-10-04T09:52:09.545Z",
+    "orgId": 23,
+    "pluginId": "awsRek"
 }
 ```
 
@@ -186,55 +92,44 @@ Success
 
 ---
 
-### createSignedUrl
+### updateCredentials
 
-**Summary**: S3 Signed URL upload
+**Summary**: Update credentials of a transformation module.
 
 ```javascript
 // Promise
 
-const promise = assets.createSignedUrl({
-    name: "filename",
-    path: "path/to/containing/folder",
-    format: "jpeg",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+const promise = assets.updateCredentials({
+    pluginId: "awsRek",
+    credentials: {
+        region: "ap-south-1",
+        accessKeyId: "123456789ABC",
+        secretAccessKey: "DUMMY1234567890",
+    },
 });
 
 // Async/Await
 
-const data = await assets.createSignedUrl({
-    name: "filename",
-    path: "path/to/containing/folder",
-    format: "jpeg",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+const data = await assets.updateCredentials({
+    pluginId: "awsRek",
+    credentials: {
+        region: "ap-south-1",
+        accessKeyId: "123456789ABC",
+        secretAccessKey: "DUMMY1234567890",
+    },
 });
 ```
 
-| Argument         | Type                      | Required | Description                                                                                                                                                                                                                      |
-| ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| name             | string                    | no       | name of the file                                                                                                                                                                                                                 |
-| path             | string                    | no       | Path of containing folder.                                                                                                                                                                                                       |
-| format           | string                    | no       | Format of the file                                                                                                                                                                                                               |
-| access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
-| tags             | [string]                  | no       | Tags associated with the file.                                                                                                                                                                                                   |
-| metadata         | string                    | no       | Metadata associated with the file.                                                                                                                                                                                               |
-| overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
-| filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
+| Argument    | Type   | Required | Description                                          |
+| ----------- | ------ | -------- | ---------------------------------------------------- |
+| pluginId    | string | yes      | ID of the plugin whose credentials are being updated |
+| credentials | string | yes      | Credentials of the plugin                            |
 
-For the given asset details, a S3 signed URL will be generated,
-which can be then used to upload your asset.
+Update credentials of a transformation module, for an organization.
 
 _Returned Response:_
 
-[SignedUploadResponse](#signeduploadresponse)
+[AddCredentialsResponse](#addcredentialsresponse)
 
 Success
 
@@ -243,13 +138,11 @@ Success
 
 ```json
 {
-    "s3PresignedUrl": {
-        "url": "https://domain.com/xyz",
-        "fields": {
-            "field1": "value",
-            "field2": "value"
-        }
-    }
+    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+    "createdAt": "2022-10-04T09:52:09.545Z",
+    "updatedAt": "2022-10-04T09:52:09.545Z",
+    "orgId": 23,
+    "pluginId": "awsRek"
 }
 ```
 
@@ -257,57 +150,33 @@ Success
 
 ---
 
-### listFiles
+### deleteCredentials
 
-**Summary**: List and search files and folders.
+**Summary**: Delete credentials of a transformation module.
 
 ```javascript
 // Promise
 
-const promise = assets.listFiles({
-    name: "cat",
-    path: "cat-photos",
-    format: "jpeg",
-    tags: ["cats", "animals"],
-    onlyFiles: "false",
-    onlyFolders: "false",
-    pageNo: "1",
-    pageSize: "10",
-    sort: "name",
+const promise = assets.deleteCredentials({
+    pluginId: "awsRek",
 });
 
 // Async/Await
 
-const data = await assets.listFiles({
-    name: "cat",
-    path: "cat-photos",
-    format: "jpeg",
-    tags: ["cats", "animals"],
-    onlyFiles: "false",
-    onlyFolders: "false",
-    pageNo: "1",
-    pageSize: "10",
-    sort: "name",
+const data = await assets.deleteCredentials({
+    pluginId: "awsRek",
 });
 ```
 
-| Argument    | Type     | Required | Description                                                                  |
-| ----------- | -------- | -------- | ---------------------------------------------------------------------------- |
-| name        | string   | no       | Find items with matching name                                                |
-| path        | string   | no       | Find items with matching path                                                |
-| format      | string   | no       | Find items with matching format                                              |
-| tags        | [string] | no       | Find items containing these tags                                             |
-| onlyFiles   | boolean  | no       | If true will fetch only files                                                |
-| onlyFolders | boolean  | no       | If true will fetch only folders                                              |
-| pageNo      | number   | no       | Page No.                                                                     |
-| pageSize    | number   | no       | Page Size                                                                    |
-| sort        | string   | no       | Key to sort results by. A "-" suffix will sort results in descending orders. |
+| Argument | Type   | Required | Description                                          |
+| -------- | ------ | -------- | ---------------------------------------------------- |
+| pluginId | string | yes      | ID of the plugin whose credentials are being deleted |
 
-List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
+Delete credentials of a transformation module, for an organization.
 
 _Returned Response:_
 
-[ListFilesResponse](#listfilesresponse)
+[AddCredentialsResponse](#addcredentialsresponse)
 
 Success
 
@@ -316,133 +185,17 @@ Success
 
 ```json
 {
-    "items": [
-        {
-            "_id": "dummy-uuid",
-            "name": "dir",
-            "type": "folder"
-        },
-        {
-            "_id": "dummy-uuid",
-            "name": "asset2",
-            "type": "file",
-            "path": "dir",
-            "fileId": "dir/asset2",
-            "format": "jpeg",
-            "size": 1000,
-            "access": "private"
-        },
-        {
-            "_id": "dummy-uuid",
-            "name": "asset1",
-            "type": "file",
-            "path": "dir",
-            "fileId": "dir/asset1",
-            "format": "jpeg",
-            "size": 1000,
-            "access": "private"
-        }
-    ],
-    "page": {
-        "type": "number",
-        "size": 4,
-        "current": 1,
-        "hasNext": false
-    }
+    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+    "createdAt": "2022-10-04T09:52:09.545Z",
+    "updatedAt": "2022-10-04T09:52:09.545Z",
+    "orgId": 23,
+    "pluginId": "awsRek"
 }
 ```
 
 </details>
 
 ---
-
-### listFilesPaginator
-
-**Summary**: Paginator for listFiles
-
-Paginator exposes `hasNext` and `next` methods to paginate through pages.
-
-```javascript
-const paginator = assets.listFilesPaginator({
-    name: "cat",
-    path: "cat-photos",
-    format: "jpeg",
-    tags: ["cats", "animals"],
-    onlyFiles: "false",
-    onlyFolders: "false",
-    pageSize: "10",
-    sort: "name",
-});
-while (paginator.hasNext()) {
-    const { items, page } = await paginator.next();
-    console.log(page.current); // 1
-    console.log(page.hasNext); // false
-    console.log(page.size); // 3
-    console.log(items.length); // 3
-}
-```
-
-| Argument    | Type     | Required | Description                                                                  |
-| ----------- | -------- | -------- | ---------------------------------------------------------------------------- |
-| name        | string   | no       | Find items with matching name                                                |
-| path        | string   | no       | Find items with matching path                                                |
-| format      | string   | no       | Find items with matching format                                              |
-| tags        | [string] | no       | Find items containing these tags                                             |
-| onlyFiles   | boolean  | no       | If true will fetch only files                                                |
-| onlyFolders | boolean  | no       | If true will fetch only folders                                              |
-| pageSize    | number   | no       | Page Size                                                                    |
-| sort        | string   | no       | Key to sort results by. A "-" suffix will sort results in descending orders. |
-
-List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
-
-_Returned Response:_
-
-[ListFilesResponse](#listfilesresponse)
-
-Success
-
-<details>
-<summary><i>&nbsp; Example:</i></summary>
-
-```json
-{
-    "items": [
-        {
-            "_id": "dummy-uuid",
-            "name": "dir",
-            "type": "folder"
-        },
-        {
-            "_id": "dummy-uuid",
-            "name": "asset2",
-            "type": "file",
-            "path": "dir",
-            "fileId": "dir/asset2",
-            "format": "jpeg",
-            "size": 1000,
-            "access": "private"
-        },
-        {
-            "_id": "dummy-uuid",
-            "name": "asset1",
-            "type": "file",
-            "path": "dir",
-            "fileId": "dir/asset1",
-            "format": "jpeg",
-            "size": 1000,
-            "access": "private"
-        }
-    ],
-    "page": {
-        "type": "number",
-        "size": 4,
-        "current": 1,
-        "hasNext": false
-    }
-}
-```
-
-</details>
 
 ### getFileById
 
@@ -584,7 +337,7 @@ const data = await assets.updateFile({
 | -------- | ------------------------- | -------- | --------------------------------------------------------------- |
 | fileId   | string                    | yes      | Combination of `path` and `name`                                |
 | name     | string                    | no       | Name of the file                                                |
-| path     | string                    | no       | path of containing folder.                                      |
+| path     | string                    | no       | Path of the file                                                |
 | access   | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private` |
 | isActive | boolean                   | no       | Whether the file is active                                      |
 | tags     | [string]                  | no       | Tags associated with the file                                   |
@@ -749,10 +502,10 @@ const data = await assets.createFolder({
 });
 ```
 
-| Argument | Type   | Required | Description                |
-| -------- | ------ | -------- | -------------------------- |
-| name     | string | yes      | Name of the folder         |
-| path     | string | no       | path of containing folder. |
+| Argument | Type   | Required | Description        |
+| -------- | ------ | -------- | ------------------ |
+| name     | string | yes      | Name of the folder |
+| path     | string | no       | Path of the folder |
 
 Create a new folder at the specified path. Also creates the ancestors if they do not exist.
 
@@ -997,44 +750,57 @@ Success
 
 ---
 
-### addCredentials
+### listFiles
 
-**Summary**: Add credentials for a transformation module.
+**Summary**: List and search files and folders.
 
 ```javascript
 // Promise
 
-const promise = assets.addCredentials({
-    credentials: {
-        region: "ap-south-1",
-        accessKeyId: "123456789ABC",
-        secretAccessKey: "DUMMY1234567890",
-    },
-    pluginId: "awsRek",
+const promise = assets.listFiles({
+    name: "cat",
+    path: "cat-photos",
+    format: "jpeg",
+    tags: ["cats", "animals"],
+    onlyFiles: "false",
+    onlyFolders: "false",
+    pageNo: "1",
+    pageSize: "10",
+    sort: "name",
 });
 
 // Async/Await
 
-const data = await assets.addCredentials({
-    credentials: {
-        region: "ap-south-1",
-        accessKeyId: "123456789ABC",
-        secretAccessKey: "DUMMY1234567890",
-    },
-    pluginId: "awsRek",
+const data = await assets.listFiles({
+    name: "cat",
+    path: "cat-photos",
+    format: "jpeg",
+    tags: ["cats", "animals"],
+    onlyFiles: "false",
+    onlyFolders: "false",
+    pageNo: "1",
+    pageSize: "10",
+    sort: "name",
 });
 ```
 
-| Argument    | Type   | Required | Description                                                 |
-| ----------- | ------ | -------- | ----------------------------------------------------------- |
-| credentials | string | yes      | Credentials of the plugin                                   |
-| pluginId    | string | yes      | Unique identifier for the plugin this credential belongs to |
+| Argument    | Type     | Required | Description                                                                  |
+| ----------- | -------- | -------- | ---------------------------------------------------------------------------- |
+| name        | string   | no       | Find items with matching name                                                |
+| path        | string   | no       | Find items with matching path                                                |
+| format      | string   | no       | Find items with matching format                                              |
+| tags        | [string] | no       | Find items containing these tags                                             |
+| onlyFiles   | boolean  | no       | If true will fetch only files                                                |
+| onlyFolders | boolean  | no       | If true will fetch only folders                                              |
+| pageNo      | number   | no       | Page No.                                                                     |
+| pageSize    | number   | no       | Page Size                                                                    |
+| sort        | string   | no       | Key to sort results by. A "-" suffix will sort results in descending orders. |
 
-Add a transformation modules's credentials for an organization.
+List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
 
 _Returned Response:_
 
-[AddCredentialsResponse](#addcredentialsresponse)
+[ListFilesResponse](#listfilesresponse)
 
 Success
 
@@ -1043,11 +809,39 @@ Success
 
 ```json
 {
-    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
-    "createdAt": "2022-10-04T09:52:09.545Z",
-    "updatedAt": "2022-10-04T09:52:09.545Z",
-    "orgId": 23,
-    "pluginId": "awsRek"
+    "items": [
+        {
+            "_id": "dummy-uuid",
+            "name": "dir",
+            "type": "folder"
+        },
+        {
+            "_id": "dummy-uuid",
+            "name": "asset2",
+            "type": "file",
+            "path": "dir",
+            "fileId": "dir/asset2",
+            "format": "jpeg",
+            "size": 1000,
+            "access": "private"
+        },
+        {
+            "_id": "dummy-uuid",
+            "name": "asset1",
+            "type": "file",
+            "path": "dir",
+            "fileId": "dir/asset1",
+            "format": "jpeg",
+            "size": 1000,
+            "access": "private"
+        }
+    ],
+    "page": {
+        "type": "number",
+        "size": 4,
+        "current": 1,
+        "hasNext": false
+    }
 }
 ```
 
@@ -1055,44 +849,48 @@ Success
 
 ---
 
-### updateCredentials
+### listFilesPaginator
 
-**Summary**: Update credentials of a transformation module.
+**Summary**: Paginator for listFiles
+
+Paginator exposes `hasNext` and `next` methods to paginate through pages.
 
 ```javascript
-// Promise
-
-const promise = assets.updateCredentials({
-    pluginId: "awsRek",
-    credentials: {
-        region: "ap-south-1",
-        accessKeyId: "123456789ABC",
-        secretAccessKey: "DUMMY1234567890",
-    },
+const paginator = assets.listFilesPaginator({
+    name: "cat",
+    path: "cat-photos",
+    format: "jpeg",
+    tags: ["cats", "animals"],
+    onlyFiles: "false",
+    onlyFolders: "false",
+    pageSize: "10",
+    sort: "name",
 });
-
-// Async/Await
-
-const data = await assets.updateCredentials({
-    pluginId: "awsRek",
-    credentials: {
-        region: "ap-south-1",
-        accessKeyId: "123456789ABC",
-        secretAccessKey: "DUMMY1234567890",
-    },
-});
+while (paginator.hasNext()) {
+    const { items, page } = await paginator.next();
+    console.log(page.current); // 1
+    console.log(page.hasNext); // false
+    console.log(page.size); // 3
+    console.log(items.length); // 3
+}
 ```
 
-| Argument    | Type   | Required | Description                                          |
-| ----------- | ------ | -------- | ---------------------------------------------------- |
-| pluginId    | string | yes      | ID of the plugin whose credentials are being updated |
-| credentials | string | yes      | Credentials of the plugin                            |
+| Argument    | Type     | Required | Description                                                                  |
+| ----------- | -------- | -------- | ---------------------------------------------------------------------------- |
+| name        | string   | no       | Find items with matching name                                                |
+| path        | string   | no       | Find items with matching path                                                |
+| format      | string   | no       | Find items with matching format                                              |
+| tags        | [string] | no       | Find items containing these tags                                             |
+| onlyFiles   | boolean  | no       | If true will fetch only files                                                |
+| onlyFolders | boolean  | no       | If true will fetch only folders                                              |
+| pageSize    | number   | no       | Page Size                                                                    |
+| sort        | string   | no       | Key to sort results by. A "-" suffix will sort results in descending orders. |
 
-Update credentials of a transformation module, for an organization.
+List all files and folders in root folder. Search for files if name is provided. If path is provided, search in the specified path.
 
 _Returned Response:_
 
-[AddCredentialsResponse](#addcredentialsresponse)
+[ListFilesResponse](#listfilesresponse)
 
 Success
 
@@ -1101,11 +899,84 @@ Success
 
 ```json
 {
-    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
-    "createdAt": "2022-10-04T09:52:09.545Z",
-    "updatedAt": "2022-10-04T09:52:09.545Z",
-    "orgId": 23,
-    "pluginId": "awsRek"
+    "items": [
+        {
+            "_id": "dummy-uuid",
+            "name": "dir",
+            "type": "folder"
+        },
+        {
+            "_id": "dummy-uuid",
+            "name": "asset2",
+            "type": "file",
+            "path": "dir",
+            "fileId": "dir/asset2",
+            "format": "jpeg",
+            "size": 1000,
+            "access": "private"
+        },
+        {
+            "_id": "dummy-uuid",
+            "name": "asset1",
+            "type": "file",
+            "path": "dir",
+            "fileId": "dir/asset1",
+            "format": "jpeg",
+            "size": 1000,
+            "access": "private"
+        }
+    ],
+    "page": {
+        "type": "number",
+        "size": 4,
+        "current": 1,
+        "hasNext": false
+    }
+}
+```
+
+</details>
+
+### getDefaultAssetForPlayground
+
+**Summary**: Get default asset for playground
+
+```javascript
+// Promise
+
+const promise = assets.getDefaultAssetForPlayground();
+
+// Async/Await
+
+const data = await assets.getDefaultAssetForPlayground();
+```
+
+Get default asset for playground
+
+_Returned Response:_
+
+[UploadResponse](#uploadresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "_id": "dummy-uuid",
+    "name": "asset",
+    "path": "dir",
+    "fileId": "dir/asset",
+    "format": "jpeg",
+    "size": 1000,
+    "access": "private",
+    "isActive": true,
+    "tags": ["tag1", "tag2"],
+    "metadata": {
+        "key": "value"
+    },
+    "url": "https://domain.com/filename.jpeg"
 }
 ```
 
@@ -1113,33 +984,25 @@ Success
 
 ---
 
-### deleteCredentials
+### getModules
 
-**Summary**: Delete credentials of a transformation module.
+**Summary**: Get all transformation modules
 
 ```javascript
 // Promise
 
-const promise = assets.deleteCredentials({
-    pluginId: "awsRek",
-});
+const promise = assets.getModules();
 
 // Async/Await
 
-const data = await assets.deleteCredentials({
-    pluginId: "awsRek",
-});
+const data = await assets.getModules();
 ```
 
-| Argument | Type   | Required | Description                                          |
-| -------- | ------ | -------- | ---------------------------------------------------- |
-| pluginId | string | yes      | ID of the plugin whose credentials are being deleted |
-
-Delete credentials of a transformation module, for an organization.
+Get all transformation modules.
 
 _Returned Response:_
 
-[AddCredentialsResponse](#addcredentialsresponse)
+[TransformationModulesResponse](#transformationmodulesresponse)
 
 Success
 
@@ -1148,11 +1011,112 @@ Success
 
 ```json
 {
-    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
-    "createdAt": "2022-10-04T09:52:09.545Z",
-    "updatedAt": "2022-10-04T09:52:09.545Z",
-    "orgId": 23,
-    "pluginId": "awsRek"
+    "delimiters": {
+        "operationSeparator": "~",
+        "parameterSeparator": ":"
+    },
+    "plugins": {
+        "erase": {
+            "identifier": "erase",
+            "name": "EraseBG",
+            "description": "EraseBG Background Removal Module",
+            "credentials": {
+                "required": false
+            },
+            "operations": [
+                {
+                    "params": {
+                        "name": "Industry Type",
+                        "type": "enum",
+                        "enum": ["general", "ecommerce"],
+                        "default": "general",
+                        "identifier": "i",
+                        "title": "Industry type"
+                    },
+                    "displayName": "Remove background of an image",
+                    "method": "bg",
+                    "description": "Remove the background of any image"
+                }
+            ],
+            "enabled": true
+        }
+    },
+    "presets": [
+        {
+            "_id": "dummy-id",
+            "createdAt": "2022-02-14T10:06:17.803Z",
+            "updatedAt": "2022-02-14T10:06:17.803Z",
+            "isActive": true,
+            "orgId": "265",
+            "presetName": "compressor",
+            "transformation": "t.compress(q:95)",
+            "archived": false
+        }
+    ]
+}
+```
+
+</details>
+
+---
+
+### getModule
+
+**Summary**: Get Transformation Module by module identifier
+
+```javascript
+// Promise
+
+const promise = assets.getModule({
+    identifier: "t",
+});
+
+// Async/Await
+
+const data = await assets.getModule({
+    identifier: "t",
+});
+```
+
+| Argument   | Type   | Required | Description                         |
+| ---------- | ------ | -------- | ----------------------------------- |
+| identifier | string | yes      | identifier of Transformation Module |
+
+Get Transformation Module by module identifier
+
+_Returned Response:_
+
+[TransformationModuleResponse](#transformationmoduleresponse)
+
+Success
+
+<details>
+<summary><i>&nbsp; Example:</i></summary>
+
+```json
+{
+    "identifier": "erase",
+    "name": "EraseBG",
+    "description": "EraseBG Background Removal Module",
+    "credentials": {
+        "required": false
+    },
+    "operations": [
+        {
+            "params": {
+                "name": "Industry Type",
+                "type": "enum",
+                "enum": ["general", "ecommerce"],
+                "default": "general",
+                "identifier": "i",
+                "title": "Industry type"
+            },
+            "displayName": "Remove background of an image",
+            "method": "bg",
+            "description": "Remove the background of any image"
+        }
+    ],
+    "enabled": true
 }
 ```
 
@@ -1446,21 +1410,50 @@ Success
 
 ---
 
-### getDefaultAssetForPlayground
+### fileUpload
 
-**Summary**: Get default asset for playground
+**Summary**: Upload File
 
 ```javascript
 // Promise
-
-const promise = assets.getDefaultAssetForPlayground();
+const fs = require("fs");
+const promise = assets.fileUpload({
+    file: fs.createReadStream("your-file-path"),
+    path: "path/to/containing/folder",
+    name: "filename",
+    access: "public-read",
+    tags: ["tag1", "tag2"],
+    metadata: {},
+    overwrite: false,
+    filenameOverride: true,
+});
 
 // Async/Await
-
-const data = await assets.getDefaultAssetForPlayground();
+const fs = require("fs");
+const data = await assets.fileUpload({
+    file: fs.createReadStream("your-file-path"),
+    path: "path/to/containing/folder",
+    name: "filename",
+    access: "public-read",
+    tags: ["tag1", "tag2"],
+    metadata: {},
+    overwrite: false,
+    filenameOverride: true,
+});
 ```
 
-Get default asset for playground
+| Argument         | Type                      | Required | Description                                                                                                                                                                                                                      |
+| ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| file             | file                      | yes      | Asset file                                                                                                                                                                                                                       |
+| path             | string                    | no       | Path where you want to store the asset                                                                                                                                                                                           |
+| name             | string                    | no       | Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe                                                                                                 |
+| access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
+| tags             | [string]                  | no       | Asset tags                                                                                                                                                                                                                       |
+| metadata         | string                    | no       | Asset related metadata                                                                                                                                                                                                           |
+| overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
+| filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
+
+Upload File to Pixelbin
 
 _Returned Response:_
 
@@ -1493,25 +1486,54 @@ Success
 
 ---
 
-### getModules
+### urlUpload
 
-**Summary**: Get all transformation modules
+**Summary**: Upload Asset with url
 
 ```javascript
 // Promise
 
-const promise = assets.getModules();
+const promise = assets.urlUpload({
+    url: "www.dummy.com/image.png",
+    path: "path/to/containing/folder",
+    name: "filename",
+    access: "public-read",
+    tags: ["tag1", "tag2"],
+    metadata: {},
+    overwrite: false,
+    filenameOverride: true,
+});
 
 // Async/Await
 
-const data = await assets.getModules();
+const data = await assets.urlUpload({
+    url: "www.dummy.com/image.png",
+    path: "path/to/containing/folder",
+    name: "filename",
+    access: "public-read",
+    tags: ["tag1", "tag2"],
+    metadata: {},
+    overwrite: false,
+    filenameOverride: true,
+});
 ```
 
-Get all transformation modules.
+| Argument         | Type                      | Required | Description                                                                                                                                                                                                                      |
+| ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url              | string                    | yes      | Asset URL                                                                                                                                                                                                                        |
+| path             | string                    | no       | Path where you want to store the asset                                                                                                                                                                                           |
+| name             | string                    | no       | Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe                                                                                                 |
+| access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
+| tags             | [string]                  | no       | Asset tags                                                                                                                                                                                                                       |
+| metadata         | string                    | no       | Asset related metadata                                                                                                                                                                                                           |
+| overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
+| filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
+
+Upload Asset with url
 
 _Returned Response:_
 
-[TransformationModulesResponse](#transformationmodulesresponse)
+[UploadResponse](#uploadresponse)
 
 Success
 
@@ -1520,48 +1542,19 @@ Success
 
 ```json
 {
-    "delimiters": {
-        "operationSeparator": "~",
-        "parameterSeparator": ":"
+    "_id": "dummy-uuid",
+    "name": "asset",
+    "path": "dir",
+    "fileId": "dir/asset",
+    "format": "jpeg",
+    "size": 1000,
+    "access": "private",
+    "isActive": true,
+    "tags": ["tag1", "tag2"],
+    "metadata": {
+        "key": "value"
     },
-    "plugins": {
-        "erase": {
-            "identifier": "erase",
-            "name": "EraseBG",
-            "description": "EraseBG Background Removal Module",
-            "credentials": {
-                "required": false
-            },
-            "operations": [
-                {
-                    "params": {
-                        "name": "Industry Type",
-                        "type": "enum",
-                        "enum": ["general", "ecommerce"],
-                        "default": "general",
-                        "identifier": "i",
-                        "title": "Industry type"
-                    },
-                    "displayName": "Remove background of an image",
-                    "method": "bg",
-                    "description": "Remove the background of any image"
-                }
-            ],
-            "enabled": true
-        }
-    },
-    "presets": [
-        {
-            "_id": "dummy-id",
-            "createdAt": "2022-02-14T10:06:17.803Z",
-            "updatedAt": "2022-02-14T10:06:17.803Z",
-            "isActive": true,
-            "orgId": "265",
-            "presetName": "compressor",
-            "transformation": "t.compress(q:95)",
-            "archived": false
-        }
-    ]
+    "url": "https://domain.com/filename.jpeg"
 }
 ```
 
@@ -1569,33 +1562,55 @@ Success
 
 ---
 
-### getModule
+### createSignedUrl
 
-**Summary**: Get Transformation Module by module identifier
+**Summary**: S3 Signed URL upload
 
 ```javascript
 // Promise
 
-const promise = assets.getModule({
-    identifier: "t",
+const promise = assets.createSignedUrl({
+    name: "filename",
+    path: "path/to/containing/folder",
+    format: "jpeg",
+    access: "public-read",
+    tags: ["tag1", "tag2"],
+    metadata: {},
+    overwrite: false,
+    filenameOverride: true,
 });
 
 // Async/Await
 
-const data = await assets.getModule({
-    identifier: "t",
+const data = await assets.createSignedUrl({
+    name: "filename",
+    path: "path/to/containing/folder",
+    format: "jpeg",
+    access: "public-read",
+    tags: ["tag1", "tag2"],
+    metadata: {},
+    overwrite: false,
+    filenameOverride: true,
 });
 ```
 
-| Argument   | Type   | Required | Description                         |
-| ---------- | ------ | -------- | ----------------------------------- |
-| identifier | string | yes      | identifier of Transformation Module |
+| Argument         | Type                      | Required | Description                                                                                                                                                                                                                      |
+| ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name             | string                    | no       | name of the file                                                                                                                                                                                                                 |
+| path             | string                    | no       | Path of the file                                                                                                                                                                                                                 |
+| format           | string                    | no       | Format of the file                                                                                                                                                                                                               |
+| access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
+| tags             | [string]                  | no       | Tags associated with the file.                                                                                                                                                                                                   |
+| metadata         | string                    | no       | Metadata associated with the file.                                                                                                                                                                                               |
+| overwrite        | boolean                   | no       | Overwrite flag. If set to `true` will overwrite any file that exists with same path, name and type. Defaults to `false`.                                                                                                         |
+| filenameOverride | boolean                   | no       | If set to `true` will add unique characters to name if asset with given name already exists. If overwrite flag is set to `true`, preference will be given to overwrite flag. If both are set to `false` an error will be raised. |
 
-Get Transformation Module by module identifier
+For the given asset details, a S3 signed URL will be generated,
+which can be then used to upload your asset.
 
 _Returned Response:_
 
-[TransformationModuleResponse](#transformationmoduleresponse)
+[SignedUploadResponse](#signeduploadresponse)
 
 Success
 
@@ -1604,28 +1619,13 @@ Success
 
 ```json
 {
-    "identifier": "erase",
-    "name": "EraseBG",
-    "description": "EraseBG Background Removal Module",
-    "credentials": {
-        "required": false
-    },
-    "operations": [
-        {
-            "params": {
-                "name": "Industry Type",
-                "type": "enum",
-                "enum": ["general", "ecommerce"],
-                "default": "general",
-                "identifier": "i",
-                "title": "Industry type"
-            },
-            "displayName": "Remove background of an image",
-            "method": "bg",
-            "description": "Remove the background of any image"
+    "s3PresignedUrl": {
+        "url": "https://domain.com/xyz",
+        "fields": {
+            "field1": "value",
+            "field2": "value"
         }
-    ],
-    "enabled": true
+    }
 }
 ```
 
@@ -1713,7 +1713,7 @@ Success
 | ---------- | ------ | -------- | ------------------------------------ |
 | \_id       | string | yes      | Id of the folder item                |
 | name       | string | yes      | Name of the folder item              |
-| path       | string | yes      | Path of containing folder            |
+| path       | string | yes      | Path of the folder item              |
 | type       | string | yes      | Type of the item. `file` or `folder` |
 
 ---
@@ -1725,8 +1725,8 @@ Success
 | \_id       | string                    | yes      | id of the exploreItem                                           |
 | name       | string                    | yes      | name of the item                                                |
 | type       | string                    | yes      | Type of item whether `file` or `folder`                         |
-| path       | string                    | yes      | Path of containing folder                                       |
-| fileId     | string                    | no       | Combination of `path` and `name` of file                        |
+| path       | string                    | yes      | Path of the folder item                                         |
+| fileId     | string                    | no       | FileId associated with the item. `path`+`name`                  |
 | format     | string                    | no       | Format of the file                                              |
 | size       | number                    | no       | Size of the file in bytes                                       |
 | access     | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private` |
@@ -1778,7 +1778,7 @@ Success
 | Properties       | Type                      | Nullable | Description                                                                                                                                                                                                                      |
 | ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | file             | file                      | yes      | Asset file                                                                                                                                                                                                                       |
-| path             | string                    | no       | Path where you want to store the asset. Path of containing folder                                                                                                                                                                |
+| path             | string                    | no       | Path where you want to store the asset                                                                                                                                                                                           |
 | name             | string                    | no       | Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe                                                                                                 |
 | access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
 | tags             | [string]                  | no       | Asset tags                                                                                                                                                                                                                       |
@@ -1793,7 +1793,7 @@ Success
 | Properties       | Type                      | Nullable | Description                                                                                                                                                                                                                      |
 | ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | url              | string                    | yes      | Asset URL                                                                                                                                                                                                                        |
-| path             | string                    | no       | Path where you want to store the asset. Path of containing folder.                                                                                                                                                               |
+| path             | string                    | no       | Path where you want to store the asset                                                                                                                                                                                           |
 | name             | string                    | no       | Name of the asset, if not provided name of the file will be used. Note - The provided name will be slugified to make it URL safe                                                                                                 |
 | access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
 | tags             | [string]                  | no       | Asset tags                                                                                                                                                                                                                       |
@@ -1808,7 +1808,7 @@ Success
 | Properties | Type                      | Nullable | Description                                                 |
 | ---------- | ------------------------- | -------- | ----------------------------------------------------------- |
 | \_id       | string                    | yes      | \_id of the item                                            |
-| fileId     | string                    | yes      | Combination of `path` and `name` of file                    |
+| fileId     | string                    | yes      | FileId associated with the item. path+name                  |
 | name       | string                    | yes      | name of the item                                            |
 | path       | string                    | yes      | path to the parent folder                                   |
 | format     | string                    | yes      | format of the file                                          |
@@ -1826,7 +1826,7 @@ Success
 | Properties       | Type                      | Nullable | Description                                                                                                                                                                                                                      |
 | ---------------- | ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | name             | string                    | no       | name of the file                                                                                                                                                                                                                 |
-| path             | string                    | no       | Path of containing folder.                                                                                                                                                                                                       |
+| path             | string                    | no       | Path of the file                                                                                                                                                                                                                 |
 | format           | string                    | no       | Format of the file                                                                                                                                                                                                               |
 | access           | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private`                                                                                                                                                                  |
 | tags             | [string]                  | no       | Tags associated with the file.                                                                                                                                                                                                   |
@@ -1861,8 +1861,8 @@ Success
 | ---------- | ------------------------- | -------- | -------------------------------------------------------------- |
 | \_id       | string                    | yes      | \_id of the file                                               |
 | name       | string                    | yes      | name of the file                                               |
-| path       | string                    | yes      | path of containing folder.                                     |
-| fileId     | string                    | yes      | Combination of `path` and `name` of file                       |
+| path       | string                    | yes      | path to the parent folder of the file                          |
+| fileId     | string                    | yes      | FileId associated with the item. `path`+`name`                 |
 | format     | string                    | yes      | format of the file                                             |
 | size       | number                    | yes      | size of the file in bytes                                      |
 | access     | [AccessEnum](#accessenum) | yes      | Access level of file, can be either `public-read` or `private` |
@@ -1879,7 +1879,7 @@ Success
 | Properties | Type                      | Nullable | Description                                                     |
 | ---------- | ------------------------- | -------- | --------------------------------------------------------------- |
 | name       | string                    | no       | Name of the file                                                |
-| path       | string                    | no       | path of containing folder.                                      |
+| path       | string                    | no       | Path of the file                                                |
 | access     | [AccessEnum](#accessenum) | no       | Access level of asset, can be either `public-read` or `private` |
 | isActive   | boolean                   | no       | Whether the file is active                                      |
 | tags       | [string]                  | no       | Tags associated with the file                                   |
@@ -1889,21 +1889,21 @@ Success
 
 #### FoldersResponse
 
-| Properties | Type    | Nullable | Description                  |
-| ---------- | ------- | -------- | ---------------------------- |
-| \_id       | string  | yes      | \_id of the folder           |
-| name       | string  | yes      | name of the folder           |
-| path       | string  | yes      | path of containing folder.   |
-| isActive   | boolean | yes      | whether the folder is active |
+| Properties | Type    | Nullable | Description                             |
+| ---------- | ------- | -------- | --------------------------------------- |
+| \_id       | string  | yes      | \_id of the folder                      |
+| name       | string  | yes      | name of the folder                      |
+| path       | string  | yes      | path to the parent folder of the folder |
+| isActive   | boolean | yes      | whether the folder is active            |
 
 ---
 
 #### CreateFolderRequest
 
-| Properties | Type   | Nullable | Description                |
-| ---------- | ------ | -------- | -------------------------- |
-| name       | string | yes      | Name of the folder         |
-| path       | string | no       | path of containing folder. |
+| Properties | Type   | Nullable | Description        |
+| ---------- | ------ | -------- | ------------------ |
+| name       | string | yes      | Name of the folder |
+| path       | string | no       | Path of the folder |
 
 ---
 
@@ -1912,16 +1912,6 @@ Success
 | Properties | Type    | Nullable | Description                  |
 | ---------- | ------- | -------- | ---------------------------- |
 | isActive   | boolean | no       | whether the folder is active |
-
----
-
-#### TransformationModulesResponse
-
-| Properties | Type                                                                    | Nullable | Description                                         |
-| ---------- | ----------------------------------------------------------------------- | -------- | --------------------------------------------------- |
-| delimiters | [Delimiter](#delimiter)                                                 | no       | Delimiter for parsing plugin schema                 |
-| plugins    | [String: [TransformationModuleResponse](#transformationmoduleresponse)] | no       | Transformations currently supported by the pixelbin |
-| presets    | [any]                                                                   | no       | List of saved presets                               |
 
 ---
 
@@ -1939,19 +1929,6 @@ Success
 | ------------------ | ------ | -------- | ------------------------------------------------------------------------ |
 | operationSeparator | string | no       | separator to separate operations in the url pattern                      |
 | parameterSeparator | string | no       | separator to separate parameters used with operations in the url pattern |
-
----
-
-#### TransformationModuleResponse
-
-| Properties  | Type    | Nullable | Description                                     |
-| ----------- | ------- | -------- | ----------------------------------------------- |
-| identifier  | string  | no       | identifier for the plugin type                  |
-| name        | string  | no       | name of the plugin                              |
-| description | string  | no       | description of the plugin                       |
-| credentials | string  | no       | credentials, if any, associated with the plugin |
-| operations  | [any]   | no       | supported operations in the plugin              |
-| enabled     | boolean | no       | whether the plugin is enabled                   |
 
 ---
 
@@ -2081,6 +2058,29 @@ Success
 | ---------- | ----------------------------------------- | -------- | ----------------------- |
 | items      | [[AddPresetResponse](#addpresetresponse)] | yes      | Presets in current page |
 | page       | [page](#page)                             | yes      | page details            |
+
+---
+
+#### TransformationModuleResponse
+
+| Properties  | Type    | Nullable | Description                                     |
+| ----------- | ------- | -------- | ----------------------------------------------- |
+| identifier  | string  | no       | identifier for the plugin type                  |
+| name        | string  | no       | name of the plugin                              |
+| description | string  | no       | description of the plugin                       |
+| credentials | string  | no       | credentials, if any, associated with the plugin |
+| operations  | [any]   | no       | supported operations in the plugin              |
+| enabled     | boolean | no       | whether the plugin is enabled                   |
+
+---
+
+#### TransformationModulesResponse
+
+| Properties | Type                                                                    | Nullable | Description                                         |
+| ---------- | ----------------------------------------------------------------------- | -------- | --------------------------------------------------- |
+| delimiters | [Delimiter](#delimiter)                                                 | no       | Delimiter for parsing plugin schema                 |
+| plugins    | [String: [TransformationModuleResponse](#transformationmoduleresponse)] | no       | Transformations currently supported by the pixelbin |
+| presets    | [any]                                                                   | no       | List of saved presets                               |
 
 ---
 

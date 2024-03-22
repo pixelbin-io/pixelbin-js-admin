@@ -1,8 +1,14 @@
+## 4.0.1
+
+-   Vulnerability Fix for crypto.js
+
 ## 4.0.0
+
 -   Updated Signature Generation for `Signed PixelBin Urls` to use `accessKey` instead of `tokenId`.
 
 ## 3.8.1
--   Fixed paginator.hasNext() returning `undefined` on first call. 
+
+-   Fixed paginator.hasNext() returning `undefined` on first call.
 
 ## 3.8.0
 

@@ -242,16 +242,6 @@ class Validator {
         });
     }
 
-    static TransformationModulesResponse() {
-        return Joi.object({
-            delimiters: this.Delimiter(),
-
-            plugins: Joi.object().pattern(/\S/, this.TransformationModuleResponse()),
-
-            presets: Joi.array().items(Joi.string().allow("")),
-        });
-    }
-
     static DeleteMultipleFilesRequest() {
         return Joi.object({
             ids: Joi.array().items(Joi.string().allow("")).required(),
@@ -263,22 +253,6 @@ class Validator {
             operationSeparator: Joi.string().allow(""),
 
             parameterSeparator: Joi.string().allow(""),
-        });
-    }
-
-    static TransformationModuleResponse() {
-        return Joi.object({
-            identifier: Joi.string().allow(""),
-
-            name: Joi.string().allow(""),
-
-            description: Joi.string().allow(""),
-
-            credentials: Joi.object(),
-
-            operations: Joi.array().items(Joi.string().allow("")),
-
-            enabled: Joi.boolean(),
         });
     }
 
@@ -407,6 +381,32 @@ class Validator {
             items: Joi.array().items(this.AddPresetResponse()).required(),
 
             page: this.page().required(),
+        });
+    }
+
+    static TransformationModuleResponse() {
+        return Joi.object({
+            identifier: Joi.string().allow(""),
+
+            name: Joi.string().allow(""),
+
+            description: Joi.string().allow(""),
+
+            credentials: Joi.object(),
+
+            operations: Joi.array().items(Joi.string().allow("")),
+
+            enabled: Joi.boolean(),
+        });
+    }
+
+    static TransformationModulesResponse() {
+        return Joi.object({
+            delimiters: this.Delimiter(),
+
+            plugins: Joi.object().pattern(/\S/, this.TransformationModuleResponse()),
+
+            presets: Joi.array().items(Joi.string().allow("")),
         });
     }
 
@@ -554,40 +554,26 @@ class Validator {
 }
 
 class AssetsValidator {
-    static fileUpload() {
+    static addCredentials() {
         return Joi.object({
             options: Joi.object(),
-            body: Validator.FileUploadRequest().required(),
+            body: Validator.AddCredentialsRequest().required(),
         }).required();
     }
 
-    static urlUpload() {
+    static updateCredentials() {
         return Joi.object({
             options: Joi.object(),
-            body: Validator.UrlUploadRequest().required(),
+            pluginId: Joi.string().allow("").required(),
+            body: Validator.UpdateCredentialsRequest().required(),
         }).required();
     }
 
-    static createSignedUrl() {
+    static deleteCredentials() {
         return Joi.object({
             options: Joi.object(),
-            body: Validator.SignedUploadRequest().required(),
+            pluginId: Joi.string().allow("").required(),
         }).required();
-    }
-
-    static listFiles() {
-        return Joi.object({
-            options: Joi.object(),
-            name: Joi.string().allow(""),
-            path: Joi.string().allow(""),
-            format: Joi.string().allow(""),
-            tags: Joi.array().items(Joi.string().allow("")),
-            onlyFiles: Joi.boolean(),
-            onlyFolders: Joi.boolean(),
-            pageNo: Joi.number(),
-            pageSize: Joi.number(),
-            sort: Joi.string().allow(""),
-        });
     }
 
     static getFileById() {
@@ -663,25 +649,37 @@ class AssetsValidator {
         }).required();
     }
 
-    static addCredentials() {
+    static listFiles() {
         return Joi.object({
             options: Joi.object(),
-            body: Validator.AddCredentialsRequest().required(),
-        }).required();
+            name: Joi.string().allow(""),
+            path: Joi.string().allow(""),
+            format: Joi.string().allow(""),
+            tags: Joi.array().items(Joi.string().allow("")),
+            onlyFiles: Joi.boolean(),
+            onlyFolders: Joi.boolean(),
+            pageNo: Joi.number(),
+            pageSize: Joi.number(),
+            sort: Joi.string().allow(""),
+        });
     }
 
-    static updateCredentials() {
+    static getDefaultAssetForPlayground() {
         return Joi.object({
             options: Joi.object(),
-            pluginId: Joi.string().allow("").required(),
-            body: Validator.UpdateCredentialsRequest().required(),
-        }).required();
+        });
     }
 
-    static deleteCredentials() {
+    static getModules() {
         return Joi.object({
             options: Joi.object(),
-            pluginId: Joi.string().allow("").required(),
+        });
+    }
+
+    static getModule() {
+        return Joi.object({
+            options: Joi.object(),
+            identifier: Joi.string().allow("").required(),
         }).required();
     }
 
@@ -720,22 +718,24 @@ class AssetsValidator {
         }).required();
     }
 
-    static getDefaultAssetForPlayground() {
+    static fileUpload() {
         return Joi.object({
             options: Joi.object(),
-        });
+            body: Validator.FileUploadRequest().required(),
+        }).required();
     }
 
-    static getModules() {
+    static urlUpload() {
         return Joi.object({
             options: Joi.object(),
-        });
+            body: Validator.UrlUploadRequest().required(),
+        }).required();
     }
 
-    static getModule() {
+    static createSignedUrl() {
         return Joi.object({
             options: Joi.object(),
-            identifier: Joi.string().allow("").required(),
+            body: Validator.SignedUploadRequest().required(),
         }).required();
     }
 
