@@ -23,13 +23,15 @@ class PixelbinClient {
         @typedef folderItem
         
         
-        @property { string } _id
+        @property { string } [_id]
         
-        @property { string } name
+        @property { number } [orgId]
         
-        @property { string } path
+        @property { string } [name]
         
-        @property { string } type
+        @property { string } [path]
+        
+        @property { string } [type]
         
          
     */
@@ -38,13 +40,15 @@ class PixelbinClient {
         @typedef exploreItem
         
         
-        @property { string } _id
+        @property { string } [_id]
         
-        @property { string } name
+        @property { number } [orgId]
         
-        @property { string } type
+        @property { string } [name]
         
-        @property { string } path
+        @property { string } [type]
+        
+        @property { string } [path]
         
         @property { string } [fileId]
         
@@ -53,6 +57,10 @@ class PixelbinClient {
         @property { number } [size]
         
         @property { AccessEnum } [access]
+        
+        @property { string } [s3Bucket]
+        
+        @property { string } [s3Key]
         
          
     */
@@ -89,22 +97,9 @@ class PixelbinClient {
         @typedef ListFilesResponse
         
         
-        @property { Array<exploreItem> } items
+        @property { Array<exploreItem> } [items]
         
-        @property { page } page
-        
-         
-    */
-
-/**
-        @typedef exploreFolderResponse
-        
-        
-        @property { folderItem } folder
-        
-        @property { Array<exploreItem> } items
-        
-        @property { page } page
+        @property { page } [page]
         
          
     */
@@ -333,38 +328,6 @@ class PixelbinClient {
     */
 
 /**
-        @typedef Credentials
-        
-        
-        @property { string } [_id]
-        
-        @property { string } [createdAt]
-        
-        @property { string } [updatedAt]
-        
-        @property { boolean } [isActive]
-        
-        @property { string } [orgId]
-        
-        @property { string } [pluginId]
-        
-        @property { Object } [credentials]
-        
-        @property { Object } [description]
-        
-         
-    */
-
-/**
-        @typedef CredentialsItem
-        
-        
-        @property { Object } [pluginId]
-        
-         
-    */
-
-/**
         @typedef AddCredentialsRequest
         
         
@@ -394,59 +357,12 @@ class PixelbinClient {
     */
 
 /**
-        @typedef DeleteCredentialsResponse
-        
-        
-        @property { string } [_id]
-        
-        @property { string } [createdAt]
-        
-        @property { string } [updatedAt]
-        
-        @property { boolean } [isActive]
-        
-        @property { string } [orgId]
-        
-        @property { string } [pluginId]
-        
-        @property { Object } [credentials]
-        
-         
-    */
-
-/**
         @typedef GetAncestorsResponse
         
         
         @property { folderItem } [folder]
         
         @property { Array<FoldersResponse> } [ancestors]
-        
-         
-    */
-
-/**
-        @typedef GetFilesWithConstraintsItem
-        
-        
-        @property { string } [path]
-        
-        @property { string } [name]
-        
-        @property { string } [type]
-        
-         
-    */
-
-/**
-        @typedef GetFilesWithConstraintsRequest
-        
-        
-        @property { Array<GetFilesWithConstraintsItem> } [items]
-        
-        @property { number } [maxCount]
-        
-        @property { number } [maxSize]
         
          
     */
@@ -468,13 +384,21 @@ class PixelbinClient {
         @typedef AddPresetResponse
         
         
-        @property { string } presetName
+        @property { string } [presetName]
         
-        @property { string } transformation
+        @property { string } [transformation]
         
         @property { Object } [params]
         
         @property { boolean } [archived]
+        
+        @property { number } [orgId]
+        
+        @property { boolean } [isActive]
+        
+        @property { string } [createdAt]
+        
+        @property { string } [updatedAt]
         
          
     */
@@ -696,6 +620,39 @@ class PixelbinClient {
         @property { TotalUsageSchema } [total]
         
         @property { UsageSchema } [usage]
+        
+         
+    */
+
+/**
+        @typedef StorageUsageSchema
+        
+        
+        @property { number } [total]
+        
+        @property { number } [used]
+        
+         
+    */
+
+/**
+        @typedef CreditUsageSchema
+        
+        
+        @property { number } [total]
+        
+        @property { number } [used]
+        
+         
+    */
+
+/**
+        @typedef PixelbinUsageSchema
+        
+        
+        @property { StorageUsageSchema } [storage]
+        
+        @property { CreditUsageSchema } [credits]
         
          
     */
@@ -1478,17 +1435,28 @@ We currently do not support updating folder name or path.
 
     /**
     *
-    * @summary: Get all presets.
-    * @description: Get all presets of an organization.
-
+    * @summary: Get presets for an organization
+    * @description: Retrieve presets for a specific organization.
     * @param {Object} arg - arg object.
     * @param {Object} arg.options - extra options if avaiable 
+    * @param {number} [arg.pageNo] - Page number
+    * @param {number} [arg.pageSize] - Page size
+    * @param {string} [arg.name] - Preset name
+    * @param {string} [arg.transformation] - Transformation applied
+    * @param {boolean} [arg.archived] - Indicates whether the preset is archived or not
+    * @param {Array<string>} [arg.sort] - Sort the results by a specific key
     
     **/
-    getPresets({ options } = {}) {
+    getPresets({ options, pageNo, pageSize, name, transformation, archived, sort } = {}) {
         const { error } = AssetsValidator.getPresets().validate(
             {
                 options,
+                pageNo,
+                pageSize,
+                name,
+                transformation,
+                archived,
+                sort,
             },
             { abortEarly: false },
         );
@@ -1497,6 +1465,16 @@ We currently do not support updating folder name or path.
         }
 
         const query_params = {};
+        query_params["pageNo"] = pageNo;
+        query_params["pageSize"] = pageSize;
+        query_params["name"] = name;
+        query_params["transformation"] = transformation;
+        query_params["archived"] = archived;
+        if (sort && sort instanceof Array && sort.join("")) {
+            sort.forEach((param, idx) => {
+                query_params[`sort[${idx}]`] = param;
+            });
+        }
 
         return PlatformAPIClient.execute(
             this.config,
@@ -1975,6 +1953,36 @@ class Billing {
     *
     * @summary: Get current usage of organization
     * @description: Get current usage of organization
+    * @param {Object} arg - arg object.
+    * @param {Object} arg.options - extra options if avaiable 
+    
+    **/
+    getUsageV2({ options } = {}) {
+        const { error } = BillingValidator.getUsageV2().validate(
+            {
+                options,
+            },
+            { abortEarly: false },
+        );
+        if (error) {
+            return Promise.reject(new PDKClientValidationError(error));
+        }
+
+        const query_params = {};
+
+        return PlatformAPIClient.execute(
+            this.config,
+            "get",
+            `/service/platform/payment/v1.0/usage`,
+            query_params,
+            undefined,
+        );
+    }
+
+    /**
+    *
+    * @summary: Get current subscription usage of organization
+    * @description: This API endpoint is deprecated and will be discontinued in the future. It does not include add-on details in the subscription usage data.
     * @param {Object} arg - arg object.
     * @param {Object} arg.options - extra options if avaiable 
     
