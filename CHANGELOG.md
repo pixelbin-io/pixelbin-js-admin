@@ -1,3 +1,9 @@
+## 4.0.2
+
+-   Enhanced getPresets in assets with pagination and sorting.
+-   Added getUsageV2 method to Billing for current usage details.
+-   Deprecated old getUsage method; migration recommended.
+
 ## 4.0.1
 
 -   Vulnerability Fix for crypto.js

@@ -2,25 +2,29 @@ const Joi = require("joi");
 class Validator {
     static folderItem() {
         return Joi.object({
-            _id: Joi.string().allow("").required(),
+            _id: Joi.string().allow(""),
 
-            name: Joi.string().allow("").required(),
+            orgId: Joi.number(),
 
-            path: Joi.string().allow("").required(),
+            name: Joi.string().allow(""),
 
-            type: Joi.string().allow("").required(),
+            path: Joi.string().allow(""),
+
+            type: Joi.string().allow(""),
         });
     }
 
     static exploreItem() {
         return Joi.object({
-            _id: Joi.string().allow("").required(),
+            _id: Joi.string().allow(""),
 
-            name: Joi.string().allow("").required(),
+            orgId: Joi.number(),
 
-            type: Joi.string().allow("").required(),
+            name: Joi.string().allow(""),
 
-            path: Joi.string().allow("").required(),
+            type: Joi.string().allow(""),
+
+            path: Joi.string().allow(""),
 
             fileId: Joi.string().allow(""),
 
@@ -29,6 +33,10 @@ class Validator {
             size: Joi.number(),
 
             access: this.AccessEnum(),
+
+            s3Bucket: Joi.string().allow(""),
+
+            s3Key: Joi.string().allow(""),
         });
     }
 
@@ -56,19 +64,9 @@ class Validator {
 
     static ListFilesResponse() {
         return Joi.object({
-            items: Joi.array().items(this.exploreItem()).required(),
+            items: Joi.array().items(this.exploreItem()),
 
-            page: this.page().required(),
-        });
-    }
-
-    static exploreFolderResponse() {
-        return Joi.object({
-            folder: this.folderItem().required(),
-
-            items: Joi.array().items(this.exploreItem()).required(),
-
-            page: this.page().required(),
+            page: this.page(),
         });
     }
 
@@ -256,32 +254,6 @@ class Validator {
         });
     }
 
-    static Credentials() {
-        return Joi.object({
-            _id: Joi.string().allow(""),
-
-            createdAt: Joi.string().allow(""),
-
-            updatedAt: Joi.string().allow(""),
-
-            isActive: Joi.boolean(),
-
-            orgId: Joi.string().allow(""),
-
-            pluginId: Joi.string().allow(""),
-
-            credentials: Joi.object(),
-
-            description: Joi.any(),
-        });
-    }
-
-    static CredentialsItem() {
-        return Joi.object({
-            pluginId: Joi.any(),
-        });
-    }
-
     static AddCredentialsRequest() {
         return Joi.object({
             credentials: Joi.object().required(),
@@ -302,49 +274,11 @@ class Validator {
         });
     }
 
-    static DeleteCredentialsResponse() {
-        return Joi.object({
-            _id: Joi.string().allow(""),
-
-            createdAt: Joi.string().allow(""),
-
-            updatedAt: Joi.string().allow(""),
-
-            isActive: Joi.boolean(),
-
-            orgId: Joi.string().allow(""),
-
-            pluginId: Joi.string().allow(""),
-
-            credentials: Joi.object(),
-        });
-    }
-
     static GetAncestorsResponse() {
         return Joi.object({
             folder: this.folderItem(),
 
             ancestors: Joi.array().items(this.FoldersResponse()),
-        });
-    }
-
-    static GetFilesWithConstraintsItem() {
-        return Joi.object({
-            path: Joi.string().allow(""),
-
-            name: Joi.string().allow(""),
-
-            type: Joi.string().allow(""),
-        });
-    }
-
-    static GetFilesWithConstraintsRequest() {
-        return Joi.object({
-            items: Joi.array().items(this.GetFilesWithConstraintsItem()),
-
-            maxCount: Joi.number(),
-
-            maxSize: Joi.number(),
         });
     }
 
@@ -360,13 +294,21 @@ class Validator {
 
     static AddPresetResponse() {
         return Joi.object({
-            presetName: Joi.string().allow("").required(),
+            presetName: Joi.string().allow(""),
 
-            transformation: Joi.string().allow("").required(),
+            transformation: Joi.string().allow(""),
 
             params: Joi.object(),
 
             archived: Joi.boolean(),
+
+            orgId: Joi.number(),
+
+            isActive: Joi.boolean(),
+
+            createdAt: Joi.string().allow(""),
+
+            updatedAt: Joi.string().allow(""),
         });
     }
 
@@ -551,6 +493,30 @@ class Validator {
             usage: this.UsageSchema(),
         });
     }
+
+    static StorageUsageSchema() {
+        return Joi.object({
+            total: Joi.number(),
+
+            used: Joi.number(),
+        });
+    }
+
+    static CreditUsageSchema() {
+        return Joi.object({
+            total: Joi.number(),
+
+            used: Joi.number(),
+        });
+    }
+
+    static PixelbinUsageSchema() {
+        return Joi.object({
+            storage: this.StorageUsageSchema(),
+
+            credits: this.CreditUsageSchema(),
+        });
+    }
 }
 
 class AssetsValidator {
@@ -693,6 +659,12 @@ class AssetsValidator {
     static getPresets() {
         return Joi.object({
             options: Joi.object(),
+            pageNo: Joi.number(),
+            pageSize: Joi.number(),
+            name: Joi.string().allow(""),
+            transformation: Joi.string().allow(""),
+            archived: Joi.boolean(),
+            sort: Joi.array().items(Joi.string().allow("")),
         });
     }
 
@@ -765,6 +737,12 @@ class TransformationValidator {
 }
 
 class BillingValidator {
+    static getUsageV2() {
+        return Joi.object({
+            options: Joi.object(),
+        });
+    }
+
     static getUsage() {
         return Joi.object({
             options: Joi.object(),
