@@ -1,3 +1,8 @@
+## 4.0.3
+
+-   Added default user-agent header.
+-   Added integrationPlatform configuration to allows analytics.
+
 ## 4.0.2
 
 -   Enhanced getPresets in assets with pagination and sorting.

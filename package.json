@@ -1,6 +1,6 @@
 {
     "name": "@pixelbin/admin",
-    "version": "4.0.2",
+    "version": "4.0.3",
     "description": "Pixelbin Backend SDK for Javascript",
     "main": "index.js",
     "scripts": {

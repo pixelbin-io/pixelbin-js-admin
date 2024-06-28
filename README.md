@@ -26,6 +26,7 @@ const { PixelbinConfig, PixelbinClient } = require("@pixelbin/admin");
 const config = new PixelbinConfig({
     domain: "https://api.pixelbin.io",
     apiSecret: "API_TOKEN",
+    integrationPlatform: "YourAppName/1.0 (AppPlatform/2.0)", // this is optional
 });
 
 // Create a pixelbin instance
@@ -52,6 +53,16 @@ async function getData() {
 
 getData();
 ```
+
+## Integration Platform
+
+The `integrationPlatform` parameter allows you to customize the `User-Agent` string in API requests. This helps in identifying the specific application or plugin making the request, useful for analytics and troubleshooting.
+
+#### How to Use
+
+Include the `integrationPlatform` in your Pixelbin configuration as shown above. The string should clearly identify your application or plugin and include version details as well as any platform your system is deployed on if applicable.
+
+Syntax : `Pixelbin{integration_name}/{integration_version} ({platform_name}/{platform_version})`
 
 ## Security Utils
 
