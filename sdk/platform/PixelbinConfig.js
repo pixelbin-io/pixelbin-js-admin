@@ -23,6 +23,7 @@ class PixelbinConfig {
         this.domain = config.domain || "https://api.pixelbin.io";
         this.apiSecret = config.apiSecret;
         this.oauthClient = new OauthClient(this);
+        this.integrationPlatform = config.integrationPlatform;
     }
     async getAccessToken() {
         let token = await this.oauthClient.getAccessToken();
