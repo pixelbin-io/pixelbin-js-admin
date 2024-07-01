@@ -111,13 +111,31 @@ function interceptorFn(options) {
     };
 }
 
+function userAgentInterceptor(options) {
+    return (config) => {
+        const sdk = {
+            name: "@pixelbin/admin",
+            version: "4.0.3",
+        };
+        const language = "JavaScript";
+
+        let userAgent = `${sdk.name}/${sdk.version} (${language})`;
+        const integrationPlatform = config.headers["user-agent"];
+        if (integrationPlatform) {
+            userAgent = `${integrationPlatform} ${userAgent}`;
+        }
+        config.headers["user-agent"] = userAgent;
+        return config;
+    };
+}
+
 const pdkAxios = axios.create({
     paramsSerializer: (params) => {
         return querystring.stringify(params);
     },
 });
-
 pdkAxios.interceptors.request.use(interceptorFn());
+pdkAxios.interceptors.request.use(userAgentInterceptor());
 pdkAxios.interceptors.response.use(
     function (response) {
         if (response.config.method == "head") {

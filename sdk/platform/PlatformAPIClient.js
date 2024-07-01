@@ -22,6 +22,7 @@ class APIClient {
             params: query,
             data: body,
             headers: {
+                "user-agent": conf.integrationPlatform,
                 Authorization: "Bearer " + token,
                 ...headers,
             },
