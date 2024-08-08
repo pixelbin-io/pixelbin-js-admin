@@ -8,6 +8,7 @@ const {
 const Paginator = require("../common/Paginator");
 const PlatformAPIClient = require("./PlatformAPIClient");
 const { PDKClientValidationError } = require("../common/PDKError");
+const { Uploader } = require("./Uploader");
 
 class PixelbinClient {
     constructor(config) {
@@ -16,6 +17,8 @@ class PixelbinClient {
         this.organization = new Organization(config);
         this.transformation = new Transformation(config);
         this.billing = new Billing(config);
+
+        this.uploader = new Uploader(this.assets);
     }
 }
 

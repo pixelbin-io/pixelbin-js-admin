@@ -1,3 +1,8 @@
+## 4.1.0
+
+-   Added [upload](./README.md#upload) method.
+-   Removed signature support for all API calls.
+
 ## 4.0.3
 
 -   Added default user-agent header.
@@ -6,8 +11,8 @@
 ## 4.0.2
 
 -   Enhanced getPresets in assets with pagination and sorting.
--   Added getUsageV2 method to Billing for current usage details.
--   Deprecated old getUsage method; migration recommended.
+-   Improved Billing's getUsage method for current usage details.
+-   Deprecated old getUsage method; migration recommended, instead use getUsageV2.
 
 ## 4.0.1
 

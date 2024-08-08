@@ -54,6 +54,141 @@ async function getData() {
 getData();
 ```
 
+## Uploader
+
+### upload
+
+Uploads a file to PixelBin with greater control over the upload process.
+
+| Argument          | Type                                                                                                          | Required | Description                                                                                                                                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| file              | [Buffer](https://nodejs.org/api/buffer.html) or [Stream](https://nodejs.org/api/stream.html#readable-streams) | yes      | The file to be uploaded.                                                                                                                                                                                                                              |
+| name              | string                                                                                                        | no       | Name of the file.                                                                                                                                                                                                                                     |
+| path              | string                                                                                                        | no       | Path of the containing folder.                                                                                                                                                                                                                        |
+| format            | string                                                                                                        | no       | Format of the file.                                                                                                                                                                                                                                   |
+| access            | [AccessEnum](./documentation/platform/ASSETS.md#accessenum)                                                   | no       | Access level of the asset, can be either `public-read` or `private`.                                                                                                                                                                                  |
+| tags              | [string]                                                                                                      | no       | Tags associated with the file.                                                                                                                                                                                                                        |
+| metadata          | string                                                                                                        | no       | Metadata associated with the file.                                                                                                                                                                                                                    |
+| overwrite         | boolean                                                                                                       | no       | Overwrite flag. If set to `true`, will overwrite any file that exists with the same path, name, and type. Defaults to `false`.                                                                                                                        |
+| filenameOverride  | boolean                                                                                                       | no       | If set to `true`, will add unique characters to the name if an asset with the given name already exists. If the overwrite flag is set to `true`, preference will be given to the overwrite flag. If both are set to `false`, an error will be raised. |
+| expiry            | number                                                                                                        | no       | Expiry time in seconds for the underlying signed URL. Defaults to 3000 seconds.                                                                                                                                                                       |
+| uploadOptions     | Object                                                                                                        | no       | Additional options for fine-tuning the upload process. Default: `{ chunkSize: 10 * 1024 * 1024, maxRetries: 2, concurrency: 3, exponentialFactor: 2 }`                                                                                                |
+| chunkSize         | number                                                                                                        | no       | Size of each chunk to upload. Default is 10 megabyte.                                                                                                                                                                                                 |
+| maxRetries        | number                                                                                                        | no       | Maximum number of retries if an upload fails. Default is 2 retries.                                                                                                                                                                                   |
+| concurrency       | number                                                                                                        | no       | Number of concurrent chunk upload tasks. Default is 3 concurrent chunk uploads.                                                                                                                                                                       |
+| exponentialFactor | number                                                                                                        | no       | The exponential factor for retry delay. Default is 2.                                                                                                                                                                                                 |
+
+**returns**: Promise<Object>
+
+**On Success**
+
+| property             | description                                                     | example                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| orgId (Number)       | Organization id                                                 | `5320086`                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| type (String)        |                                                                 | `file`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| name (String)        | name of the file                                                | `testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| path (String)        | Path of containing folder.                                      | `/path/to/image.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| fileId (String)      | id of file                                                      | `testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| access (String)      | Access level of asset, can be either `public-read` or `private` | `public-read`                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| tags (Array<String>) | Tags associated with the file.                                  | `["tag1", "tag2"]`                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| metadata (Object)    | Metadata associated with the file.                              | `{"source:"", "publicUploadId":""}`                                                                                                                                                                                                                                                                                                                                                                                                        |
+| format (String)      | file format                                                     | `jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| assetType (String)   | type of asset                                                   | `image`                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| size (Number)        | file size                                                       | `37394`                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| width (Number)       | file width                                                      | `720`                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| height (Number)      | file height                                                     | `450`                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| context (Object)     | contains the file metadata and other contexts of file           | `{"steps":[],"req":{"headers":{},"query":{}},"meta":{"format":"png","size":195337,"width":812,"height":500,"space":"srgb","channels":4,"depth":"uchar","density":144,"isProgressive":false,"resolutionUnit":"inch","hasProfile":true,"hasAlpha":true,"extension":"jpeg","contentType":"image/png","assetType":"image","isImageAsset":true,"isAudioAsset":false,"isVideoAsset":false,"isRawAsset":false,"isTransformationSupported":true}}` |
+| isOriginal (Boolean) | flag about files type                                           | `true`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| \_id (String)        | record id                                                       | `a0b0b19a-d526-4xc07-ae51-0xxxxxx`                                                                                                                                                                                                                                                                                                                                                                                                         |
+| url (String)         | uploaded image url                                              | `https://cdn.pixelbin.io/v2/user-e26cf3/original/testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                            |
+
+Example :
+
+#### Uploading a buffer
+
+```javascript
+// import the PixelbinConfig and PixelbinClient
+const { PixelbinConfig, PixelbinClient } = require("@pixelbin/admin");
+const fs = require("fs");
+
+// Create a config with you API_TOKEN
+const config = new PixelbinConfig({
+    domain: "https://api.pixelbin.io",
+    apiSecret: "API_TOKEN",
+    integrationPlatform: "YourAppName/1.0 (AppPlatform/2.0)", // this is optional
+});
+
+// Create a pixelbin instance
+const pixelbin = new PixelbinClient(config);
+
+const buffer = fs.readFileSync("./myimage.png")
+
+const result = await pixelbin.uploader.upload({
+  file: buffer,
+  name: "myimage",
+  path: "folder",
+  format: "png",
+  tags: [],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: false,
+  access: "public-read",
+  uploadOptions: {
+    chunkSize: 5 * 1024 * 1024 // 5MB
+    concurrency: 2, // 2 concurrent chunk uploads
+    maxRetries: 1, // 2 retries for errors that can be retried
+    exponentialFactor: 1, // exponential factor for retries
+  }
+});
+
+console.log(result.url)
+// "https://cdn.pixelbin.io/v2/mycloudname/original/folder/myimage.png"
+
+```
+
+Example :
+
+#### Uploading a stream
+
+```javascript
+// import the PixelbinConfig and PixelbinClient
+const { PixelbinConfig, PixelbinClient } = require("@pixelbin/admin");
+const fs = require("fs");
+
+// Create a config with you API_TOKEN
+const config = new PixelbinConfig({
+    domain: "https://api.pixelbin.io",
+    apiSecret: "API_TOKEN",
+    integrationPlatform: "YourAppName/1.0 (AppPlatform/2.0)", // this is optional
+});
+
+// Create a pixelbin instance
+const pixelbin = new PixelbinClient(config);
+
+const buffer = fs.createReadStream("./myimage.png")
+
+const result = await pixelbin.uploader.upload({
+  file: buffer,
+  name: "myimage",
+  path: "folder",
+  format: "png",
+  tags: [],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: false,
+  access: "public-read",
+  uploadOptions: {
+    chunkSize: 5 * 1024 * 1024 // 5MB
+    concurrency: 2, // 2 concurrent chunk uploads
+    maxRetries: 1, // 2 retries for errors that can be retried
+    exponentialFactor: 1, // exponential factor for retries
+  }
+});
+
+console.log(result.url)
+// "https://cdn.pixelbin.io/v2/mycloudname/original/folder/myimage.png"
+```
+
 ## Integration Platform
 
 The `integrationPlatform` parameter allows you to customize the `User-Agent` string in API requests. This helps in identifying the specific application or plugin making the request, useful for analytics and troubleshooting.
