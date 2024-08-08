@@ -115,7 +115,7 @@ function userAgentInterceptor(options) {
     return (config) => {
         const sdk = {
             name: "@pixelbin/admin",
-            version: "4.0.3",
+            version: "4.1.0",
         };
         const language = "JavaScript";
 
