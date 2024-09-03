@@ -1,5 +1,5 @@
 .github
-documentation
+documentation/**/*.*
 .gitignore
 tests
 sample.js

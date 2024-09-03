@@ -115,7 +115,7 @@ function userAgentInterceptor(options) {
     return (config) => {
         const sdk = {
             name: "@pixelbin/admin",
-            version: "4.0.3",
+            version: "4.1.0",
         };
         const language = "JavaScript";
 
@@ -134,7 +134,10 @@ const pdkAxios = axios.create({
         return querystring.stringify(params);
     },
 });
-pdkAxios.interceptors.request.use(interceptorFn());
+/**
+ * Skipping signature check for URLS starting with `/service/platform/` i.e. platform APIs of all services.
+ */
+// pdkAxios.interceptors.request.use(interceptorFn());
 pdkAxios.interceptors.request.use(userAgentInterceptor());
 pdkAxios.interceptors.response.use(
     function (response) {
@@ -163,6 +166,41 @@ pdkAxios.interceptors.response.use(
     },
 );
 
+/**
+ * Uploader Axios
+ * @ignore
+ * @type {import("axios").AxiosInstance}
+ */
+const uploaderAxios = axios.create();
+uploaderAxios.interceptors.request.use(userAgentInterceptor());
+uploaderAxios.interceptors.response.use(
+    function (response) {
+        if (response.config.method == "head") {
+            return response.headers;
+        }
+        return response.data; // IF 2XX then return response.data only
+    },
+    function (error) {
+        if (error.response) {
+            // Request made and server responded
+            throw new PDKServerResponseError(
+                error.response.data.message || error.message,
+                error.response.data.stack || error.stack,
+                error.response.statusText,
+                error.response.status,
+                error.response.data,
+            );
+        } else if (error.request) {
+            // The request was made but no error.response was received
+            throw new PDKServerResponseError(error.message, error.stack, error.code, error.code);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            throw new PDKServerResponseError(error.message, error.stack);
+        }
+    },
+);
+
 module.exports = {
     pdkAxios,
+    uploaderAxios,
 };
