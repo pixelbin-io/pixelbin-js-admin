@@ -1,10 +1,36 @@
-const combineURLs = require("axios/lib/helpers/combineURLs");
-const isAbsoluteURL = require("axios/lib/helpers/isAbsoluteURL");
-const axios = require("axios");
+const { default: axios } = require("axios");
 const querystring = require("query-string");
 const { sign } = require("./RequestSigner");
 const { PDKServerResponseError } = require("./PDKError");
 const FormData = require("form-data");
+
+/**
+ * https://github.com/axios/axios/blob/5b8a826771b77ab30081d033fdba9ef3b90e439a/lib/helpers/isAbsoluteURL.js
+ * Determines whether the specified URL is absolute
+ * @ignore
+ * @param {string} url The URL to test
+ * @returns {boolean} True if the specified URL is absolute, otherwise false
+ */
+function isAbsoluteURL(url) {
+    // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+    // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+    // by any combination of letters, digits, plus, period, or hyphen.
+    return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
+}
+
+/**
+ * https://github.com/axios/axios/blob/5b8a826771b77ab30081d033fdba9ef3b90e439a/lib/helpers/combineURLs.js
+ * Creates a new URL by combining the specified URLs
+ * @ignore
+ * @param {string} baseURL The base URL
+ * @param {string} relativeURL The relative URL
+ * @returns {string} The combined URL
+ */
+function combineURLs(baseURL, relativeURL) {
+    return relativeURL
+        ? baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "")
+        : baseURL;
+}
 
 axios.defaults.withCredentials = true;
 
@@ -115,7 +141,7 @@ function userAgentInterceptor(options) {
     return (config) => {
         const sdk = {
             name: "@pixelbin/admin",
-            version: "4.1.0",
+            version: "4.1.1",
         };
         const language = "JavaScript";
 

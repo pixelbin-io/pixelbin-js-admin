@@ -1,3 +1,7 @@
+## 4.1.1
+
+-   Updated `axios` to `1.7.7`.
+
 ## 4.1.0
 
 -   Added [upload](./README.md#upload) method.

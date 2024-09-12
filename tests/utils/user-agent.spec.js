@@ -39,7 +39,7 @@ describe("User-Agent Header Test", () => {
     it("should correctly set the User-Agent header incase no integerationPlatform is set", async () => {
         const userAgentInterceptor = pdkAxios.interceptors.request.handlers[0].fulfilled;
         const config = await userAgentInterceptor({ headers: {} });
-        let userAgent = `@pixelbin/admin/4.1.0 (JavaScript)`;
+        let userAgent = `@pixelbin/admin/4.1.1 (JavaScript)`;
         expect(config.headers["user-agent"]).toEqual(userAgent);
     });
 
@@ -48,7 +48,7 @@ describe("User-Agent Header Test", () => {
         const interceptedConfig = await userAgentInterceptor({
             headers: { "user-agent": "Erasebg Plugin/1.2.3 (Figma/3.2.1)" },
         });
-        let userAgent = `Erasebg Plugin/1.2.3 (Figma/3.2.1) @pixelbin/admin/4.1.0 (JavaScript)`;
+        let userAgent = `Erasebg Plugin/1.2.3 (Figma/3.2.1) @pixelbin/admin/4.1.1 (JavaScript)`;
         expect(interceptedConfig.headers["user-agent"]).toEqual(userAgent);
     });
 });
