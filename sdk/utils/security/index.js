@@ -11,7 +11,7 @@ Sign a PixelBin URL
 */
 
 const signURL = function (url, expirySeconds, accessKey, token) {
-    return generateSignedURL(url, expirySeconds, accessKey, token);
+  return generateSignedURL(url, expirySeconds, accessKey, token);
 };
 
 module.exports = { signURL };

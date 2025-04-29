@@ -4,8 +4,8 @@
 
 Payment Service
 
--   [getUsageV2](#getusagev2)
--   [getUsage](#getusage)
+- [getUsageV2](#getusagev2)
+- [getUsage](#getusage)
 
 ## Methods with example and description
 
@@ -36,14 +36,14 @@ Success
 
 ```json
 {
-    "storage": {
-        "used": 1.0357297026862702,
-        "total": 10
-    },
-    "credits": {
-        "used": 1000,
-        "total": 1
-    }
+  "storage": {
+    "used": 1.0357297026862702,
+    "total": 10
+  },
+  "credits": {
+    "used": 1000,
+    "total": 1
+  }
 }
 ```
 
@@ -78,16 +78,16 @@ Success
 
 ```json
 {
-    "credits": {
-        "used": 1.0357297026862702
-    },
-    "total": {
-        "credits": 1000,
-        "storage": 1
-    },
-    "usage": {
-        "storage": "0"
-    }
+  "credits": {
+    "used": 1.0357297026862702
+  },
+  "total": {
+    "credits": 1000,
+    "storage": 1
+  },
+  "usage": {
+    "storage": "0"
+  }
 }
 ```
 
