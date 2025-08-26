@@ -4,7 +4,7 @@
 
 Organization Service
 
--   [getAppOrgDetails](#getapporgdetails)
+- [getAppOrgDetails](#getapporgdetails)
 
 ## Methods with example and description
 
@@ -35,24 +35,24 @@ Success. Returns a JSON object as shown below. Refer `AppOrgDetails` for more de
 
 ```json
 {
-    "app": {
-        "_id": 123,
-        "orgId": 12,
-        "name": "Desktop Client App",
-        "permissions": ["read", "read_write"],
-        "active": false,
-        "createdAt": "2021-07-15T07:47:00Z",
-        "updatedAt": "2021-07-15T07:47:00Z"
-    },
-    "org": {
-        "_id": 12,
-        "name": "org_1",
-        "cloudName": "testcloudname",
-        "accountType": "individual",
-        "industry": "Ecommerce",
-        "strength": "1",
-        "active": "false"
-    }
+  "app": {
+    "_id": 123,
+    "orgId": 12,
+    "name": "Desktop Client App",
+    "permissions": ["read", "read_write"],
+    "active": false,
+    "createdAt": "2021-07-15T07:47:00Z",
+    "updatedAt": "2021-07-15T07:47:00Z"
+  },
+  "org": {
+    "_id": 12,
+    "name": "org_1",
+    "cloudName": "testcloudname",
+    "accountType": "individual",
+    "industry": "Ecommerce",
+    "strength": "1",
+    "active": "false"
+  }
 }
 ```
 
