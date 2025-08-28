@@ -2,6 +2,7 @@ const FormData = require("form-data");
 const retry = require("async-retry");
 const PlatformAPIClient = require("./PlatformAPIClient");
 const { PDKClientValidationError } = require("../common/PDKError");
+const path = require("path");
 
 class Predictions {
   constructor(config) {
@@ -43,6 +44,15 @@ class Predictions {
     const query_params = {};
     const body = new FormData();
 
+    const isStream = (v) => v && typeof v.pipe === "function";
+    const isBuffer = (v) => Buffer.isBuffer(v);
+    const inferFilename = (v, key) => {
+      const p = v && v.path;
+      if (p && typeof p === "string") return path.basename(p);
+      if (p && Buffer.isBuffer(p)) return path.basename(p.toString());
+      return `${key}.jpeg`;
+    };
+
     if (webhook) {
       body.append("webhook", webhook);
     }
@@ -50,44 +60,46 @@ class Predictions {
     Object.entries(input || {}).forEach(([key, value]) => {
       if (value === undefined || value === null) return;
       const fieldName = `input.${key}`;
-      if (Array.isArray(value)) {
-        value.forEach((v) => {
-          if (
-            v &&
-            typeof v === "object" &&
-            !(v instanceof Buffer) &&
-            v.value !== undefined
-          ) {
-            const filename = v.filename;
-            body.append(
-              fieldName,
-              v.value,
-              filename ? { filename } : undefined,
-            );
-          } else {
-            body.append(
-              fieldName,
-              typeof v === "object" && !(v instanceof Buffer)
-                ? JSON.stringify(v)
-                : v,
-            );
-          }
-        });
-      } else if (typeof value === "object" && !(value instanceof Buffer)) {
-        if (value && value.value !== undefined) {
-          const filename = value.filename;
-          const content = value.value;
-          body.append(fieldName, content, filename ? { filename } : undefined);
-        } else {
-          body.append(fieldName, JSON.stringify(value));
+
+      const appendValue = (val) => {
+        if (
+          val &&
+          typeof val === "object" &&
+          !isBuffer(val) &&
+          val.value !== undefined
+        ) {
+          const filename = val.filename;
+          body.append(
+            fieldName,
+            val.value,
+            filename ? { filename } : undefined,
+          );
+          return;
         }
+
+        // New: raw Buffer or Stream => add filename
+        if (isBuffer(val) || isStream(val)) {
+          const filename = inferFilename(val, key);
+          body.append(fieldName, val, { filename });
+          return;
+        }
+
+        // Objects (non-file) => JSON
+        if (typeof val === "object" && !isBuffer(val)) {
+          body.append(fieldName, JSON.stringify(val));
+          return;
+        }
+
+        // Primitives (string/number/bool) => as-is
+        body.append(fieldName, val);
+      };
+
+      if (Array.isArray(value)) {
+        value.forEach((v) => appendValue(v));
       } else {
-        // Do not treat strings as file paths. Expect Buffer/Stream for files; strings are sent as-is.
-        body.append(fieldName, value);
+        appendValue(value);
       }
     });
-
-    // Note: do not append legacy fields; server expects keys under "input.*"
 
     return PlatformAPIClient.execute(
       this.config,
