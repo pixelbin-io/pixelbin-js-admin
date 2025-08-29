@@ -12,7 +12,7 @@ Getting started with Pixelbin Backend SDK for Javascript
 npm install @pixelbin/admin --save
 ```
 
----
+______________________________________________________________________
 
 ### Initialize client
 
@@ -45,11 +45,11 @@ For a broader overview, see the official docs: [Prediction APIs](https://www.pix
 
 Initiate a prediction job using the prediction model name (for example, `erase_bg`) and input fields as per the model's input schema. Optionally pass a `webhook` URL to receive async notifications.
 
-| Argument | Type   | Required | Description                                          |
+| Argument | Type | Required | Description |
 | -------- | ------ | -------- | ---------------------------------------------------- |
-| name     | string | yes      | Name of the prediction model, e.g. `erase_bg`.       |
-| input    | Object | yes      | Input fields as per the model input schema.          |
-| webhook  | string | no       | Optional webhook URL to receive async notifications. |
+| name | string | yes | Name of the prediction model, e.g. `erase_bg`. |
+| input | Object | yes | Input fields as per the model input schema. |
+| webhook | string | no | Optional webhook URL to receive async notifications. |
 
 ```javascript
 const { PixelbinConfig, PixelbinClient } = require("@pixelbin/admin");
@@ -59,7 +59,7 @@ const pixelbin = new PixelbinClient(
   new PixelbinConfig({
     domain: "https://api.pixelbin.io",
     apiSecret: process.env.PIXELBIN_API_TOKEN,
-  })
+  }),
 );
 
 const job = await pixelbin.predictions.create({
@@ -85,33 +85,33 @@ console.log(job.urls.get); // URL to fetch job status
 
 **On Creation**
 
-| property           | description                       | example                                                                                                                          |
+| property | description | example |
 | ------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| input (Object)     | Model input                       | `{ "image": "https://delivery.pixelbin.io/predictions/inputs/erase/bg/0198f54a-cc84-7ccc-b31f-18dd0a5b0f01/image/0.jpeg", ... }` |
-| status (String)    | Current job status                | `ACCEPTED`                                                                                                                       |
-| urls.get (String)  | URL to fetch job details          | `https://api.pixelbin.io/service/platform/transformation/v1.0/predictions/erase--bg--0198f54a-cc84-7ccc-b31f-18dd0a5b0f01`       |
-| orgId (Number)     | Organization id                   | `402162`                                                                                                                         |
-| retention (String) | Output retention period           | `30d`                                                                                                                            |
-| createdAt (String) | Job creation timestamp (ISO 8601) | `2025-08-29T10:06:16.708Z`                                                                                                       |
-| \_id (String)      | Prediction request id             | `erase--bg--0198f54a-cc84-7ccc-b31f-18dd0a5b0f01`                                                                                |
+| input (Object) | Model input | `{ "image": "https://delivery.pixelbin.io/predictions/inputs/erase/bg/0198f54a-cc84-7ccc-b31f-18dd0a5b0f01/image/0.jpeg", ... }` |
+| status (String) | Current job status | `ACCEPTED` |
+| urls.get (String) | URL to fetch job details | `https://api.pixelbin.io/service/platform/transformation/v1.0/predictions/erase--bg--0198f54a-cc84-7ccc-b31f-18dd0a5b0f01` |
+| orgId (Number) | Organization id | `402162` |
+| retention (String) | Output retention period | `30d` |
+| createdAt (String) | Job creation timestamp (ISO 8601) | `2025-08-29T10:06:16.708Z` |
+| \_id (String) | Prediction request id | `erase--bg--0198f54a-cc84-7ccc-b31f-18dd0a5b0f01` |
 
 **On Error**
 
-| property           | description      | example                                            |
+| property | description | example |
 | ------------------ | ---------------- | -------------------------------------------------- |
-| message (String)   | Error message    | `Usage Limit Exceeded`                             |
-| status (Number)    | HTTP status code | `403`                                              |
-| errorCode (String) | Error code       | `JR-1000`                                          |
-| exception (String) | Exception name   | `UsageBlockedError`                                |
-| info (String)      | Help link        | `https://fynd.engineering/erasebg/docs/error/1000` |
+| message (String) | Error message | `Usage Limit Exceeded` |
+| status (Number) | HTTP status code | `403` |
+| errorCode (String) | Error code | `JR-1000` |
+| exception (String) | Exception name | `UsageBlockedError` |
+| info (String) | Help link | `https://fynd.engineering/erasebg/docs/error/1000` |
 
 ### get
 
 Fetch the prediction by request ID (job.\_id).
 
-| Argument  | Type   | Required | Description                                             |
+| Argument | Type | Required | Description |
 | --------- | ------ | -------- | ------------------------------------------------------- |
-| requestId | string | yes      | Prediction request ID returned by `create` (`job._id`). |
+| requestId | string | yes | Prediction request ID returned by `create` (`job._id`). |
 
 ```javascript
 const details = await pixelbin.predictions.get(job._id);
@@ -126,42 +126,42 @@ if (details.status === "SUCCESS") {
 
 **On Success**
 
-| property                 | description                       | example                                                                                                                          |
+| property | description | example |
 | ------------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| input (Object)           | Model input                       | `{ "image": "https://delivery.pixelbin.io/predictions/inputs/erase/bg/0198f54a-cc84-7ccc-b31f-18dd0a5b0f01/image/0.jpeg", ... }` |
-| status (String)          | Final job status                  | `SUCCESS`                                                                                                                        |
-| urls.get (String)        | URL to fetch job details          | `https://api.pixelbin.io/service/platform/transformation/v1.0/predictions/erase--bg--0198f54a-cc84-7ccc-b31f-18dd0a5b0f01`       |
-| orgId (Number)           | Organization id                   | `402162`                                                                                                                         |
-| retention (String)       | Output retention period           | `30d`                                                                                                                            |
-| createdAt (String)       | Job creation timestamp (ISO 8601) | `2025-08-29T10:06:16.708Z`                                                                                                       |
-| \_id (String)            | Prediction request id             | `erase--bg--0198f54a-cc84-7ccc-b31f-18dd0a5b0f01`                                                                                |
-| consumedCredits (Number) | Credits consumed                  | `1`                                                                                                                              |
-| output (Array<String>)   | Result URLs                       | `["https://delivery.pixelbin.io/predictions/outputs/30d/erase/bg/0198f54a-cc84-7ccc-b31f-18dd0a5b0f01/result_0.png"]`            |
+| input (Object) | Model input | `{ "image": "https://delivery.pixelbin.io/predictions/inputs/erase/bg/0198f54a-cc84-7ccc-b31f-18dd0a5b0f01/image/0.jpeg", ... }` |
+| status (String) | Final job status | `SUCCESS` |
+| urls.get (String) | URL to fetch job details | `https://api.pixelbin.io/service/platform/transformation/v1.0/predictions/erase--bg--0198f54a-cc84-7ccc-b31f-18dd0a5b0f01` |
+| orgId (Number) | Organization id | `402162` |
+| retention (String) | Output retention period | `30d` |
+| createdAt (String) | Job creation timestamp (ISO 8601) | `2025-08-29T10:06:16.708Z` |
+| \_id (String) | Prediction request id | `erase--bg--0198f54a-cc84-7ccc-b31f-18dd0a5b0f01` |
+| consumedCredits (Number) | Credits consumed | `1` |
+| output (Array<String>) | Result URLs | `["https://delivery.pixelbin.io/predictions/outputs/30d/erase/bg/0198f54a-cc84-7ccc-b31f-18dd0a5b0f01/result_0.png"]` |
 
 **On Failure**
 
-| property           | description                       | example                                                                                                                    |
+| property | description | example |
 | ------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| input (Object)     | Model input                       | `{ "industry_type": "general", "quality_type": "original", "shadow": false, "refine": true }`                              |
-| status (String)    | Final job status                  | `FAILURE`                                                                                                                  |
-| urls.get (String)  | URL to fetch job details          | `https://api.pixelbin.io/service/platform/transformation/v1.0/predictions/erase--bg--0198f54b-8d2e-7ccc-b31f-2a2f33cb7365` |
-| orgId (Number)     | Organization id                   | `402162`                                                                                                                   |
-| retention (String) | Output retention period           | `30d`                                                                                                                      |
-| createdAt (String) | Job creation timestamp (ISO 8601) | `2025-08-29T10:07:06.030Z`                                                                                                 |
-| \_id (String)      | Prediction request id             | `erase--bg--0198f54b-8d2e-7ccc-b31f-2a2f33cb7365`                                                                          |
-| error (String)     | Error message                     | `image not found`                                                                                                          |
+| input (Object) | Model input | `{ "industry_type": "general", "quality_type": "original", "shadow": false, "refine": true }` |
+| status (String) | Final job status | `FAILURE` |
+| urls.get (String) | URL to fetch job details | `https://api.pixelbin.io/service/platform/transformation/v1.0/predictions/erase--bg--0198f54b-8d2e-7ccc-b31f-2a2f33cb7365` |
+| orgId (Number) | Organization id | `402162` |
+| retention (String) | Output retention period | `30d` |
+| createdAt (String) | Job creation timestamp (ISO 8601) | `2025-08-29T10:07:06.030Z` |
+| \_id (String) | Prediction request id | `erase--bg--0198f54b-8d2e-7ccc-b31f-2a2f33cb7365` |
+| error (String) | Error message | `image not found` |
 
 ### wait
 
 Wait until the prediction completes.
 
-| Argument              | Type   | Required | Description                                                           |
+| Argument | Type | Required | Description |
 | --------------------- | ------ | -------- | --------------------------------------------------------------------- |
-| requestId             | string | yes      | Prediction request ID to poll until status is `SUCCESS` or `FAILURE`. |
-| options               | Object | no       | Polling options.                                                      |
-| options.maxAttempts   | number | no       | Maximum polling attempts. Default `150`. Range: `1` - `150`.          |
-| options.retryFactor   | number | no       | Exponential backoff factor. Default `1`. Range: `1` - `3`.            |
-| options.retryInterval | number | no       | Initial wait interval in ms. Default `4000`. Range: `1000` - `60000`. |
+| requestId | string | yes | Prediction request ID to poll until status is `SUCCESS` or `FAILURE`. |
+| options | Object | no | Polling options. |
+| options.maxAttempts | number | no | Maximum polling attempts. Default `150`. Range: `1` - `150`. |
+| options.retryFactor | number | no | Exponential backoff factor. Default `1`. Range: `1` - `3`. |
+| options.retryInterval | number | no | Initial wait interval in ms. Default `4000`. Range: `1000` - `60000`. |
 
 ```javascript
 // default behavior
@@ -187,12 +187,12 @@ See returns for `get` above. `wait` resolves to the final prediction object with
 
 Create a prediction and wait until it completes. Returns the final result.
 
-| Argument | Type   | Required | Description                                                    |
+| Argument | Type | Required | Description |
 | -------- | ------ | -------- | -------------------------------------------------------------- |
-| name     | string | yes      | Prediction name in `plugin_operation` format, e.g. `erase_bg`. |
-| input    | Object | yes      | Input fields as per the model input schema.                    |
-| webhook  | string | no       | Optional webhook URL.                                          |
-| options  | Object | no       | Same options as in `wait`.                                     |
+| name | string | yes | Prediction name in `plugin_operation` format, e.g. `erase_bg`. |
+| input | Object | yes | Input fields as per the model input schema. |
+| webhook | string | no | Optional webhook URL. |
+| options | Object | no | Same options as in `wait`. |
 
 ```javascript
 const result = await pixelbin.predictions.createAndWait({
@@ -219,19 +219,19 @@ const items = await pixelbin.predictions.list();
 
 **Each item**
 
-| property             | description                               | example                     |
+| property | description | example |
 | -------------------- | ----------------------------------------- | --------------------------- |
-| name (String)        | Unique identifier of the prediction model | `erase_bg`                  |
-| displayName (String) | Human readable name of the model          | `Erase Background`          |
-| description (String) | Short model description                   | `Removes image background.` |
+| name (String) | Unique identifier of the prediction model | `erase_bg` |
+| displayName (String) | Human readable name of the model | `Erase Background` |
+| description (String) | Short model description | `Removes image background.` |
 
 ### getSchema
 
 Fetch the input schema for a specific prediction model by its name.
 
-| Argument | Type   | Required | Description                       |
+| Argument | Type | Required | Description |
 | -------- | ------ | -------- | --------------------------------- |
-| name     | string | yes      | Prediction name, e.g. `erase_bg`. |
+| name | string | yes | Prediction name, e.g. `erase_bg`. |
 
 ```javascript
 const schema = await pixelbin.predictions.getSchema("erase_bg");
@@ -240,22 +240,22 @@ const schema = await pixelbin.predictions.getSchema("erase_bg");
 
 **returns**: `Promise<Object>`
 
-| property             | description                                    | example                     |
+| property | description | example |
 | -------------------- | ---------------------------------------------- | --------------------------- |
-| name (String)        | Model name                                     | `erase_bg`                  |
-| displayName (String) | Human readable name                            | `Erase Background`          |
-| description (String) | Model description                              | `Removes image background.` |
-| input (Object)       | JSON Schema for model inputs (varies by model) | `{ ... }`                   |
+| name (String) | Model name | `erase_bg` |
+| displayName (String) | Human readable name | `Erase Background` |
+| description (String) | Model description | `Removes image background.` |
+| input (Object) | JSON Schema for model inputs (varies by model) | `{ ... }` |
 
 Fields inside `input.image` (varies by model):
 
-| property                              | description                                      | example                            |
+| property | description | example |
 | ------------------------------------- | ------------------------------------------------ | ---------------------------------- |
-| oneOf (Array)                         | Supported input types (e.g., URL or file upload) | `[ ... ]`                          |
-| supportedContentTypes (Array<String>) | Supported MIME types                             | `["image/png", "image/jpeg", ...]` |
-| imageValidation.maxWidth (Number)     | Max image width in pixels                        | `10000`                            |
-| imageValidation.maxHeight (Number)    | Max image height in pixels                       | `10000`                            |
-| imageValidation.maxSize (Number)      | Max image size in bytes                          | `26214400`                         |
+| oneOf (Array) | Supported input types (e.g., URL or file upload) | `[ ... ]` |
+| supportedContentTypes (Array<String>) | Supported MIME types | `["image/png", "image/jpeg", ...]` |
+| imageValidation.maxWidth (Number) | Max image width in pixels | `10000` |
+| imageValidation.maxHeight (Number) | Max image height in pixels | `10000` |
+| imageValidation.maxSize (Number) | Max image size in bytes | `26214400` |
 
 Notes:
 
@@ -274,7 +274,7 @@ async function generateImage() {
     new PixelbinConfig({
       domain: "https://api.pixelbin.io",
       apiSecret: process.env.PIXELBIN_API_TOKEN || "API_TOKEN",
-    })
+    }),
   );
 
   try {
@@ -319,7 +319,7 @@ async function generateImage() {
       domain: "https://api.pixelbin.io",
       // Use your raw API token; the SDK base64-encodes it automatically
       apiSecret: process.env.PIXELBIN_API_TOKEN || "API_TOKEN",
-    })
+    }),
   );
 
   try {
@@ -352,47 +352,47 @@ generateImage();
 
 Uploads a file to PixelBin with greater control over the upload process.
 
-| Argument          | Type                                                                                                          | Required | Description                                                                                                                                                                                                                                           |
+| Argument | Type | Required | Description |
 | ----------------- | ------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| file              | [Buffer](https://nodejs.org/api/buffer.html) or [Stream](https://nodejs.org/api/stream.html#readable-streams) | yes      | The file to be uploaded.                                                                                                                                                                                                                              |
-| name              | string                                                                                                        | no       | Name of the file.                                                                                                                                                                                                                                     |
-| path              | string                                                                                                        | no       | Path of the containing folder.                                                                                                                                                                                                                        |
-| format            | string                                                                                                        | no       | Format of the file.                                                                                                                                                                                                                                   |
-| access            | [AccessEnum](./documentation/platform/ASSETS.md#accessenum)                                                   | no       | Access level of the asset, can be either `public-read` or `private`.                                                                                                                                                                                  |
-| tags              | [string]                                                                                                      | no       | Tags associated with the file.                                                                                                                                                                                                                        |
-| metadata          | string                                                                                                        | no       | Metadata associated with the file.                                                                                                                                                                                                                    |
-| overwrite         | boolean                                                                                                       | no       | Overwrite flag. If set to `true`, will overwrite any file that exists with the same path, name, and type. Defaults to `false`.                                                                                                                        |
-| filenameOverride  | boolean                                                                                                       | no       | If set to `true`, will add unique characters to the name if an asset with the given name already exists. If the overwrite flag is set to `true`, preference will be given to the overwrite flag. If both are set to `false`, an error will be raised. |
-| expiry            | number                                                                                                        | no       | Expiry time in seconds for the underlying signed URL. Defaults to 3000 seconds.                                                                                                                                                                       |
-| uploadOptions     | Object                                                                                                        | no       | Additional options for fine-tuning the upload process. Default: `{ chunkSize: 10 * 1024 * 1024, maxRetries: 2, concurrency: 3, exponentialFactor: 2 }`                                                                                                |
-| chunkSize         | number                                                                                                        | no       | Size of each chunk to upload. Default is 10 megabyte.                                                                                                                                                                                                 |
-| maxRetries        | number                                                                                                        | no       | Maximum number of retries if an upload fails. Default is 2 retries.                                                                                                                                                                                   |
-| concurrency       | number                                                                                                        | no       | Number of concurrent chunk upload tasks. Default is 3 concurrent chunk uploads.                                                                                                                                                                       |
-| exponentialFactor | number                                                                                                        | no       | The exponential factor for retry delay. Default is 2.                                                                                                                                                                                                 |
+| file | [Buffer](https://nodejs.org/api/buffer.html) or [Stream](https://nodejs.org/api/stream.html#readable-streams) | yes | The file to be uploaded. |
+| name | string | no | Name of the file. |
+| path | string | no | Path of the containing folder. |
+| format | string | no | Format of the file. |
+| access | [AccessEnum](./documentation/platform/ASSETS.md#accessenum) | no | Access level of the asset, can be either `public-read` or `private`. |
+| tags | [string] | no | Tags associated with the file. |
+| metadata | string | no | Metadata associated with the file. |
+| overwrite | boolean | no | Overwrite flag. If set to `true`, will overwrite any file that exists with the same path, name, and type. Defaults to `false`. |
+| filenameOverride | boolean | no | If set to `true`, will add unique characters to the name if an asset with the given name already exists. If the overwrite flag is set to `true`, preference will be given to the overwrite flag. If both are set to `false`, an error will be raised. |
+| expiry | number | no | Expiry time in seconds for the underlying signed URL. Defaults to 3000 seconds. |
+| uploadOptions | Object | no | Additional options for fine-tuning the upload process. Default: `{ chunkSize: 10 * 1024 * 1024, maxRetries: 2, concurrency: 3, exponentialFactor: 2 }` |
+| chunkSize | number | no | Size of each chunk to upload. Default is 10 megabyte. |
+| maxRetries | number | no | Maximum number of retries if an upload fails. Default is 2 retries. |
+| concurrency | number | no | Number of concurrent chunk upload tasks. Default is 3 concurrent chunk uploads. |
+| exponentialFactor | number | no | The exponential factor for retry delay. Default is 2. |
 
 **returns**: Promise<Object>
 
 **On Success**
 
-| property             | description                                                     | example                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| property | description | example |
 | -------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| orgId (Number)       | Organization id                                                 | `5320086`                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| type (String)        |                                                                 | `file`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| name (String)        | name of the file                                                | `testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| path (String)        | Path of containing folder.                                      | `/path/to/image.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| fileId (String)      | id of file                                                      | `testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| access (String)      | Access level of asset, can be either `public-read` or `private` | `public-read`                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| tags (Array<String>) | Tags associated with the file.                                  | `["tag1", "tag2"]`                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| metadata (Object)    | Metadata associated with the file.                              | `{"source:"", "publicUploadId":""}`                                                                                                                                                                                                                                                                                                                                                                                                        |
-| format (String)      | file format                                                     | `jpeg`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| assetType (String)   | type of asset                                                   | `image`                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| size (Number)        | file size                                                       | `37394`                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| width (Number)       | file width                                                      | `720`                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| height (Number)      | file height                                                     | `450`                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| context (Object)     | contains the file metadata and other contexts of file           | `{"steps":[],"req":{"headers":{},"query":{}},"meta":{"format":"png","size":195337,"width":812,"height":500,"space":"srgb","channels":4,"depth":"uchar","density":144,"isProgressive":false,"resolutionUnit":"inch","hasProfile":true,"hasAlpha":true,"extension":"jpeg","contentType":"image/png","assetType":"image","isImageAsset":true,"isAudioAsset":false,"isVideoAsset":false,"isRawAsset":false,"isTransformationSupported":true}}` |
-| isOriginal (Boolean) | flag about files type                                           | `true`                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| \_id (String)        | record id                                                       | `a0b0b19a-d526-4xc07-ae51-0xxxxxx`                                                                                                                                                                                                                                                                                                                                                                                                         |
-| url (String)         | uploaded image url                                              | `https://cdn.pixelbin.io/v2/user-e26cf3/original/testfile.jpeg`                                                                                                                                                                                                                                                                                                                                                                            |
+| orgId (Number) | Organization id | `5320086` |
+| type (String) | | `file` |
+| name (String) | name of the file | `testfile.jpeg` |
+| path (String) | Path of containing folder. | `/path/to/image.jpeg` |
+| fileId (String) | id of file | `testfile.jpeg` |
+| access (String) | Access level of asset, can be either `public-read` or `private` | `public-read` |
+| tags (Array<String>) | Tags associated with the file. | `["tag1", "tag2"]` |
+| metadata (Object) | Metadata associated with the file. | `{"source:"", "publicUploadId":""}` |
+| format (String) | file format | `jpeg` |
+| assetType (String) | type of asset | `image` |
+| size (Number) | file size | `37394` |
+| width (Number) | file width | `720` |
+| height (Number) | file height | `450` |
+| context (Object) | contains the file metadata and other contexts of file | `{"steps":[],"req":{"headers":{},"query":{}},"meta":{"format":"png","size":195337,"width":812,"height":500,"space":"srgb","channels":4,"depth":"uchar","density":144,"isProgressive":false,"resolutionUnit":"inch","hasProfile":true,"hasAlpha":true,"extension":"jpeg","contentType":"image/png","assetType":"image","isImageAsset":true,"isAudioAsset":false,"isVideoAsset":false,"isRawAsset":false,"isTransformationSupported":true}}` |
+| isOriginal (Boolean) | flag about files type | `true` |
+| \_id (String) | record id | `a0b0b19a-d526-4xc07-ae51-0xxxxxx` |
+| url (String) | uploaded image url | `https://cdn.pixelbin.io/v2/user-e26cf3/original/testfile.jpeg` |
 
 Example :
 
@@ -497,12 +497,12 @@ Syntax : `Pixelbin{integration_name}/{integration_version} ({platform_name}/{pla
 
 Generate a signed PixelBin url
 
-| Parameter                | Description                                          | Example                                                                                    |
+| Parameter | Description | Example |
 | ------------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `url` (string)           | A valid Pixelbin URL to be signed                    | `https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg` |
-| `expirySeconds` (number) | Number of seconds the signed URL should be valid for | `20`                                                                                       |
-| `accessKey` (string)     | Access key of the token used for signing             | `42`                                                                                       |
-| `token` (string)         | Value of the token used for signing                  | `dummy-token`                                                                              |
+| `url` (string) | A valid Pixelbin URL to be signed | `https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg` |
+| `expirySeconds` (number) | Number of seconds the signed URL should be valid for | `20` |
+| `accessKey` (string) | Access key of the token used for signing | `42` |
+| `token` (string) | Value of the token used for signing | `dummy-token` |
 
 Example:
 
@@ -513,7 +513,7 @@ const signedUrl = security.signURL(
   "https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg", // url
   20, // expirySeconds
   "0b55aaff-d7db-45f0-b556-9b45a6f2200e", // accessKey
-  "dummy-token" // token
+  "dummy-token", // token
 );
 // signedUrl
 // https://cdn.pixelbin.io/v2/dummy-cloudname/original/__playground/playground-default.jpeg?pbs=8eb6a00af74e57967a42316e4de238aa88d92961649764fad1832c1bff101f25&pbe=1695635915&pbt=0b55aaff-d7db-45f0-b556-9b45a6f2200e
@@ -528,7 +528,7 @@ const signedUrl = security.signURL(
   "https://krit.imagebin.io/v2/original/__playground/playground-default.jpeg", // url
   30, // expirySeconds
   "0b55aaff-d7db-45f0-b556-9b45a6f2200e", // accessKey
-  "dummy-token" // token
+  "dummy-token", // token
 );
 // signedUrl
 // https://krit.imagebin.io/v2/original/__playground/playground-default.jpeg?pbs=1aef31c1e0ecd8a875b1d3184f324327f4ab4bce419d81d1eb1a818ee5f2e3eb&pbe=1695705975&pbt=0b55aaff-d7db-45f0-b556-9b45a6f2200e
@@ -542,26 +542,26 @@ Pixelbin provides url utilities to construct and deconstruct Pixelbin urls.
 
 Deconstruct a pixelbin url
 
-| Parameter             | Description                                                        | Example                                                                                               |
+| Parameter | Description | Example |
 | --------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `url` (string)        | A valid Pixelbin URL                                               | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
-| `opts` (Object)       | Options for the conversion                                         | Default: `{ isCustomDomain: false }`                                                                  |
+| `url` (string) | A valid Pixelbin URL | `https://cdn.pixelbin.io/v2/your-cloud-name/z-slug/t.resize(h:100,w:200)~t.flip()/path/to/image.jpeg` |
+| `opts` (Object) | Options for the conversion | Default: `{ isCustomDomain: false }` |
 | `opts.isCustomDomain` | Indicates if the URL belongs to a custom domain (default: `false`) |
 
 **Returns**:
 
-| Property                  | Description                                          | Example                               |
+| Property | Description | Example |
 | ------------------------- | ---------------------------------------------------- | ------------------------------------- |
-| `baseURL` (string)        | Base path of the URL                                 | `https://cdn.pixelbin.io`             |
-| `filePath` (string)       | Path to the file on Pixelbin storage                 | `/path/to/image.jpeg`                 |
-| `version` (string)        | Version of the URL                                   | `v2`                                  |
-| `cloudName` (string)      | Cloud name from the URL                              | `your-cloud-name`                     |
-| `transformations` (array) | A list of transformation objects                     | `[{ "plugin": "t", "name": "flip" }]` |
-| `zone` (string)           | Zone slug from the URL                               | `z-slug`                              |
-| `pattern` (string)        | Transformation pattern extracted from the URL        | `t.resize(h:100,w:200)~t.flip()`      |
-| `worker` (boolean)        | Indicates if the URL is a URL Translation Worker URL | `false`                               |
-| `workerPath` (string)     | Input path to a URL Translation Worker               | `resize:w200,h400/folder/image.jpeg`  |
-| `options` (Object)        | Query parameters added, such as "dpr" and "f_auto"   | `{ dpr: 2.5, f_auto: true}`           |
+| `baseURL` (string) | Base path of the URL | `https://cdn.pixelbin.io` |
+| `filePath` (string) | Path to the file on Pixelbin storage | `/path/to/image.jpeg` |
+| `version` (string) | Version of the URL | `v2` |
+| `cloudName` (string) | Cloud name from the URL | `your-cloud-name` |
+| `transformations` (array) | A list of transformation objects | `[{ "plugin": "t", "name": "flip" }]` |
+| `zone` (string) | Zone slug from the URL | `z-slug` |
+| `pattern` (string) | Transformation pattern extracted from the URL | `t.resize(h:100,w:200)~t.flip()` |
+| `worker` (boolean) | Indicates if the URL is a URL Translation Worker URL | `false` |
+| `workerPath` (string) | Input path to a URL Translation Worker | `resize:w200,h400/folder/image.jpeg` |
+| `options` (Object) | Query parameters added, such as "dpr" and "f_auto" | `{ dpr: 2.5, f_auto: true}` |
 
 Example:
 
@@ -669,18 +669,18 @@ const obj = url.urlToObj(pixelbinUrl);
 
 Converts the extracted url obj to a Pixelbin url.
 
-| Property                   | Description                                          | Example                               |
+| Property | Description | Example |
 | -------------------------- | ---------------------------------------------------- | ------------------------------------- |
-| `cloudName` (string)       | The cloudname extracted from the URL                 | `your-cloud-name`                     |
-| `zone` (string)            | 6 character zone slug                                | `z-slug`                              |
-| `version` (string)         | CDN API version                                      | `v2`                                  |
-| `transformations` (array)  | Extracted transformations from the URL               | `[{ "plugin": "t", "name": "flip" }]` |
-| `filePath` (string)        | Path to the file on Pixelbin storage                 | `/path/to/image.jpeg`                 |
-| `baseUrl` (string)         | Base URL                                             | `https://cdn.pixelbin.io/`            |
-| `isCustomDomain` (boolean) | Indicates if the URL is for a custom domain          | `false`                               |
-| `worker` (boolean)         | Indicates if the URL is a URL Translation Worker URL | `false`                               |
-| `workerPath` (string)      | Input path to a URL Translation Worker               | `resize:w200,h400/folder/image.jpeg`  |
-| `options` (Object)         | Query parameters added, such as "dpr" and "f_auto"   | `{ "dpr": "2", "f_auto": "true" }`    |
+| `cloudName` (string) | The cloudname extracted from the URL | `your-cloud-name` |
+| `zone` (string) | 6 character zone slug | `z-slug` |
+| `version` (string) | CDN API version | `v2` |
+| `transformations` (array) | Extracted transformations from the URL | `[{ "plugin": "t", "name": "flip" }]` |
+| `filePath` (string) | Path to the file on Pixelbin storage | `/path/to/image.jpeg` |
+| `baseUrl` (string) | Base URL | `https://cdn.pixelbin.io/` |
+| `isCustomDomain` (boolean) | Indicates if the URL is for a custom domain | `false` |
+| `worker` (boolean) | Indicates if the URL is a URL Translation Worker URL | `false` |
+| `workerPath` (string) | Input path to a URL Translation Worker | `resize:w200,h400/folder/image.jpeg` |
+| `options` (Object) | Query parameters added, such as "dpr" and "f_auto" | `{ "dpr": "2", "f_auto": "true" }` |
 
 ```javascript
 const { url } = require("@pixelbin/admin");
