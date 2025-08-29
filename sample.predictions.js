@@ -54,7 +54,11 @@ async function main() {
     console.log("get by id:", statusById.status);
 
     console.log("\n=== pollUntilComplete ===");
-    const finalStatus2 = await pixelbin.predictions.wait(job._id);
+    const finalStatus2 = await pixelbin.predictions.wait(job._id, {
+      maxAttempts: 30,
+      retryFactor: 1,
+      retryInterval: 1000,
+    });
     console.log("wait ->", finalStatus2.status);
 
     console.log("\n=== check outputs (helpers) ===");
@@ -71,6 +75,7 @@ async function main() {
         refine: process.env.PREDICT_REFINE || "true",
       },
       webhook: WEBHOOK,
+      options: { maxAttempts: 60, retryFactor: 1, retryInterval: 2000 },
     });
     console.log("createAndWait ->", final.status);
 

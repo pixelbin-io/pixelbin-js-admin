@@ -151,6 +151,26 @@ describe("Predictions", () => {
     requestMock.mockRestore();
   });
 
+  it("should wait with custom options (maxAttempts, retryFactor, retryInterval)", async () => {
+    const config = new PixelbinConfig({
+      domain: "https://api.testdomain.com",
+      apiSecret: "test-api-secret",
+    });
+    const requestMock = jest.spyOn(pdkAxios, "request");
+    requestMock
+      .mockResolvedValueOnce({ status: "ACCEPTED", _id: "rid" })
+      .mockResolvedValueOnce({ status: "SUCCESS", _id: "rid", output: "ok" });
+
+    const pixelbin = new PixelbinClient(config);
+    const status = await pixelbin.predictions.wait("erase--bg--rid", {
+      maxAttempts: 200, // should clamp to 150
+      retryFactor: 10, // should clamp to 3
+      retryInterval: 10, // should clamp to >= 1000
+    });
+    expect(status.status).toBe("SUCCESS");
+    requestMock.mockRestore();
+  });
+
   it("should createAndWait and return final result only", async () => {
     const config = new PixelbinConfig({
       domain: "https://api.testdomain.com",
@@ -166,6 +186,7 @@ describe("Predictions", () => {
     const result = await pixelbin.predictions.createAndWait({
       name: "erase_bg",
       input: { image: Buffer.from("x") },
+      options: { maxAttempts: 1, retryFactor: 1, retryInterval: 1 },
     });
     expect(result.status).toBe("SUCCESS");
     requestMock.mockRestore();
@@ -230,8 +251,6 @@ describe("Predictions", () => {
     );
     requestMock.mockRestore();
   });
-
-  // Helper predicates removed from SDK
 
   it("should include webhook in create body when provided", async () => {
     const config = new PixelbinConfig({

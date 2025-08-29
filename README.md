@@ -31,6 +31,8 @@ const config = new PixelbinConfig({
 const pixelbin = new PixelbinClient(config);
 ```
 
+Note: You will need an API token to authenticate your requests. Follow the Pixelbin Create Token guide to generate one: [Create Token](https://www.pixelbin.io/docs/tokens/create-token/).
+
 ## Predictions API
 
 PixelBin's Prediction APIs offer a suite of smart, AI-powered image editing tools designed to streamline your media workflow. These APIs enable you to transform, organize, and enhance images seamlessly within your application or system.
@@ -101,11 +103,23 @@ if (details.status === "SUCCESS") {
 Wait until the prediction completes.
 
 | Argument | Type | Required | Description |
-| --------- | ------ | -------- | --------------------------------------------------------------------- |
+| --------------------- | ------ | -------- | --------------------------------------------------------------------- |
 | requestId | string | yes | Prediction request ID to poll until status is `SUCCESS` or `FAILURE`. |
+| options | Object | no | Polling options. |
+| options.maxAttempts | number | no | Maximum polling attempts. Default `150`. Range: `1` - `150`. |
+| options.retryFactor | number | no | Exponential backoff factor. Default `1`. Range: `1` - `3`. |
+| options.retryInterval | number | no | Initial wait interval in ms. Default `4000`. Range: `1000` - `60000`. |
 
 ```javascript
+// default behavior
 const result = await pixelbin.predictions.wait(job._id);
+
+// custom behavior
+const quick = await pixelbin.predictions.wait(job._id, {
+  maxAttempts: 30,
+  retryFactor: 1,
+  retryInterval: 1000,
+});
 
 // Result details
 console.log(result.status); // Prediction status
@@ -121,11 +135,13 @@ Create a prediction and wait until it completes. Returns the final result.
 | name | string | yes | Prediction name in `plugin_operation` format, e.g. `erase_bg`. |
 | input | Object | yes | Input fields as per the model input schema. |
 | webhook | string | no | Optional webhook URL. |
+| options | Object | no | Same options as in `wait`. |
 
 ```javascript
 const result = await pixelbin.predictions.createAndWait({
   name: "erase_bg",
   input: { image: fs.readFileSync("/path/to/image.jpeg") },
+  options: { maxAttempts: 60, retryFactor: 1, retryInterval: 2000 },
 });
 ```
 
@@ -228,6 +244,7 @@ async function generateImage() {
         refine: true,
       },
       // webhook: "https://example.com/webhook", // optional
+      options: { maxAttempts: 60, retryFactor: 1, retryInterval: 2000 },
     });
 
     console.log(result); // { status, output, ... }

@@ -136,19 +136,39 @@ class Predictions {
   }
 
   /**
-   * Wait for prediction to complete (SUCCESS/FAILURE) with default retry settings
-   * Defaults: retries 150, factor 1, minTimeout 4000ms
+   * Wait for prediction to complete (SUCCESS/FAILURE) with retry options
+   * Defaults: maxAttempts 150, retryFactor 1, retryInterval 4000ms
    * @param {string} requestId
+   * @param {Object} [options]
+   * @param {number} [options.maxAttempts] - Maximum number of polling attempts (maps to retries)
+   * @param {number} [options.retryFactor] - Exponential backoff factor
+   * @param {number} [options.retryInterval] - Initial wait interval in milliseconds
    */
-  async wait(requestId) {
+  async wait(requestId, options = {}) {
     if (!requestId || typeof requestId !== "string") {
       throw new PDKClientValidationError({
         details: [{ message: "requestId (string) is required" }],
       });
     }
-    const DEFAULTS = { retries: 150, factor: 1, minTimeout: 4000 };
-    const minTimeout = DEFAULTS.minTimeout;
-    const retries = DEFAULTS.retries;
+    const DEFAULTS = { maxAttempts: 150, retryFactor: 1, retryInterval: 4000 };
+    let maxAttempts = Number.isFinite(options.maxAttempts)
+      ? options.maxAttempts
+      : DEFAULTS.maxAttempts;
+    maxAttempts = Math.max(1, Math.min(150, Math.floor(maxAttempts)));
+
+    let retryFactor = Number.isFinite(options.retryFactor)
+      ? options.retryFactor
+      : DEFAULTS.retryFactor;
+    retryFactor = Math.max(1, Math.min(3, retryFactor));
+
+    let retryInterval = Number.isFinite(options.retryInterval)
+      ? options.retryInterval
+      : DEFAULTS.retryInterval;
+    retryInterval = Math.max(1000, Math.min(60000, Math.floor(retryInterval)));
+
+    const retries = maxAttempts;
+    const factor = retryFactor;
+    const minTimeout = retryInterval;
 
     let finalStatus;
     await retry(
@@ -160,7 +180,7 @@ class Predictions {
         }
         throw new Error("PENDING");
       },
-      { retries, factor: DEFAULTS.factor, minTimeout },
+      { retries, factor, minTimeout },
     );
     return finalStatus;
   }
@@ -171,11 +191,12 @@ class Predictions {
    * @param {string} arg.name - Name identifier in format "plugin_operation" (e.g. "erase_bg")
    * @param {Object} [arg.input]
    * @param {string} [arg.webhook]
+   * @param {Object} [arg.options] - Polling options for wait { maxAttempts, retryFactor, retryInterval }
    * @returns {Promise<Object>}
    */
-  async createAndWait({ name, input = {}, webhook } = {}) {
+  async createAndWait({ name, input = {}, webhook, options = {} } = {}) {
     const job = await this.create({ name, input, webhook });
-    const result = await this.wait(job._id);
+    const result = await this.wait(job._id, options);
     return result;
   }
 
