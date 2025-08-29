@@ -4,33 +4,33 @@
 
 Asset Uploader Service
 
--   [addCredentials](#addcredentials)
--   [updateCredentials](#updatecredentials)
--   [deleteCredentials](#deletecredentials)
--   [getFileById](#getfilebyid)
--   [getFileByFileId](#getfilebyfileid)
--   [updateFile](#updatefile)
--   [deleteFile](#deletefile)
--   [deleteFiles](#deletefiles)
--   [createFolder](#createfolder)
--   [getFolderDetails](#getfolderdetails)
--   [updateFolder](#updatefolder)
--   [deleteFolder](#deletefolder)
--   [getFolderAncestors](#getfolderancestors)
--   [listFiles](#listfiles)
--   [listFilesPaginator](#listfilespaginator)
--   [getDefaultAssetForPlayground](#getdefaultassetforplayground)
--   [getModules](#getmodules)
--   [getModule](#getmodule)
--   [addPreset](#addpreset)
--   [getPresets](#getpresets)
--   [updatePreset](#updatepreset)
--   [deletePreset](#deletepreset)
--   [getPreset](#getpreset)
--   [fileUpload](#fileupload)
--   [urlUpload](#urlupload)
--   [createSignedUrl](#createsignedurl)
--   [createSignedUrlV2](#createsignedurlv2)
+- [addCredentials](#addcredentials)
+- [updateCredentials](#updatecredentials)
+- [deleteCredentials](#deletecredentials)
+- [getFileById](#getfilebyid)
+- [getFileByFileId](#getfilebyfileid)
+- [updateFile](#updatefile)
+- [deleteFile](#deletefile)
+- [deleteFiles](#deletefiles)
+- [createFolder](#createfolder)
+- [getFolderDetails](#getfolderdetails)
+- [updateFolder](#updatefolder)
+- [deleteFolder](#deletefolder)
+- [getFolderAncestors](#getfolderancestors)
+- [listFiles](#listfiles)
+- [listFilesPaginator](#listfilespaginator)
+- [getDefaultAssetForPlayground](#getdefaultassetforplayground)
+- [getModules](#getmodules)
+- [getModule](#getmodule)
+- [addPreset](#addpreset)
+- [getPresets](#getpresets)
+- [updatePreset](#updatepreset)
+- [deletePreset](#deletepreset)
+- [getPreset](#getpreset)
+- [fileUpload](#fileupload)
+- [urlUpload](#urlupload)
+- [createSignedUrl](#createsignedurl)
+- [createSignedUrlV2](#createsignedurlv2)
 
 ## Methods with example and description
 
@@ -42,23 +42,23 @@ Asset Uploader Service
 // Promise
 
 const promise = assets.addCredentials({
-    credentials: {
-        region: "ap-south-1",
-        accessKeyId: "123456789ABC",
-        secretAccessKey: "DUMMY1234567890",
-    },
-    pluginId: "awsRek",
+  credentials: {
+    region: "ap-south-1",
+    accessKeyId: "123456789ABC",
+    secretAccessKey: "DUMMY1234567890",
+  },
+  pluginId: "awsRek",
 });
 
 // Async/Await
 
 const data = await assets.addCredentials({
-    credentials: {
-        region: "ap-south-1",
-        accessKeyId: "123456789ABC",
-        secretAccessKey: "DUMMY1234567890",
-    },
-    pluginId: "awsRek",
+  credentials: {
+    region: "ap-south-1",
+    accessKeyId: "123456789ABC",
+    secretAccessKey: "DUMMY1234567890",
+  },
+  pluginId: "awsRek",
 });
 ```
 
@@ -80,11 +80,11 @@ Success
 
 ```json
 {
-    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
-    "createdAt": "2022-10-04T09:52:09.545Z",
-    "updatedAt": "2022-10-04T09:52:09.545Z",
-    "orgId": 23,
-    "pluginId": "awsRek"
+  "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+  "createdAt": "2022-10-04T09:52:09.545Z",
+  "updatedAt": "2022-10-04T09:52:09.545Z",
+  "orgId": 23,
+  "pluginId": "awsRek"
 }
 ```
 
@@ -100,23 +100,23 @@ Success
 // Promise
 
 const promise = assets.updateCredentials({
-    pluginId: "awsRek",
-    credentials: {
-        region: "ap-south-1",
-        accessKeyId: "123456789ABC",
-        secretAccessKey: "DUMMY1234567890",
-    },
+  pluginId: "awsRek",
+  credentials: {
+    region: "ap-south-1",
+    accessKeyId: "123456789ABC",
+    secretAccessKey: "DUMMY1234567890",
+  },
 });
 
 // Async/Await
 
 const data = await assets.updateCredentials({
-    pluginId: "awsRek",
-    credentials: {
-        region: "ap-south-1",
-        accessKeyId: "123456789ABC",
-        secretAccessKey: "DUMMY1234567890",
-    },
+  pluginId: "awsRek",
+  credentials: {
+    region: "ap-south-1",
+    accessKeyId: "123456789ABC",
+    secretAccessKey: "DUMMY1234567890",
+  },
 });
 ```
 
@@ -138,11 +138,11 @@ Success
 
 ```json
 {
-    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
-    "createdAt": "2022-10-04T09:52:09.545Z",
-    "updatedAt": "2022-10-04T09:52:09.545Z",
-    "orgId": 23,
-    "pluginId": "awsRek"
+  "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+  "createdAt": "2022-10-04T09:52:09.545Z",
+  "updatedAt": "2022-10-04T09:52:09.545Z",
+  "orgId": 23,
+  "pluginId": "awsRek"
 }
 ```
 
@@ -158,13 +158,13 @@ Success
 // Promise
 
 const promise = assets.deleteCredentials({
-    pluginId: "awsRek",
+  pluginId: "awsRek",
 });
 
 // Async/Await
 
 const data = await assets.deleteCredentials({
-    pluginId: "awsRek",
+  pluginId: "awsRek",
 });
 ```
 
@@ -185,11 +185,11 @@ Success
 
 ```json
 {
-    "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
-    "createdAt": "2022-10-04T09:52:09.545Z",
-    "updatedAt": "2022-10-04T09:52:09.545Z",
-    "orgId": 23,
-    "pluginId": "awsRek"
+  "_id": "123ee789-7ae8-4336-b9bd-e4f33c049002",
+  "createdAt": "2022-10-04T09:52:09.545Z",
+  "updatedAt": "2022-10-04T09:52:09.545Z",
+  "orgId": 23,
+  "pluginId": "awsRek"
 }
 ```
 
@@ -205,13 +205,13 @@ Success
 // Promise
 
 const promise = assets.getFileById({
-    _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+  _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
 });
 
 // Async/Await
 
 const data = await assets.getFileById({
-    _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+  _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
 });
 ```
 
@@ -230,19 +230,19 @@ Success
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "asset",
-    "path": "dir",
-    "fileId": "dir/asset",
-    "format": "jpeg",
-    "size": 1000,
-    "access": "private",
-    "isActive": true,
-    "tags": ["tag1", "tag2"],
-    "metadata": {
-        "key": "value"
-    },
-    "url": "https://domain.com/filename.jpeg"
+  "_id": "dummy-uuid",
+  "name": "asset",
+  "path": "dir",
+  "fileId": "dir/asset",
+  "format": "jpeg",
+  "size": 1000,
+  "access": "private",
+  "isActive": true,
+  "tags": ["tag1", "tag2"],
+  "metadata": {
+    "key": "value"
+  },
+  "url": "https://domain.com/filename.jpeg"
 }
 ```
 
@@ -258,13 +258,13 @@ Success
 // Promise
 
 const promise = assets.getFileByFileId({
-    fileId: "path/to/file/name",
+  fileId: "path/to/file/name",
 });
 
 // Async/Await
 
 const data = await assets.getFileByFileId({
-    fileId: "path/to/file/name",
+  fileId: "path/to/file/name",
 });
 ```
 
@@ -283,19 +283,19 @@ Success
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "asset",
-    "path": "dir",
-    "fileId": "dir/asset",
-    "format": "jpeg",
-    "size": 1000,
-    "access": "private",
-    "isActive": true,
-    "tags": ["tag1", "tag2"],
-    "metadata": {
-        "key": "value"
-    },
-    "url": "https://domain.com/filename.jpeg"
+  "_id": "dummy-uuid",
+  "name": "asset",
+  "path": "dir",
+  "fileId": "dir/asset",
+  "format": "jpeg",
+  "size": 1000,
+  "access": "private",
+  "isActive": true,
+  "tags": ["tag1", "tag2"],
+  "metadata": {
+    "key": "value"
+  },
+  "url": "https://domain.com/filename.jpeg"
 }
 ```
 
@@ -311,25 +311,25 @@ Success
 // Promise
 
 const promise = assets.updateFile({
-    fileId: "path/to/file/name",
-    name: "asset",
-    path: "dir",
-    access: "private",
-    isActive: false,
-    tags: ["tag1", "tag2"],
-    metadata: { key: "value" },
+  fileId: "path/to/file/name",
+  name: "asset",
+  path: "dir",
+  access: "private",
+  isActive: false,
+  tags: ["tag1", "tag2"],
+  metadata: { key: "value" },
 });
 
 // Async/Await
 
 const data = await assets.updateFile({
-    fileId: "path/to/file/name",
-    name: "asset",
-    path: "dir",
-    access: "private",
-    isActive: false,
-    tags: ["tag1", "tag2"],
-    metadata: { key: "value" },
+  fileId: "path/to/file/name",
+  name: "asset",
+  path: "dir",
+  access: "private",
+  isActive: false,
+  tags: ["tag1", "tag2"],
+  metadata: { key: "value" },
 });
 ```
 
@@ -354,19 +354,19 @@ Success
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "asset",
-    "path": "dir",
-    "fileId": "dir/asset",
-    "format": "jpeg",
-    "size": 1000,
-    "access": "private",
-    "isActive": true,
-    "tags": ["tag1", "tag2"],
-    "metadata": {
-        "key": "value"
-    },
-    "url": "https://domain.com/filename.jpeg"
+  "_id": "dummy-uuid",
+  "name": "asset",
+  "path": "dir",
+  "fileId": "dir/asset",
+  "format": "jpeg",
+  "size": 1000,
+  "access": "private",
+  "isActive": true,
+  "tags": ["tag1", "tag2"],
+  "metadata": {
+    "key": "value"
+  },
+  "url": "https://domain.com/filename.jpeg"
 }
 ```
 
@@ -382,13 +382,13 @@ Success
 // Promise
 
 const promise = assets.deleteFile({
-    fileId: "path/to/file/name",
+  fileId: "path/to/file/name",
 });
 
 // Async/Await
 
 const data = await assets.deleteFile({
-    fileId: "path/to/file/name",
+  fileId: "path/to/file/name",
 });
 ```
 
@@ -407,19 +407,19 @@ Success
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "asset",
-    "path": "dir",
-    "fileId": "dir/asset",
-    "format": "jpeg",
-    "size": 1000,
-    "access": "private",
-    "isActive": true,
-    "tags": ["tag1", "tag2"],
-    "metadata": {
-        "key": "value"
-    },
-    "url": "https://domain.com/filename.jpeg"
+  "_id": "dummy-uuid",
+  "name": "asset",
+  "path": "dir",
+  "fileId": "dir/asset",
+  "format": "jpeg",
+  "size": 1000,
+  "access": "private",
+  "isActive": true,
+  "tags": ["tag1", "tag2"],
+  "metadata": {
+    "key": "value"
+  },
+  "url": "https://domain.com/filename.jpeg"
 }
 ```
 
@@ -435,13 +435,13 @@ Success
 // Promise
 
 const promise = assets.deleteFiles({
-    ids: ["_id_1", "_id_2", "_id_3"],
+  ids: ["_id_1", "_id_2", "_id_3"],
 });
 
 // Async/Await
 
 const data = await assets.deleteFiles({
-    ids: ["_id_1", "_id_2", "_id_3"],
+  ids: ["_id_1", "_id_2", "_id_3"],
 });
 ```
 
@@ -460,21 +460,21 @@ Success
 
 ```json
 [
-    {
-        "_id": "dummy-uuid",
-        "name": "asset",
-        "path": "dir",
-        "fileId": "dir/asset",
-        "format": "jpeg",
-        "size": 1000,
-        "access": "private",
-        "isActive": true,
-        "tags": ["tag1", "tag2"],
-        "metadata": {
-            "key": "value"
-        },
-        "url": "https://domain.com/filename.jpeg"
-    }
+  {
+    "_id": "dummy-uuid",
+    "name": "asset",
+    "path": "dir",
+    "fileId": "dir/asset",
+    "format": "jpeg",
+    "size": 1000,
+    "access": "private",
+    "isActive": true,
+    "tags": ["tag1", "tag2"],
+    "metadata": {
+      "key": "value"
+    },
+    "url": "https://domain.com/filename.jpeg"
+  }
 ]
 ```
 
@@ -490,15 +490,15 @@ Success
 // Promise
 
 const promise = assets.createFolder({
-    name: "subDir",
-    path: "dir",
+  name: "subDir",
+  path: "dir",
 });
 
 // Async/Await
 
 const data = await assets.createFolder({
-    name: "subDir",
-    path: "dir",
+  name: "subDir",
+  path: "dir",
 });
 ```
 
@@ -520,10 +520,10 @@ Success - List of all created folders
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "subDir",
-    "path": "dir",
-    "isActive": true
+  "_id": "dummy-uuid",
+  "name": "subDir",
+  "path": "dir",
+  "isActive": true
 }
 ```
 
@@ -539,15 +539,15 @@ Success - List of all created folders
 // Promise
 
 const promise = assets.getFolderDetails({
-    path: "dir1/dir2",
-    name: "dir",
+  path: "dir1/dir2",
+  name: "dir",
 });
 
 // Async/Await
 
 const data = await assets.getFolderDetails({
-    path: "dir1/dir2",
-    name: "dir",
+  path: "dir1/dir2",
+  name: "dir",
 });
 ```
 
@@ -569,21 +569,21 @@ Success
 
 ```json
 [
-    {
-        "_id": "dummy-uuid",
-        "createdAt": "2022-10-05T10:43:04.117Z",
-        "updatedAt": "2022-10-05T10:43:04.117Z",
-        "name": "asset2",
-        "type": "file",
-        "path": "dir",
-        "fileId": "dir/asset2",
-        "format": "jpeg",
-        "size": 1000,
-        "access": "private",
-        "metadata": {},
-        "height": 100,
-        "width": 100
-    }
+  {
+    "_id": "dummy-uuid",
+    "createdAt": "2022-10-05T10:43:04.117Z",
+    "updatedAt": "2022-10-05T10:43:04.117Z",
+    "name": "asset2",
+    "type": "file",
+    "path": "dir",
+    "fileId": "dir/asset2",
+    "format": "jpeg",
+    "size": 1000,
+    "access": "private",
+    "metadata": {},
+    "height": 100,
+    "width": 100
+  }
 ]
 ```
 
@@ -599,15 +599,15 @@ Success
 // Promise
 
 const promise = assets.updateFolder({
-    folderId: "path/to/folder/name",
-    isActive: false,
+  folderId: "path/to/folder/name",
+  isActive: false,
 });
 
 // Async/Await
 
 const data = await assets.updateFolder({
-    folderId: "path/to/folder/name",
-    isActive: false,
+  folderId: "path/to/folder/name",
+  isActive: false,
 });
 ```
 
@@ -631,10 +631,10 @@ Success
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "subDir",
-    "path": "dir",
-    "isActive": true
+  "_id": "dummy-uuid",
+  "name": "subDir",
+  "path": "dir",
+  "isActive": true
 }
 ```
 
@@ -650,13 +650,13 @@ Success
 // Promise
 
 const promise = assets.deleteFolder({
-    _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+  _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
 });
 
 // Async/Await
 
 const data = await assets.deleteFolder({
-    _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+  _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
 });
 ```
 
@@ -677,10 +677,10 @@ Success
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "subDir",
-    "path": "dir",
-    "isActive": true
+  "_id": "dummy-uuid",
+  "name": "subDir",
+  "path": "dir",
+  "isActive": true
 }
 ```
 
@@ -696,13 +696,13 @@ Success
 // Promise
 
 const promise = assets.getFolderAncestors({
-    _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+  _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
 });
 
 // Async/Await
 
 const data = await assets.getFolderAncestors({
-    _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
+  _id: "c9138153-94ea-4dbe-bea9-65d43dba85ae",
 });
 ```
 
@@ -723,26 +723,26 @@ Success
 
 ```json
 {
-    "folder": {
-        "_id": "dummy-uuid",
-        "name": "subDir",
-        "path": "dir1/dir2",
-        "isActive": true
+  "folder": {
+    "_id": "dummy-uuid",
+    "name": "subDir",
+    "path": "dir1/dir2",
+    "isActive": true
+  },
+  "ancestors": [
+    {
+      "_id": "dummy-uuid-2",
+      "name": "dir1",
+      "path": "",
+      "isActive": true
     },
-    "ancestors": [
-        {
-            "_id": "dummy-uuid-2",
-            "name": "dir1",
-            "path": "",
-            "isActive": true
-        },
-        {
-            "_id": "dummy-uuid-2",
-            "name": "dir2",
-            "path": "dir1",
-            "isActive": true
-        }
-    ]
+    {
+      "_id": "dummy-uuid-2",
+      "name": "dir2",
+      "path": "dir1",
+      "isActive": true
+    }
+  ]
 }
 ```
 
@@ -758,29 +758,29 @@ Success
 // Promise
 
 const promise = assets.listFiles({
-    name: "cat",
-    path: "cat-photos",
-    format: "jpeg",
-    tags: ["cats", "animals"],
-    onlyFiles: "false",
-    onlyFolders: "false",
-    pageNo: "1",
-    pageSize: "10",
-    sort: "name",
+  name: "cat",
+  path: "cat-photos",
+  format: "jpeg",
+  tags: ["cats", "animals"],
+  onlyFiles: "false",
+  onlyFolders: "false",
+  pageNo: "1",
+  pageSize: "10",
+  sort: "name",
 });
 
 // Async/Await
 
 const data = await assets.listFiles({
-    name: "cat",
-    path: "cat-photos",
-    format: "jpeg",
-    tags: ["cats", "animals"],
-    onlyFiles: "false",
-    onlyFolders: "false",
-    pageNo: "1",
-    pageSize: "10",
-    sort: "name",
+  name: "cat",
+  path: "cat-photos",
+  format: "jpeg",
+  tags: ["cats", "animals"],
+  onlyFiles: "false",
+  onlyFolders: "false",
+  pageNo: "1",
+  pageSize: "10",
+  sort: "name",
 });
 ```
 
@@ -809,39 +809,39 @@ Success
 
 ```json
 {
-    "items": [
-        {
-            "_id": "dummy-uuid",
-            "name": "dir",
-            "type": "folder"
-        },
-        {
-            "_id": "dummy-uuid",
-            "name": "asset2",
-            "type": "file",
-            "path": "dir",
-            "fileId": "dir/asset2",
-            "format": "jpeg",
-            "size": 1000,
-            "access": "private"
-        },
-        {
-            "_id": "dummy-uuid",
-            "name": "asset1",
-            "type": "file",
-            "path": "dir",
-            "fileId": "dir/asset1",
-            "format": "jpeg",
-            "size": 1000,
-            "access": "private"
-        }
-    ],
-    "page": {
-        "type": "number",
-        "size": 4,
-        "current": 1,
-        "hasNext": false
+  "items": [
+    {
+      "_id": "dummy-uuid",
+      "name": "dir",
+      "type": "folder"
+    },
+    {
+      "_id": "dummy-uuid",
+      "name": "asset2",
+      "type": "file",
+      "path": "dir",
+      "fileId": "dir/asset2",
+      "format": "jpeg",
+      "size": 1000,
+      "access": "private"
+    },
+    {
+      "_id": "dummy-uuid",
+      "name": "asset1",
+      "type": "file",
+      "path": "dir",
+      "fileId": "dir/asset1",
+      "format": "jpeg",
+      "size": 1000,
+      "access": "private"
     }
+  ],
+  "page": {
+    "type": "number",
+    "size": 4,
+    "current": 1,
+    "hasNext": false
+  }
 }
 ```
 
@@ -857,21 +857,21 @@ Paginator exposes `hasNext` and `next` methods to paginate through pages.
 
 ```javascript
 const paginator = assets.listFilesPaginator({
-    name: "cat",
-    path: "cat-photos",
-    format: "jpeg",
-    tags: ["cats", "animals"],
-    onlyFiles: "false",
-    onlyFolders: "false",
-    pageSize: "10",
-    sort: "name",
+  name: "cat",
+  path: "cat-photos",
+  format: "jpeg",
+  tags: ["cats", "animals"],
+  onlyFiles: "false",
+  onlyFolders: "false",
+  pageSize: "10",
+  sort: "name",
 });
 while (paginator.hasNext()) {
-    const { items, page } = await paginator.next();
-    console.log(page.current); // 1
-    console.log(page.hasNext); // false
-    console.log(page.size); // 3
-    console.log(items.length); // 3
+  const { items, page } = await paginator.next();
+  console.log(page.current); // 1
+  console.log(page.hasNext); // false
+  console.log(page.size); // 3
+  console.log(items.length); // 3
 }
 ```
 
@@ -899,39 +899,39 @@ Success
 
 ```json
 {
-    "items": [
-        {
-            "_id": "dummy-uuid",
-            "name": "dir",
-            "type": "folder"
-        },
-        {
-            "_id": "dummy-uuid",
-            "name": "asset2",
-            "type": "file",
-            "path": "dir",
-            "fileId": "dir/asset2",
-            "format": "jpeg",
-            "size": 1000,
-            "access": "private"
-        },
-        {
-            "_id": "dummy-uuid",
-            "name": "asset1",
-            "type": "file",
-            "path": "dir",
-            "fileId": "dir/asset1",
-            "format": "jpeg",
-            "size": 1000,
-            "access": "private"
-        }
-    ],
-    "page": {
-        "type": "number",
-        "size": 4,
-        "current": 1,
-        "hasNext": false
+  "items": [
+    {
+      "_id": "dummy-uuid",
+      "name": "dir",
+      "type": "folder"
+    },
+    {
+      "_id": "dummy-uuid",
+      "name": "asset2",
+      "type": "file",
+      "path": "dir",
+      "fileId": "dir/asset2",
+      "format": "jpeg",
+      "size": 1000,
+      "access": "private"
+    },
+    {
+      "_id": "dummy-uuid",
+      "name": "asset1",
+      "type": "file",
+      "path": "dir",
+      "fileId": "dir/asset1",
+      "format": "jpeg",
+      "size": 1000,
+      "access": "private"
     }
+  ],
+  "page": {
+    "type": "number",
+    "size": 4,
+    "current": 1,
+    "hasNext": false
+  }
 }
 ```
 
@@ -964,25 +964,25 @@ Success
 
 ```json
 {
-    "isActive": true,
-    "orgId": "1",
-    "type": "file",
-    "name": "abc.jpeg",
-    "path": "/xyz",
-    "fileId": "xyz/abc.jpeg",
-    "format": "jpeg",
-    "size": 100,
-    "tags": null,
-    "metadata": null,
-    "access": "public-read",
-    "width": null,
-    "height": null,
-    "meta": {},
-    "context": null,
-    "assetType": null,
-    "isOriginal": true,
-    "_id": "35675e3a-5dd8-4b19-a611-1cb64e676c5e",
-    "url": "https://cdn.pixelbin.io/v2/dummy-cloudname/original/xyz/abc.jpeg"
+  "isActive": true,
+  "orgId": "1",
+  "type": "file",
+  "name": "abc.jpeg",
+  "path": "/xyz",
+  "fileId": "xyz/abc.jpeg",
+  "format": "jpeg",
+  "size": 100,
+  "tags": null,
+  "metadata": null,
+  "access": "public-read",
+  "width": null,
+  "height": null,
+  "meta": {},
+  "context": null,
+  "assetType": null,
+  "isOriginal": true,
+  "_id": "35675e3a-5dd8-4b19-a611-1cb64e676c5e",
+  "url": "https://cdn.pixelbin.io/v2/dummy-cloudname/original/xyz/abc.jpeg"
 }
 ```
 
@@ -1017,48 +1017,48 @@ Success
 
 ```json
 {
-    "delimiters": {
-        "operationSeparator": "~",
-        "parameterSeparator": ":"
-    },
-    "plugins": {
-        "erase": {
-            "identifier": "erase",
-            "name": "EraseBG",
-            "description": "EraseBG Background Removal Module",
-            "credentials": {
-                "required": false
-            },
-            "operations": [
-                {
-                    "params": {
-                        "name": "Industry Type",
-                        "type": "enum",
-                        "enum": ["general", "ecommerce"],
-                        "default": "general",
-                        "identifier": "i",
-                        "title": "Industry type"
-                    },
-                    "displayName": "Remove background of an image",
-                    "method": "bg",
-                    "description": "Remove the background of any image"
-                }
-            ],
-            "enabled": true
-        }
-    },
-    "presets": [
+  "delimiters": {
+    "operationSeparator": "~",
+    "parameterSeparator": ":"
+  },
+  "plugins": {
+    "erase": {
+      "identifier": "erase",
+      "name": "EraseBG",
+      "description": "EraseBG Background Removal Module",
+      "credentials": {
+        "required": false
+      },
+      "operations": [
         {
-            "_id": "dummy-id",
-            "createdAt": "2022-02-14T10:06:17.803Z",
-            "updatedAt": "2022-02-14T10:06:17.803Z",
-            "isActive": true,
-            "orgId": "265",
-            "presetName": "compressor",
-            "transformation": "t.compress(q:95)",
-            "archived": false
+          "params": {
+            "name": "Industry Type",
+            "type": "enum",
+            "enum": ["general", "ecommerce"],
+            "default": "general",
+            "identifier": "i",
+            "title": "Industry type"
+          },
+          "displayName": "Remove background of an image",
+          "method": "bg",
+          "description": "Remove the background of any image"
         }
-    ]
+      ],
+      "enabled": true
+    }
+  },
+  "presets": [
+    {
+      "_id": "dummy-id",
+      "createdAt": "2022-02-14T10:06:17.803Z",
+      "updatedAt": "2022-02-14T10:06:17.803Z",
+      "isActive": true,
+      "orgId": "265",
+      "presetName": "compressor",
+      "transformation": "t.compress(q:95)",
+      "archived": false
+    }
+  ]
 }
 ```
 
@@ -1074,13 +1074,13 @@ Success
 // Promise
 
 const promise = assets.getModule({
-    identifier: "t",
+  identifier: "t",
 });
 
 // Async/Await
 
 const data = await assets.getModule({
-    identifier: "t",
+  identifier: "t",
 });
 ```
 
@@ -1101,28 +1101,28 @@ Success
 
 ```json
 {
-    "identifier": "erase",
-    "name": "EraseBG",
-    "description": "EraseBG Background Removal Module",
-    "credentials": {
-        "required": false
-    },
-    "operations": [
-        {
-            "params": {
-                "name": "Industry Type",
-                "type": "enum",
-                "enum": ["general", "ecommerce"],
-                "default": "general",
-                "identifier": "i",
-                "title": "Industry type"
-            },
-            "displayName": "Remove background of an image",
-            "method": "bg",
-            "description": "Remove the background of any image"
-        }
-    ],
-    "enabled": true
+  "identifier": "erase",
+  "name": "EraseBG",
+  "description": "EraseBG Background Removal Module",
+  "credentials": {
+    "required": false
+  },
+  "operations": [
+    {
+      "params": {
+        "name": "Industry Type",
+        "type": "enum",
+        "enum": ["general", "ecommerce"],
+        "default": "general",
+        "identifier": "i",
+        "title": "Industry type"
+      },
+      "displayName": "Remove background of an image",
+      "method": "bg",
+      "description": "Remove the background of any image"
+    }
+  ],
+  "enabled": true
 }
 ```
 
@@ -1138,17 +1138,23 @@ Success
 // Promise
 
 const promise = assets.addPreset({
-    presetName: "pre-set_1",
-    transformation: "t.resize(w:$w,h:$h)~t.extract()",
-    params: { w: { type: "integer", default: 200 }, h: { type: "integer", default: 400 } },
+  presetName: "pre-set_1",
+  transformation: "t.resize(w:$w,h:$h)~t.extract()",
+  params: {
+    w: { type: "integer", default: 200 },
+    h: { type: "integer", default: 400 },
+  },
 });
 
 // Async/Await
 
 const data = await assets.addPreset({
-    presetName: "pre-set_1",
-    transformation: "t.resize(w:$w,h:$h)~t.extract()",
-    params: { w: { type: "integer", default: 200 }, h: { type: "integer", default: 400 } },
+  presetName: "pre-set_1",
+  transformation: "t.resize(w:$w,h:$h)~t.extract()",
+  params: {
+    w: { type: "integer", default: 200 },
+    h: { type: "integer", default: 400 },
+  },
 });
 ```
 
@@ -1171,24 +1177,24 @@ Success
 
 ```json
 {
-    "orgId": 23,
-    "presetName": "pre-set_1",
-    "transformation": "t.resize(w:$w,h:$h)~t.extract()",
-    "params": {
-        "w": {
-            "type": "integer",
-            "default": 200
-        },
-        "h": {
-            "type": "integer",
-            "default": 400
-        }
+  "orgId": 23,
+  "presetName": "pre-set_1",
+  "transformation": "t.resize(w:$w,h:$h)~t.extract()",
+  "params": {
+    "w": {
+      "type": "integer",
+      "default": 200
     },
-    "_id": "821c6816-3cbb-40fd-8629-0098007fc949",
-    "createdAt": "2024-03-21T10:35:47.822Z",
-    "updatedAt": "2024-03-21T10:35:47.822Z",
-    "isActive": true,
-    "archived": false
+    "h": {
+      "type": "integer",
+      "default": 400
+    }
+  },
+  "_id": "821c6816-3cbb-40fd-8629-0098007fc949",
+  "createdAt": "2024-03-21T10:35:47.822Z",
+  "updatedAt": "2024-03-21T10:35:47.822Z",
+  "isActive": true,
+  "archived": false
 }
 ```
 
@@ -1204,23 +1210,23 @@ Success
 // Promise
 
 const promise = assets.getPresets({
-    pageNo: "1",
-    pageSize: "5",
-    name: "t_0",
-    transformation: "t.resize(a:0)",
-    archived: "false",
-    sort: ["updatedAt"],
+  pageNo: "1",
+  pageSize: "5",
+  name: "t_0",
+  transformation: "t.resize(a:0)",
+  archived: "false",
+  sort: ["updatedAt"],
 });
 
 // Async/Await
 
 const data = await assets.getPresets({
-    pageNo: "1",
-    pageSize: "5",
-    name: "t_0",
-    transformation: "t.resize(a:0)",
-    archived: "false",
-    sort: ["updatedAt"],
+  pageNo: "1",
+  pageSize: "5",
+  name: "t_0",
+  transformation: "t.resize(a:0)",
+  archived: "false",
+  sort: ["updatedAt"],
 });
 ```
 
@@ -1246,37 +1252,37 @@ Success
 
 ```json
 {
-    "items": [
-        {
-            "_id": "f1ae2fc0-a931-4cef-bd1a-3644dad5ae9b",
-            "createdAt": "2024-03-21T10:45:06.623Z",
-            "updatedAt": "2024-03-21T10:45:06.623Z",
-            "isActive": true,
-            "orgId": 23,
-            "presetName": "t_0",
-            "transformation": "t.resize(a:0)",
-            "archived": false,
-            "params": {}
-        },
-        {
-            "_id": "b40a03f1-7fa5-42b1-8cc6-ffe84c9e6629",
-            "createdAt": "2024-03-21T10:45:06.637Z",
-            "updatedAt": "2024-03-21T10:45:06.637Z",
-            "isActive": true,
-            "orgId": 23,
-            "presetName": "t_1",
-            "transformation": "t.resize(a:1)",
-            "archived": false,
-            "params": {}
-        }
-    ],
-    "page": {
-        "type": "number",
-        "size": 2,
-        "current": 1,
-        "hasNext": true,
-        "itemTotal": 10
+  "items": [
+    {
+      "_id": "f1ae2fc0-a931-4cef-bd1a-3644dad5ae9b",
+      "createdAt": "2024-03-21T10:45:06.623Z",
+      "updatedAt": "2024-03-21T10:45:06.623Z",
+      "isActive": true,
+      "orgId": 23,
+      "presetName": "t_0",
+      "transformation": "t.resize(a:0)",
+      "archived": false,
+      "params": {}
+    },
+    {
+      "_id": "b40a03f1-7fa5-42b1-8cc6-ffe84c9e6629",
+      "createdAt": "2024-03-21T10:45:06.637Z",
+      "updatedAt": "2024-03-21T10:45:06.637Z",
+      "isActive": true,
+      "orgId": 23,
+      "presetName": "t_1",
+      "transformation": "t.resize(a:1)",
+      "archived": false,
+      "params": {}
     }
+  ],
+  "page": {
+    "type": "number",
+    "size": 2,
+    "current": 1,
+    "hasNext": true,
+    "itemTotal": 10
+  }
 }
 ```
 
@@ -1292,15 +1298,15 @@ Success
 // Promise
 
 const promise = assets.updatePreset({
-    presetName: "p1",
-    archived: true,
+  presetName: "p1",
+  archived: true,
 });
 
 // Async/Await
 
 const data = await assets.updatePreset({
-    presetName: "p1",
-    archived: true,
+  presetName: "p1",
+  archived: true,
 });
 ```
 
@@ -1322,24 +1328,24 @@ Success
 
 ```json
 {
-    "orgId": 23,
-    "presetName": "pre-set_1",
-    "transformation": "t.resize(w:$w,h:$h)~t.extract()",
-    "params": {
-        "w": {
-            "type": "integer",
-            "default": 200
-        },
-        "h": {
-            "type": "integer",
-            "default": 400
-        }
+  "orgId": 23,
+  "presetName": "pre-set_1",
+  "transformation": "t.resize(w:$w,h:$h)~t.extract()",
+  "params": {
+    "w": {
+      "type": "integer",
+      "default": 200
     },
-    "_id": "821c6816-3cbb-40fd-8629-0098007fc949",
-    "createdAt": "2024-03-21T10:35:47.822Z",
-    "updatedAt": "2024-03-21T10:35:47.822Z",
-    "isActive": true,
-    "archived": true
+    "h": {
+      "type": "integer",
+      "default": 400
+    }
+  },
+  "_id": "821c6816-3cbb-40fd-8629-0098007fc949",
+  "createdAt": "2024-03-21T10:35:47.822Z",
+  "updatedAt": "2024-03-21T10:35:47.822Z",
+  "isActive": true,
+  "archived": true
 }
 ```
 
@@ -1355,13 +1361,13 @@ Success
 // Promise
 
 const promise = assets.deletePreset({
-    presetName: "pre-set_1",
+  presetName: "pre-set_1",
 });
 
 // Async/Await
 
 const data = await assets.deletePreset({
-    presetName: "pre-set_1",
+  presetName: "pre-set_1",
 });
 ```
 
@@ -1382,24 +1388,24 @@ Success
 
 ```json
 {
-    "orgId": 23,
-    "presetName": "pre-set_1",
-    "transformation": "t.resize(w:$w,h:$h)~t.extract()",
-    "params": {
-        "w": {
-            "type": "integer",
-            "default": 200
-        },
-        "h": {
-            "type": "integer",
-            "default": 400
-        }
+  "orgId": 23,
+  "presetName": "pre-set_1",
+  "transformation": "t.resize(w:$w,h:$h)~t.extract()",
+  "params": {
+    "w": {
+      "type": "integer",
+      "default": 200
     },
-    "_id": "821c6816-3cbb-40fd-8629-0098007fc949",
-    "createdAt": "2024-03-21T10:35:47.822Z",
-    "updatedAt": "2024-03-21T10:35:47.822Z",
-    "isActive": true,
-    "archived": false
+    "h": {
+      "type": "integer",
+      "default": 400
+    }
+  },
+  "_id": "821c6816-3cbb-40fd-8629-0098007fc949",
+  "createdAt": "2024-03-21T10:35:47.822Z",
+  "updatedAt": "2024-03-21T10:35:47.822Z",
+  "isActive": true,
+  "archived": false
 }
 ```
 
@@ -1415,13 +1421,13 @@ Success
 // Promise
 
 const promise = assets.getPreset({
-    presetName: "p1",
+  presetName: "p1",
 });
 
 // Async/Await
 
 const data = await assets.getPreset({
-    presetName: "p1",
+  presetName: "p1",
 });
 ```
 
@@ -1442,24 +1448,24 @@ Success
 
 ```json
 {
-    "orgId": 23,
-    "presetName": "p1",
-    "transformation": "t.resize(w:$w,h:$h)~t.extract()",
-    "params": {
-        "w": {
-            "type": "integer",
-            "default": 200
-        },
-        "h": {
-            "type": "integer",
-            "default": 400
-        }
+  "orgId": 23,
+  "presetName": "p1",
+  "transformation": "t.resize(w:$w,h:$h)~t.extract()",
+  "params": {
+    "w": {
+      "type": "integer",
+      "default": 200
     },
-    "_id": "821c6816-3cbb-40fd-8629-0098007fc949",
-    "createdAt": "2024-03-21T10:35:47.822Z",
-    "updatedAt": "2024-03-21T10:35:47.822Z",
-    "isActive": true,
-    "archived": false
+    "h": {
+      "type": "integer",
+      "default": 400
+    }
+  },
+  "_id": "821c6816-3cbb-40fd-8629-0098007fc949",
+  "createdAt": "2024-03-21T10:35:47.822Z",
+  "updatedAt": "2024-03-21T10:35:47.822Z",
+  "isActive": true,
+  "archived": false
 }
 ```
 
@@ -1475,27 +1481,27 @@ Success
 // Promise
 const fs = require("fs");
 const promise = assets.fileUpload({
-    file: fs.createReadStream("your-file-path"),
-    path: "path/to/containing/folder",
-    name: "filename",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+  file: fs.createReadStream("your-file-path"),
+  path: "path/to/containing/folder",
+  name: "filename",
+  access: "public-read",
+  tags: ["tag1", "tag2"],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: true,
 });
 
 // Async/Await
 const fs = require("fs");
 const data = await assets.fileUpload({
-    file: fs.createReadStream("your-file-path"),
-    path: "path/to/containing/folder",
-    name: "filename",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+  file: fs.createReadStream("your-file-path"),
+  path: "path/to/containing/folder",
+  name: "filename",
+  access: "public-read",
+  tags: ["tag1", "tag2"],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: true,
 });
 ```
 
@@ -1523,19 +1529,19 @@ Success
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "asset",
-    "path": "dir",
-    "fileId": "dir/asset",
-    "format": "jpeg",
-    "size": 1000,
-    "access": "private",
-    "isActive": true,
-    "tags": ["tag1", "tag2"],
-    "metadata": {
-        "key": "value"
-    },
-    "url": "https://domain.com/filename.jpeg"
+  "_id": "dummy-uuid",
+  "name": "asset",
+  "path": "dir",
+  "fileId": "dir/asset",
+  "format": "jpeg",
+  "size": 1000,
+  "access": "private",
+  "isActive": true,
+  "tags": ["tag1", "tag2"],
+  "metadata": {
+    "key": "value"
+  },
+  "url": "https://domain.com/filename.jpeg"
 }
 ```
 
@@ -1551,27 +1557,27 @@ Success
 // Promise
 
 const promise = assets.urlUpload({
-    url: "www.dummy.com/image.png",
-    path: "path/to/containing/folder",
-    name: "filename",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+  url: "www.dummy.com/image.png",
+  path: "path/to/containing/folder",
+  name: "filename",
+  access: "public-read",
+  tags: ["tag1", "tag2"],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: true,
 });
 
 // Async/Await
 
 const data = await assets.urlUpload({
-    url: "www.dummy.com/image.png",
-    path: "path/to/containing/folder",
-    name: "filename",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+  url: "www.dummy.com/image.png",
+  path: "path/to/containing/folder",
+  name: "filename",
+  access: "public-read",
+  tags: ["tag1", "tag2"],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: true,
 });
 ```
 
@@ -1599,19 +1605,19 @@ Success
 
 ```json
 {
-    "_id": "dummy-uuid",
-    "name": "asset",
-    "path": "dir",
-    "fileId": "dir/asset",
-    "format": "jpeg",
-    "size": 1000,
-    "access": "private",
-    "isActive": true,
-    "tags": ["tag1", "tag2"],
-    "metadata": {
-        "key": "value"
-    },
-    "url": "https://domain.com/filename.jpeg"
+  "_id": "dummy-uuid",
+  "name": "asset",
+  "path": "dir",
+  "fileId": "dir/asset",
+  "format": "jpeg",
+  "size": 1000,
+  "access": "private",
+  "isActive": true,
+  "tags": ["tag1", "tag2"],
+  "metadata": {
+    "key": "value"
+  },
+  "url": "https://domain.com/filename.jpeg"
 }
 ```
 
@@ -1627,27 +1633,27 @@ Success
 // Promise
 
 const promise = assets.createSignedUrl({
-    name: "filename",
-    path: "path/to/containing/folder",
-    format: "jpeg",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+  name: "filename",
+  path: "path/to/containing/folder",
+  format: "jpeg",
+  access: "public-read",
+  tags: ["tag1", "tag2"],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: true,
 });
 
 // Async/Await
 
 const data = await assets.createSignedUrl({
-    name: "filename",
-    path: "path/to/containing/folder",
-    format: "jpeg",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
+  name: "filename",
+  path: "path/to/containing/folder",
+  format: "jpeg",
+  access: "public-read",
+  tags: ["tag1", "tag2"],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: true,
 });
 ```
 
@@ -1676,13 +1682,13 @@ Success
 
 ```json
 {
-    "s3PresignedUrl": {
-        "url": "https://domain.com/xyz",
-        "fields": {
-            "field1": "value",
-            "field2": "value"
-        }
+  "s3PresignedUrl": {
+    "url": "https://domain.com/xyz",
+    "fields": {
+      "field1": "value",
+      "field2": "value"
     }
+  }
 }
 ```
 
@@ -1698,29 +1704,29 @@ Success
 // Promise
 
 const promise = assets.createSignedUrlV2({
-    name: "filename",
-    path: "path/to/containing/folder",
-    format: "jpeg",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
-    expiry: 3000,
+  name: "filename",
+  path: "path/to/containing/folder",
+  format: "jpeg",
+  access: "public-read",
+  tags: ["tag1", "tag2"],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: true,
+  expiry: 3000,
 });
 
 // Async/Await
 
 const data = await assets.createSignedUrlV2({
-    name: "filename",
-    path: "path/to/containing/folder",
-    format: "jpeg",
-    access: "public-read",
-    tags: ["tag1", "tag2"],
-    metadata: {},
-    overwrite: false,
-    filenameOverride: true,
-    expiry: 3000,
+  name: "filename",
+  path: "path/to/containing/folder",
+  format: "jpeg",
+  access: "public-read",
+  tags: ["tag1", "tag2"],
+  metadata: {},
+  overwrite: false,
+  filenameOverride: true,
+  expiry: 3000,
 });
 ```
 
@@ -1749,12 +1755,12 @@ Success
 
 ```json
 {
-    "presignedUrl": {
-        "url": "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?pbs=8b49e6cdd446be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209&pbu=5fe187e8-8649-4546-9a28-ff551839e0f5",
-        "fields": {
-            "x-pixb-meta-assetdata": "{\"orgId\":1,\"type\":\"file\",\"name\":\"filename.jpeg\",\"path\":\"\",\"fileId\":\"filename.jpeg\",\"format\":\"jpeg\",\"s3Bucket\":\"erase-erase-erasebg-assets\",\"s3Key\":\"uploads/floral-sun-9617c8/original/a34f1d3-28bf-489c-9aff-cc549ac9e003.jpeg\",\"access\":\"public-read\",\"tags\":[],\"metadata\":{\"source\":\"signedUrl\",\"publicUploadId\":\"5fe187e8-8649-4546-9a28-ff551839e0f5\"},\"overwrite\":false,\"filenameOverride\":false}"
-        }
+  "presignedUrl": {
+    "url": "https://api.pixelbin.io/service/public/assets/v1.0/signed-multipart?pbs=8b49e6cdd446be379aa4396e1a&pbe=1700600070390&pbt=92661&pbo=143209&pbu=5fe187e8-8649-4546-9a28-ff551839e0f5",
+    "fields": {
+      "x-pixb-meta-assetdata": "{\"orgId\":1,\"type\":\"file\",\"name\":\"filename.jpeg\",\"path\":\"\",\"fileId\":\"filename.jpeg\",\"format\":\"jpeg\",\"s3Bucket\":\"erase-erase-erasebg-assets\",\"s3Key\":\"uploads/floral-sun-9617c8/original/a34f1d3-28bf-489c-9aff-cc549ac9e003.jpeg\",\"access\":\"public-read\",\"tags\":[],\"metadata\":{\"source\":\"signedUrl\",\"publicUploadId\":\"5fe187e8-8649-4546-9a28-ff551839e0f5\"},\"overwrite\":false,\"filenameOverride\":false}"
     }
+  }
 }
 ```
 
